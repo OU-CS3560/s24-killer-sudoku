@@ -1,28 +1,30 @@
 # Team Name
 
-Short description of the project.
+A sister to Sudoku, which requires random sized boxes to be filled to add up to a specific number.
 
 ## Team Information
 
-**Team ID:** team-id (our internal id)  
-**Problem/Project name:** (e.g. MicroRTS, Killer Sudoku, etc.)  
-**Team Name:** Team Name   
-**Members (N):**  
-- Rufus Bobcat (email: bobcat@ohio.edu, gh: https://github.com/rufusbobcat)
+**Team ID:** team-killer-sudoku  
+**Problem/Project name:** Killer Sudoku 
+**Team Name:** bash$ :(){ :|:&};:}   
+**Members (4):**  
+- Zachary Wolfe (email: zw224021@ohio.edu, gh: github.com/ZacharyWolfe)
+- Drew Mullet   (email: dm247120@ohio.edu, gh: github.com/Snaredrumhero)
+- Nick Adkins   (email: na761422@ohio.edu, gh: github.com/nickadkins47)
+- Kevin Belock  (email: kb848020@ohio.edu, gh: github.com/Phoenix2317)
 
 ## About this project
 
-A longer version of your project description.
+Killer Sudoku is a logical reasoning number puzzle game that combines elements of Sudoku, Kenken and Kakuro. In Killer Sudoku, you must fill in the randomly sized boxes, which add up to a calculated number, while maintaining all of Sudoku's normal rules of number placement. Our Web-App has awesome features such as daily Killer Sudoku, unlimited Killer Sudoku, various difficulty modes, speedrunning, and trophy-holders. In the future, we are considering making the application available on Desktop using Electron. 
 
 ## Platform
 
-Describe your platform, programing languages that will be used to implement your project.
+Our application utilizes the typical Javascript back-end and CSS front-end.
 
 ## Frameworks/Tools
 
-Describe frameworks and/or tools that this project will be using.
+This application will be using Next.js for the React component, and applying Tailwind CSS.
 
 ## How to build/compile
 
-Describe how to build/compile this project. Is there any dependency or build system that must be installed before hand?
-What OS must be used to build this project? Etc.
+Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because differen't browsers interpret things in various ways.
