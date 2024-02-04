@@ -19,7 +19,7 @@ Killer Sudoku is a logical reasoning number puzzle game that combines elements o
 
 ## Platform
 
-Our application utilizes the typical Javascript back-end and CSS front-end.
+Our application utilizes the typical Javascript back-end and CSS front-end. Additionally, we are hosting a linode server for all students to try our Sudoku.
 
 ## Frameworks/Tools
 
@@ -27,4 +27,4 @@ This application will be using Next.js for the React component, and applying Tai
 
 ## How to build/compile
 
-Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because differen't browsers interpret things in various ways.
+Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways.
