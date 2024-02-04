@@ -1,6 +1,6 @@
 # Team Name
 
-A sister to Sudoku, which requires random sized boxes to be filled to add up to a specific number.
+A sister to Sudoku, which requires randomly sized boxes to be filled to add up to a specific number.
 
 ## Team Information
 
@@ -19,11 +19,11 @@ Killer Sudoku is a logical reasoning number puzzle game that combines elements o
 
 ## Platform
 
-Our application utilizes the typical Javascript back-end and CSS front-end. Additionally, we are hosting a linode server for all students to try our Sudoku.
+Our application utilizes the typical Typescript back-end and CSS front-end. Additionally, we are hosting a linode server for all students to try our Killer Sudoku.
 
 ## Frameworks/Tools
 
-This application will be using Next.js for the React component, and applying Tailwind CSS.
+This application is built on Next.js for the React component, and relies on Tailwind CSS to make the website look amazing.
 
 ## How to build/compile
 
