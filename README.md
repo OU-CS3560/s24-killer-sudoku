@@ -27,4 +27,4 @@ This application is built on Next.js for the React component, and relies on Tail
 
 ## How to build/compile
 
-Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways.
+To build this project you must have the most recent versions of NPM and NODE. Compile the project by locating the ./killer-sudoku file path, and executing 'npm run build' and start it using 'npm run start'. Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways.
