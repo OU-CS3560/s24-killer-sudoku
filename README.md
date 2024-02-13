@@ -40,6 +40,7 @@ If the installation process is not working try these solutions:
 then:
 
 - `sudo apt-get install brew`
+- Check Homebrew is installed by, `brew -v`, if not, follow Homebrew issues.
 - `brew install npm`
 - `brew install node`
 
@@ -51,6 +52,14 @@ Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 Homebrew issues:
 
 - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+- (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/ancientspirit/.bashrc`
 
 NPM Error, `npm ERR! killer-sudoku@0.1.0 build: next build`   OR   `sh-next01 ERR`:
-- `npm install next``
+- `npm install next`
+
+Additional Possibilities:
+- Need WSL update
+- Ensure you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows subsystem for Linux enabled.
+- Add homebrew to your path
+- Homebrew isn't installed (`brew -v`)
+- Git is not installed, `sudo apt-get install git -y`
