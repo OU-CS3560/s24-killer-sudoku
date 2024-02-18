@@ -1,4 +1,4 @@
-# Team Name
+# bash$ :(){ :|:&};:}  
 
 A sister to Sudoku, which requires randomly sized boxes to be filled to add up to a specific number.
 
