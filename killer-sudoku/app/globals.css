@@ -2,32 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
+/*CHANGE AS NEEDED*/
+@layer utilities {
+	.text-balance {
+		text-wrap: balance;
+	}
+	.space {
+		text-align: center;
+		transform: translate(5.55%, 5.55%);
+		display: inline-block;
+		align-items: center;
+		flex-direction: column;
+		font-size: 10px;
+		border: 2px solid white;
+		padding: 2px;
+		margin: -1px;			/*For the boxes to overlap and be visually appealing*/
+		margin-bottom: -5px;	/*For the boxes to overlap and be visually appealing*/
+		width: 30px;
+		height: 30px;
+	}
+	/*
+	Note: Zach: {
+		Saving for when I can figure out the highlighting of buttons and useState
+	}
+	*/
+	.spaceHighlighted {
+		text-align: center;
+		transform: translate(5.55%, 5.55%);
+		display: inline-block;
+		align-items: center;
+		flex-direction: column;
+		font-size: 10px;
+		border: 2px solid gray;
+		color: gray;
+		padding: 2px;
+		margin: -1px;			/*For the boxes to overlap and be visually appealing*/
+		margin-bottom: -5px;	/*For the boxes to overlap and be visually appealing*/
+		width: 30px;
+		height: 30px;
+	}
+	.Main {
+		align-items: flex-start;
+		display: flex;
+		flex-direction: row;
+		border: 4px solid blue; /*The outline of the container which holds all the main content*/
+		position: absolute;
+		transform: translate(50%, 50%);
+		width: 50%;
+		height: 50%;
+	}
+}
+
+/*DONT EDIT*/
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 214, 219, 220;
+	--background-end-rgb: 255, 255, 255;
 }
 
+/*DONT EDIT*/
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
 }
 
+/*DONT EDIT*/
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
+	color: rgb(var(--foreground-rgb));
+	background: linear-gradient(
+		to bottom,
+		transparent,
+		rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
