@@ -2,8 +2,7 @@
 .PHONY: run version
 
 run:
-	npm run build
-	npm run start
+	@(cd killer-sudoku; npm run build; npm run start)
 
 version:
 	@printf "node: %s\n" "$(shell node -v)"
