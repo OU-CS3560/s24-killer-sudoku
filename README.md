@@ -29,7 +29,9 @@ This application is built on Next.js for the React component, and relies on Tail
 
 To build this project you must have the most recent versions of NPM, NODE, and BREW. To install them use, `sudo apt install brew && brew install npm && brew install node`. Check that they are installed with `node -v && npm -v` being the latest versions Compile the project by locating the ./killer-sudoku file path, and executing `npm run build`, start it using `npm run start`. Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Build Issues`.
 
-## Known Build Issues
+## Known Issues
+
+Safari renders items differently than Google Chrome, please use Google Chrome to get the most visually appealing product.
 
 If the installation process is not working try these solutions:
 
