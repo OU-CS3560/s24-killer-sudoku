@@ -1,7 +1,8 @@
-import Image from "next/image";
+import SudokuBoard from "./Sudoku";
 
 export default function Home() {
-  return (
-    <div>Hello World</div>
-  );
+
+	return (
+		<SudokuBoard></SudokuBoard>
+	);
 }
