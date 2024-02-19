@@ -27,9 +27,11 @@ This application is built on Next.js for the React component, and relies on Tail
 
 ## How to build/compile
 
-To build this project you must have the most recent versions of NPM, NODE, and BREW. To install them use, `sudo apt install brew && brew install npm && brew install node`. Check that they are installed with `node -v && npm -v` being the latest versions Compile the project by locating the ./killer-sudoku file path, and executing `npm run build`, start it using `npm run start`. Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Build Issues`.
+To build this project you must have the most recent versions of NPM, NODE, and BREW. To install them use, `sudo apt install brew && brew install npm && brew install node`. Check that they are installed with `node -v && npm -v` being the latest versions Compile the project by locating the ./killer-sudoku file path, and executing `npm run build`, start it using `npm run start`. Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Issues`.
 
-## Known Build Issues
+## Known Issues
+
+Safari renders items differently than Google Chrome, please use Google Chrome to get the most visually appealing product.
 
 If the installation process is not working try these solutions:
 
@@ -52,7 +54,7 @@ Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 Homebrew issues:
 
 - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
-- (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/ancientspirit/.bashrc`
+- `(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/$USER/.bashrc`
 
 NPM Error, `npm ERR! killer-sudoku@0.1.0 build: next build`   OR   `sh-next01 ERR`:
 - `npm install next`
@@ -62,4 +64,4 @@ Additional Possibilities:
 - Ensure you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows subsystem for Linux enabled.
 - Add homebrew to your path
 - Homebrew isn't installed (`brew -v`)
-- Git is not installed, `sudo apt-get install git -y`
+- Git is not installed, (`sudo apt-get install git -y`)
