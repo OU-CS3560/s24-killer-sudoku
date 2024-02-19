@@ -1,11 +1,11 @@
-# Team Name
+# bash$ :(){ :|:&};:}  
 
 A sister to Sudoku, which requires randomly sized boxes to be filled to add up to a specific number.
 
 ## Team Information
 
 **Team ID:** team-killer-sudoku  
-**Problem/Project name:** Killer Sudoku 
+**Problem/Project name:** Killer Sudoku \
 **Team Name:** bash$ :(){ :|:&};:}   
 **Members (4):**  
 - Zachary Wolfe (email: zw224021@ohio.edu, gh: github.com/ZacharyWolfe)
