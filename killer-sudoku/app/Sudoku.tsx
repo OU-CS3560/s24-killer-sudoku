@@ -35,12 +35,12 @@ const SudokuBoard = () => {
             {board.map((row, rowIndex) => (
                 <div key={rowIndex} id={rowIndex.toString()}>
                     {row.map((space, columnIndex) => (
-                        <div key={columnIndex} id={columnIndex.toString()} className={space.highlighted}>
-                            <div onClick={() => handleCellClick(rowIndex, columnIndex)}>{space.row}, {space.col}</div>
-                        </div>
+                        <button key={columnIndex} id={columnIndex.toString()} className={space.highlighted} onClick={() => handleCellClick(rowIndex, columnIndex)}>
+                            {space.row}, {space.col}
+                        </button>
                     ))}
                     {rowIndex !== board.length - 1 && <br />}
-                </div>
+                </div> // This is so that after every 9 squares generated it creates a break tag
             ))}
         </div>);
 };
@@ -83,24 +83,6 @@ function handleHighlighting(row: number, col: number, newBoard: SpaceButtonPrope
     } catch (error) {
         console.log(error);
     }
-    /*
-    if (row + 1 < 9)
-        newBoard[row + 1][col].highlighted='spaceHighlightedLookingAt';
-    if (row - 1 >= 0)
-        newBoard[row - 1][col].highlighted='spaceHighlightedLookingAt';
-    if (col + 1 < 9)
-        newBoard[row][col + 1].highlighted='spaceHighlightedLookingAt';
-    if (col - 1 >= 0)
-        newBoard[row][col - 1].highlighted='spaceHighlightedLookingAt';
-    if (row + 1 < 9 && col + 1 < 9)
-        newBoard[row + 1][col + 1].highlighted='spaceHighlightedLookingAt';
-    if (row + 1 < 9 && col - 1 >= 0)
-        newBoard[row + 1][col - 1].highlighted='spaceHighlightedLookingAt';
-    if (row - 1 >= 0 && col - 1 >= 0)
-        newBoard[row - 1][col - 1].highlighted='spaceHighlightedLookingAt';
-    if (row - 1 >= 0 && col + 1 < 9)
-        newBoard[row - 1][col + 1].highlighted='spaceHighlightedLookingAt';
-    */
 }
 
 export default SudokuBoard;
