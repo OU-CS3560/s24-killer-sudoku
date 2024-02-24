@@ -62,26 +62,36 @@ function initBoard(): SpaceButtonProperties[][]{
 }  
 
 function handleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][]){
-    for (let j = 0; j < 9; j++)
-        for (let k = 0; k < 9; k++)
-            newBoard[j][k].highlighted = 'space';
-    
-    for (let i = 0; i < 9; i++) {
-        newBoard[i][col].highlighted = 'spaceHighlighted';
-        newBoard[row][i].highlighted = 'spaceHighlighted';
-    }    
     try {
+        // Clear any current highlights
+        for (let j = 0; j < 9; j++)
+            for (let k = 0; k < 9; k++)
+                newBoard[j][k].highlighted='space';
+        
+        // Change the corresponding row and column to be highlighted
+        for (let i = 0; i < 9; i++) {
+            if (i !== row)
+                newBoard[i][col].highlighted = 'spaceHighlighted';
+
+            if (i !== col)
+                newBoard[row][i].highlighted = 'spaceHighlighted';
+        }    
         const topLeftRow = Math.floor(row / 3) * 3;
         const topLeftCol = Math.floor(col / 3) * 3;
         
         for (let i = topLeftRow; i < topLeftRow + 3; i++) {
             for (let j = topLeftCol; j < topLeftCol + 3; j++) {
-                newBoard[i][j].highlighted='spaceHighlightedLookingAt';
-                console.log(`Highlighting square at (${i}, ${j})`);
+                if (i !== row || j !== col){
+                    newBoard[i][j].highlighted='spaceHighlightedLookingAt';
+                    console.log("Highlighting square at (${i}, ${j})");
+                }
             }
         }
+
+        newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
     } catch (error) {
         console.log(error);
+        console.log("fuck");
     }
 }
 
