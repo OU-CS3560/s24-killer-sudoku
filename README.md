@@ -9,7 +9,7 @@ A sister to Sudoku, which requires randomly sized boxes to be filled to add up t
 **Team Name:** bash$ :(){ :|:&};:}   
 **Members (4):**  
 - Zachary Wolfe (email: zw224021@ohio.edu, gh: github.com/ZacharyWolfe)
-- Drew Mullet   (email: dm247120@ohio.edu, gh: github.com/Snaredrumhero)
+- Drew Mullett   (email: dm247120@ohio.edu, gh: github.com/Snaredrumhero)
 - Nick Adkins   (email: na761422@ohio.edu, gh: github.com/nickadkins47)
 - Kevin Belock  (email: kb848020@ohio.edu, gh: github.com/Phoenix2317)
 

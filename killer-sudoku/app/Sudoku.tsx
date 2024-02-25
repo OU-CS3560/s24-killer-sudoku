@@ -8,21 +8,24 @@
 
 "use client"; // for useState variables
 
-import React, { useState } from 'react';
+import React, { ChangeEvent, ReactElement, useState } from 'react';
 
 export interface SpaceButtonProperties {
     row: number,
     col: number,
     data: number,
     highlighted?: string
+    locked: boolean
 };
 
 const SudokuBoard = () => {
-    const [board, setBoard] = useState(() =>{
+    const [board, setBoard] = useState(() => {
         return initBoard();
     });
 
-    const handleCellClick = (row: number, col: number) => {
+    const [data, setData] = useState(Number);
+
+    const handleCellClickHighlight = (row: number, col: number) => {
         setBoard(prevBoard => {
             const newBoard = [...prevBoard];
             handleHighlighting(row, col, newBoard);
@@ -30,34 +33,58 @@ const SudokuBoard = () => {
         });
     };
 
+    const handleCellClickInput = (row: number, col: number, e: ChangeEvent<HTMLInputElement>) => {
+        setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            if (!newBoard[row][col].locked){
+                let val = +e.target.value;
+                if (!isNaN(val) && newBoard[row][col].data !== val && val <= 9 && val >= 0){
+                    newBoard[row][col].data = +e.target.value;
+                }
+            }
+            e.preventDefault();
+            return newBoard;
+        })
+    };
+
     return (
         <div className="Main">
             {board.map((row, rowIndex) => (
                 <div key={rowIndex} id={rowIndex.toString()}>
                     {row.map((space, columnIndex) => (
-                        <button key={columnIndex} id={columnIndex.toString()} className={space.highlighted} onClick={() => handleCellClick(rowIndex, columnIndex)}>
-                            {space.row}, {space.col}
-                        </button>
+                        <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
+                            <input
+                                type='text'
+                                autoComplete='off'
+                                autoCapitalize='off'
+                                value={space.data}
+                                className={space.highlighted}
+                                onChange={(e) => handleCellClickInput(space.row, space.col, e)}
+                            />
+                        </div>
                     ))}
                     {rowIndex !== board.length - 1 && <br />}
-                </div> // This is so that after every 9 squares generated it creates a break tag
+                </div> // This is so that after every 9 squares generated a break tag is inserted
             ))}
         </div>);
 };
 
-function initBoard(): SpaceButtonProperties[][]{
+function initBoard(): SpaceButtonProperties[][] {
     let arr: SpaceButtonProperties[][] = [];
 
     for (let i = 0; i < 9; i++) {
         arr[i] = [];
     }
 
+    // Generation loop
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            arr[i][j] = {row: i, col: j, data: (i+j), highlighted: 'space'};
+            arr[i][j] = {row: i, col: j, data: (i+j), highlighted: 'space', locked: true};
+            arr[i][j].data=10;
         }
     }
 
+    handleHighlighting(4, 4, arr);
     return arr;
 }  
 
@@ -83,7 +110,7 @@ function handleHighlighting(row: number, col: number, newBoard: SpaceButtonPrope
             for (let j = topLeftCol; j < topLeftCol + 3; j++) {
                 if (i !== row || j !== col){
                     newBoard[i][j].highlighted='spaceHighlightedLookingAt';
-                    console.log("Highlighting square at (${i}, ${j})");
+                    console.log('Highlighting square at ' + i + ', ' + j);
                 }
             }
         }
