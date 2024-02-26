@@ -63,11 +63,11 @@ export function initBoard(): SpaceButtonProperties[][] {
     for (let r3x3_1 = 0; r3x3_1 < 3; r3x3_1++) { // Randomly swap set of 3 rows/cols with a different one
         let r3x3_2: number = rand(0,2);
         for (let i = 0; i < 3; i++) {
-            swapRow(r3x3_1 *3 +1, r3x3_2 *3 +1);
+            swapRow(r3x3_1 *3 +i, r3x3_2 *3 +i);
         }
         r3x3_2 = rand(0,2);
         for (let i = 0; i < 3; i++) {
-            swapCol(r3x3_1 *3 +1, r3x3_2 *3 +1);
+            swapCol(r3x3_1 *3 +i, r3x3_2 *3 +i);
         }
     }
 
