@@ -8,6 +8,7 @@
 "use client"; // for useState variables
 
 import React, { ChangeEvent, ReactElement, useState } from 'react';
+import { initBoard } from './Generate';
 
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
@@ -120,32 +121,6 @@ const SudokuBoard = () => {
 };
 
 /**
- * @brief Initializes the board to be a 2d array, generates a board full of data with SpaceButtonProperties, and highlights the origin to start.
- * @returns A 9x9 board
- */
-function initBoard(): SpaceButtonProperties[][] {
-    let arr: SpaceButtonProperties[][] = [];
-
-    // Don't change unless better solution, need to fill the initial columns with a row vector.
-    for (let i = 0; i < 9; i++) {
-        arr[i] = [];
-    }
-
-    // Generation loop
-    for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-            arr[i][j] = {row: i, col: j, data: (i+j).toString(), highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
-            arr[i][j].data='8';
-        }
-    }
-
-    // Initially highlight the board at the origin
-    HandleHighlighting(4, 4, arr);
-    arr[3][3].locked=true;
-    return arr;
-}  
-
-/**
  * @brief Checks if the corresponding row and column has any matching data to the current input
  * @param row - the row of the cell that was clicked
  * @param col - the column of the cell that was clicked
@@ -207,7 +182,7 @@ function HighlightForMatchingRowCol(row: number, col: number, newBoard: SpaceBut
  * @param col - the column of the cell that was clicked
  * @param newBoard - the board we want to change
  */
-function HandleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][]){
+export function HandleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][]){
     try {
         // Clear any current highlights
         for (let j = 0; j < 9; j++){
