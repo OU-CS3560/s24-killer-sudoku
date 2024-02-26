@@ -11,7 +11,9 @@
 	.space,
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
-	.spaceHighlightedLookingAtSpecific {
+	.spaceHighlightedLookingAtSpecific,
+	.spaceNumberTakenInRowOrColumn,
+	.spaceNumberTakenInRowOrColumnSpecfic {
 		text-align: center;
 		transform: translate(5.55%, 5.55%);
 		display: inline-block;
@@ -40,12 +42,20 @@
 		background: lightblue;
 		color: white;
 	}
+	.spaceNumberTakenInRowOrColumn {
+		background: red;
+		color: white;
+	}
+	.spaceNumberTakenInRowOrColumnSpecfic {
+		background: lightblue;
+		color: red;
+	}
 	.Main {
 		align-items: flex-start;
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
-		border: 4px solid blue; /*The outline of the container which holds all the main content*/
+		border: 4px solid blue; /*The outline of the container which holds all the cells*/
 		position: fixed;
 		transform: translate(50%, 50%);
 		width: 50%;
