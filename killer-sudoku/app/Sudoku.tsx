@@ -126,13 +126,11 @@ const SudokuBoard = () => {
 function initBoard(): SpaceButtonProperties[][] {
     let arr: SpaceButtonProperties[][] = [];
 
-    // Generation loop
+    // Initialization Loop
     for (let i = 0; i < 9; i++) {
-        // Don't change unless better solution, need to fill the initial columns with a row vector.
-        arr[i] = [];
+        arr[i] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let j = 0; j < 9; j++) {
             arr[i][j] = {row: i, col: j, data: '0', highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
-
         }
     }
 
