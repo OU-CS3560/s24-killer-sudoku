@@ -13,7 +13,7 @@ import React, { ChangeEvent, ReactElement, useState } from 'react';
 export interface SpaceButtonProperties {
     row: number,
     col: number,
-    data: number,
+    data: string,
     highlighted?: string,
     locked: boolean,
     spaceTakenInRowOrColumn: boolean
@@ -60,7 +60,7 @@ const SudokuBoard = () => {
                 let val = +e.target.value;
                 
                 // If the incoming value doesn't equal the old data and there are no matching cells with this value
-                if (newBoard[row][col].data !== val && !CheckForMatchingRowCol(row, col, newBoard, val)) {
+                if (+newBoard[row][col].data !== val && !CheckForMatchingRowCol(row, col, newBoard, val)) {
 
                     // Then Highlight as if it's just a space you're looking at
                     newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
@@ -77,17 +77,17 @@ const SudokuBoard = () => {
                 }
 
                 // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
-                if (!isNaN(val) && newBoard[row][col].data !== val && val <= 9 && val >= 0){
+                if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0){
                     if (val === 0){ // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
                         
                         /**
                          * @todo FIX THIS SO THAT NOTHING DISPLAYS IN THE CELL IF THE INPUT IS DELETE OR 0
                          */
 
-                        newBoard[row][col].data = +'';
+                        newBoard[row][col].data = '';
                     }
                     else{
-                        newBoard[row][col].data = +e.target.value;
+                        newBoard[row][col].data = e.target.value.toString();
                     }
                 }
             }
@@ -134,13 +134,14 @@ function initBoard(): SpaceButtonProperties[][] {
     // Generation loop
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            arr[i][j] = {row: i, col: j, data: (i+j), highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
-            arr[i][j].data=8;
+            arr[i][j] = {row: i, col: j, data: (i+j).toString(), highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
+            arr[i][j].data='8';
         }
     }
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
+    arr[3][3].locked=true;
     return arr;
 }  
 
@@ -156,7 +157,7 @@ function CheckForMatchingRowCol(row: number, col: number, newBoard: SpaceButtonP
     // Check for any matching data before placing the value and mark it as taken in that row or column
     let deez = false;
     for (let i = 0; i < 9; i++){
-        if ((target && newBoard[i][col].data === target && !newBoard[i][col].locked) || (newBoard[row][i].data === target && !newBoard[row][i].locked)){
+        if ((target && newBoard[i][col].data === target.toString() && !newBoard[i][col].locked) || (newBoard[row][i].data === target.toString() && !newBoard[row][i].locked)){
             deez = true;
         }
     }
