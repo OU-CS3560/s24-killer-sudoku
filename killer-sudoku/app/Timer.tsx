@@ -6,27 +6,58 @@
  * @version  1.0
 */
 
-import React from 'react';
+import * as React from 'react';
 
 import { useState } from 'react';
 
 const Timer = () => {
 
-    const [minuets, setMinuets] = useState(0);
-    const [seconds, setSeconds] = useState(0);
+    //sets time to 0 
+    
+    const [time, setTime] = useState(0);
 
-    const start = 3600;
 
-    const getTime = () => {
-        
-        setMinuets(Math.floor((start / 60) % 60));
-        setSeconds(Math.floor(start % 60));
+    //Checks for if the timer is running
+    const [isRunning, setIsRunning] = useState(false);
 
-    }
+    React.useEffect(() => {
+
+        let internalid: string | number | NodeJS.Timeout | undefined;
+
+        if(isRunning){
+            //sets the time from 0 to 1 every second through javascript interval method
+            internalid = setInterval(() => setTime(time + 1), 1000);
+
+        }
+
+        return () => clearInterval(internalid);
+
+    }, [isRunning, time]);
+
+    //puts time in seconds
+
+    const seconds = time;
+
+    //calculates minuets from seconds
+
+    const minuets = Math.floor(time / 60);
+
+    //Whether to start or stop the timer
+
+    const startStop = () => {
+        setIsRunning(!isRunning);
+    };
+
+    const reset = () => {
+        setTime(0);
+    };
 
     
 
 };
+
+
+export default Timer;
 
 
 
