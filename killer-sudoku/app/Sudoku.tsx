@@ -13,6 +13,7 @@ import { initBoard } from './Generate';
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
     data: string,
+    hiddenData: string,
     highlighted?: string,
     locked: boolean
 };
@@ -26,6 +27,14 @@ const SudokuBoard = () => {
     const [board, setBoard] = useState(() => {
         return initBoard();
     });
+
+    const handleClickSolveButton = () => {
+        setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            Solve(newBoard);
+            return newBoard;
+        });
+    }
 
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
@@ -77,7 +86,8 @@ const SudokuBoard = () => {
     };
 
     return (
-        <div className="Main">
+        <div>
+            <div className="Main">
             {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
                 <div key={rowIndex} id={rowIndex.toString()}>
                     {row.map((space, columnIndex) => (
@@ -95,6 +105,10 @@ const SudokuBoard = () => {
                     {rowIndex !== board.length - 1 && <br />}
                 </div> // This is so that after every 9 squares generated a break tag is inserted
             ))}
+            </div>
+            <button className='solveButton' onClick={() => handleClickSolveButton()}>
+                Solve
+            </button>
         </div>);
 };
 
@@ -184,6 +198,18 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         console.log(error);
         console.log("fuck");
     }
+}
+
+export function Solve(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+    for (let i = 0; i < 9; i++){
+        for (let j = 0; j < 9; j++){
+            if (!newBoard[i][j].locked){
+                newBoard[i][j].highlighted='space';
+                newBoard[i][j].data=newBoard[i][j].hiddenData;
+            }
+        }
+    }
+    return newBoard;
 }
 
 export default SudokuBoard;
