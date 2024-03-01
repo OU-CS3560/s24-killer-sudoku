@@ -45,6 +45,15 @@
 		background: red;
 		color: white;
 	}
+	.solveButton{
+		border-radius: 10%;
+		text-align: center;
+		width: 80px;
+		height: 25px;
+		background: lightgreen;
+		color: black;
+		border-color: black;
+	}
 	.Main {
 		align-items: flex-start;
 		display: flex;
@@ -63,7 +72,11 @@
 		font-weight: bold;
 		font-size: 48px;
 	}
-
+	.killerSudokuNames{
+		color: black;
+		font-size: 18px;
+		font-weight: 500;
+	}
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
