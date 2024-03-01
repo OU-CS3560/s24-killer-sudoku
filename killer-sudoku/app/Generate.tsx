@@ -99,15 +99,15 @@ export function initBoard(): SpaceButtonProperties[][] {
     // Initialization Loop
     let arr: SpaceButtonProperties[][] = [];
     for (let i = 0; i < 9; i++) {
-        arr[i] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
+        arr[i] = []; // Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let j = 0; j < 9; j++) {
-            arr[i][j] = {row: i, col: j, data: values[i][j], highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
+            arr[i][j] = {data: values[i][j], highlighted: 'space', locked: false};
         }
     }
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
-    arr[3][3].locked=true;
+
     return arr;
 }
 

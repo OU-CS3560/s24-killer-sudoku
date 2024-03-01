@@ -12,8 +12,7 @@
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
 	.spaceHighlightedLookingAtSpecific,
-	.spaceNumberTakenInRowOrColumn,
-	.spaceNumberTakenInRowOrColumnSpecfic {
+	.spaceNumberTakenInRowOrColumn {
 		text-align: center;
 		transform: translate(5.55%, 5.55%);
 		display: inline-block;
@@ -45,10 +44,6 @@
 	.spaceNumberTakenInRowOrColumn {
 		background: red;
 		color: white;
-	}
-	.spaceNumberTakenInRowOrColumnSpecfic {
-		background: lightblue;
-		color: red;
 	}
 	.Main {
 		align-items: flex-start;
