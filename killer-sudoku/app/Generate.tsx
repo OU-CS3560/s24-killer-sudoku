@@ -37,7 +37,6 @@ export function initBoard(): SpaceButtonProperties[][] {
             values[i][c2] = temp;
         }
     }
-
     
     let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
         ['1','2','3',  '4','5','6',  '7','8','9'],
@@ -71,7 +70,7 @@ export function initBoard(): SpaceButtonProperties[][] {
         }
     }
 
-    for (let i1 = 1; i1 < 9; i1++) { // Randomize the placement of each set of numbers. kinda redundant but why not
+    for (let i1: number = 1; i1 <= 9; i1++) { // Randomize the placement of each set of numbers
         let i2: number = rand(1,9);
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
@@ -82,6 +81,15 @@ export function initBoard(): SpaceButtonProperties[][] {
         }
     }
 
+    // Initialization Loop, put all values onto the board
+    let arr: SpaceButtonProperties[][] = [];
+    for (let x = 0; x < 9; x++) {
+        arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
+        for (let y = 0; y < 9; y++) {
+            arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: true};
+        }
+    }
+
     // TODO: i'd say hide/erase x-number of tiles (aka show as empty), as per game difficulty listed below
     // After that, the board should still have at least 1 solution
 
@@ -89,25 +97,32 @@ export function initBoard(): SpaceButtonProperties[][] {
     // --> Easy:     42,45,45,44 --> Avg 44
     // --> Medium:   51,46,51,49 --> Avg 49
     // --> Hard:     (TODO)
-    // --> Export:   
+    // --> Expert:   
     // --> Master:   
     // --> K-Easy:   
     // --> K-Medium: 
     // --> K-Hard:   
     // --> K-Expert: 
 
-    // Initialization Loop
-    let arr: SpaceButtonProperties[][] = [];
-    for (let i = 0; i < 9; i++) {
-        arr[i] = []; // Don't change unless better solution, need to fill the initial columns with a row vector.
-        for (let j = 0; j < 9; j++) {
-            arr[i][j] = {data: values[i][j], hiddenData: values[i][j],highlighted: 'space', locked: false};
+    //eventually have a manually-set difficulty string value & map that to a number
+    //for now, change "difficulty" here. 
+    const numHidden: number = 45;
+
+    // Masking Tiles
+    for (let i = 0; i <= numHidden; i++) {
+        for (let t = false; t == false;) {
+            let x: number = rand(0,8);
+            let y: number = rand(0,8);
+            if (arr[x][y].data != '') {
+                arr[x][y].data = '';
+                arr[x][y].locked = false;
+                t = true;
+            }
         }
     }
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
-
     return arr;
 }
 
