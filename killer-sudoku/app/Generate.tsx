@@ -104,10 +104,11 @@ export function initBoard(): SpaceButtonProperties[][] {
     // --> K-Hard:   
     // --> K-Expert: 
 
-    //eventually have this value come from a UI element
+    //eventually have this value come from a UI element, instead of being defined here
     const difficulty: string = "Medium";
 
-    const diffMap = new Map <string,number> ([
+    const numHidden: number = 
+    new Map <string,number> ([
         ["Easy"    , 44], //final
         ["Medium"  , 49], //final
         ["Hard"    , 49], //WIP here & down
@@ -117,14 +118,11 @@ export function initBoard(): SpaceButtonProperties[][] {
         ["K-Medium", 49],
         ["K-Hard"  , 49],
         ["K-Master", 49]
-    ]);
+    ]
+    ).get(difficulty) ?? 0; //0 is default in case something goes wrong
 
-    if(typeof(diffMap.get(difficulty)) == undefined) {
-
-    }
-
-    const numHidden: number | undefined = diffMap.get(difficulty);
-
+    //for weird looking operator "??" look up "Nullish coalescing operator"
+    //basically returns left value as long as it's not null or undefined, otherwise returns right
 
     // Masking Tiles
     for (let i = 0; i <= numHidden; i++) {
@@ -150,6 +148,6 @@ export function initBoard(): SpaceButtonProperties[][] {
  * @param b upper limit
  * @returns random value between a & b
  */
-function rand(a: number, b: number): number {
+export function rand(a: number, b: number): number {
     return Math.floor(Math.random() * (b-a+1) + a);
 };
