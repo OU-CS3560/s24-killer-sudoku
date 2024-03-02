@@ -70,7 +70,7 @@ export function initBoard(): SpaceButtonProperties[][] {
         }
     }
 
-    for (let i1 = 1; i1 <= 9; i1++) { // Randomize the placement of each set of numbers. kinda redundant but why not
+    for (let i1: number = 1; i1 <= 9; i1++) { // Randomize the placement of each set of numbers
         let i2: number = rand(1,9);
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
@@ -104,10 +104,11 @@ export function initBoard(): SpaceButtonProperties[][] {
     // --> K-Hard:   
     // --> K-Expert: 
 
-    //change "difficulty" here, for now
+    //eventually have a manually-set difficulty string value & map that to a number
+    //for now, change "difficulty" here. 
     const numHidden: number = 45;
 
-    // Masking Tiles, this is a temporary solution
+    // Masking Tiles
     for (let i = 0; i <= numHidden; i++) {
         for (let t = false; t == false;) {
             let x: number = rand(0,8);
