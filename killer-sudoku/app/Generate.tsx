@@ -121,7 +121,7 @@ export function initBoard(): SpaceButtonProperties[][] {
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
-    arr[3][3].locked=true;
+
     return arr;
 }
 

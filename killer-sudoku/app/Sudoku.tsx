@@ -7,17 +7,15 @@
 
 "use client"; // for useState variables
 
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { initBoard } from './Generate';
 
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
-    row: number,
-    col: number,
     data: string,
+    hiddenData: string,
     highlighted?: string,
-    locked: boolean,
-    spaceTakenInRowOrColumn: boolean
+    locked: boolean
 };
 
 /**
@@ -29,6 +27,14 @@ const SudokuBoard = () => {
     const [board, setBoard] = useState(() => {
         return initBoard();
     });
+
+    const handleClickSolveButton = () => {
+        setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            Solve(newBoard);
+            return newBoard;
+        });
+    }
 
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
@@ -60,37 +66,18 @@ const SudokuBoard = () => {
                 // Cast target to int, because it's incoming as a string
                 let val = +e.target.value;
                 
-                // If the incoming value doesn't equal the old data and there are no matching cells with this value
-                if (+newBoard[row][col].data !== val && !CheckForMatchingRowCol(row, col, newBoard, val)) {
-
-                    // Then Highlight as if it's just a space you're looking at
-                    newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
-
-                    // Unhighlight the corresponding row and column that this value is in
-                    HighlightForMatchingRowCol(row, col, newBoard, true);
-                    console.log('row: ' + row + ', col: ' + col + ' highlighted with: ' + newBoard[row][col].highlighted)
-                    newBoard[row][col].spaceTakenInRowOrColumn=false;
-                }
-                else {
-                    newBoard[row][col].highlighted='spaceNumberTakenInRowOrColumnSpecfic';
-                    console.log('row: ' + row + ', col: ' + col + ' highlighted with: ' + newBoard[row][col].highlighted)
-                    newBoard[row][col].spaceTakenInRowOrColumn=true;
-                }
-
                 // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
                 if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0){
                     if (val === 0){ // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                        
-                        /**
-                         * @todo FIX THIS SO THAT NOTHING DISPLAYS IN THE CELL IF THE INPUT IS DELETE OR 0
-                         */
-
+                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = '';
                     }
                     else{
+                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = e.target.value.toString();
                     }
                 }
+                HandleHighlighting(row, col, newBoard, val);
             }
             // This prevents the board from resetting completely when pressing enter
             e.preventDefault();
@@ -99,7 +86,8 @@ const SudokuBoard = () => {
     };
 
     return (
-        <div className="Main">
+        <div>
+            <div className="Main">
             {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
                 <div key={rowIndex} id={rowIndex.toString()}>
                     {row.map((space, columnIndex) => (
@@ -110,71 +98,19 @@ const SudokuBoard = () => {
                                 autoCapitalize='off'
                                 value={space.data} // the incoming value
                                 className={space.highlighted}
-                                onChange={(e) => handleCellClickInput(space.row, space.col, e)} // what to do when clicked
+                                onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // what to do when clicked
                             />
                         </div>
                     ))}
                     {rowIndex !== board.length - 1 && <br />}
                 </div> // This is so that after every 9 squares generated a break tag is inserted
             ))}
+            </div>
+            <button className='solveButton' onClick={() => handleClickSolveButton()}>
+                Solve
+            </button>
         </div>);
 };
-
-/**
- * @brief Checks if the corresponding row and column has any matching data to the current input
- * @param row - the row of the cell that was clicked
- * @param col - the column of the cell that was clicked
- * @param newBoard - the board we want to change
- * @param target - the value which we are searching for
- * @returns true if matches, false if no matches
- */
-function CheckForMatchingRowCol(row: number, col: number, newBoard: SpaceButtonProperties[][], target: number): boolean{
-    // Check for any matching data before placing the value and mark it as taken in that row or column
-    let deez = false;
-    for (let i = 0; i < 9; i++){
-        if ((target && newBoard[i][col].data === target.toString() && !newBoard[i][col].locked) || (newBoard[row][i].data === target.toString() && !newBoard[row][i].locked)){
-            deez = true;
-        }
-    }
-    if (deez)
-        HighlightForMatchingRowCol(row, col, newBoard);
-
-    return deez;
-}
-
-/**
- * @brief A function that highlights the matches in the corresponding row and column of the cell that was clicked, can also unhighlight
- * @param row - the row of the cell that was clicked
- * @param col - the column of the cell that was clicked
- * @param newBoard - the board we want to change
- * @param unhighlight - optional boolean to unhighlight the corresponding row and column of the cell that was clicked
- */
-function HighlightForMatchingRowCol(row: number, col: number, newBoard: SpaceButtonProperties[][], unhighlight?: boolean): void{
-    for (let i = 0; i < 9; i++){
-        if (i !== row && !newBoard[i][col].locked){
-            if (unhighlight){
-                newBoard[i][col].highlighted='spaceHighlighted';
-                newBoard[i][col].spaceTakenInRowOrColumn=false;
-            }
-            else{
-                newBoard[i][col].highlighted='spaceNumberTakenInRowOrColumn';
-                newBoard[i][col].spaceTakenInRowOrColumn=true;
-            }
-            console.log('highlighting with ' + newBoard[i][col].highlighted);
-        }
-        if (i !== col && !newBoard[i][col].locked){
-            if (unhighlight){
-                newBoard[row][i].highlighted='spaceHighlighted';
-                newBoard[row][i].spaceTakenInRowOrColumn=false;
-            }
-            else{
-                newBoard[row][i].highlighted='spaceNumberTakenInRowOrColumn';
-                newBoard[row][i].spaceTakenInRowOrColumn=true;
-            }
-            console.log('highlighting with ' + newBoard[row][i].highlighted);
-        }
-    }
-}
 
 /**
  * @brief A function that handles row and column highlights as well as 3x3 highlighting
@@ -182,62 +118,98 @@ function HighlightForMatchingRowCol(row: number, col: number, newBoard: SpaceBut
  * @param col - the column of the cell that was clicked
  * @param newBoard - the board we want to change
  */
-export function HandleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][]){
+export function HandleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][], difNum?: number){
     try {
         // Clear any current highlights
         for (let j = 0; j < 9; j++){
             for (let k = 0; k < 9; k++){
-                if (!newBoard[j][k].spaceTakenInRowOrColumn){
-                    newBoard[j][k].highlighted='space';
-                }
-                else {
-                    newBoard[j][k].highlighted='spaceNumberTakenInRowOrColumn';
-                }
+                if (newBoard[j][k].highlighted !== 'spaceNumberTakenInRowOrColumn' && !newBoard[j][k].locked)
+                    newBoard[j][k].highlighted='space'
                 console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted)
             }
         }
+
+        // If the old value on the board isn't undefined (if we passed it as a parameter to this function)
+        if (difNum){
+            for (let i = 0; i < 9; i++){
+                // Clear any previous highlights that this number once shared with matching data in this row or column
+                if (newBoard[row][i].highlighted === 'spaceNumberTakenInRowOrColumn' && +newBoard[row][i].data === difNum){
+                    newBoard[row][i].highlighted = 'spaceHighlighted';
+                }
+                if (newBoard[i][col].highlighted === 'spaceNumberTakenInRowOrColumn' && +newBoard[i][col].data === difNum){
+                    newBoard[i][col].highlighted = 'spaceHighlighted';
+                }
+            }
+        }
+
         // Change the corresponding row and column to be highlighted
         for (let i = 0; i < 9; i++) {
-            if (i !== row && !newBoard[i][col].spaceTakenInRowOrColumn){
-                newBoard[i][col].highlighted = 'spaceHighlighted';
+            if (i !== row && newBoard[i][col].highlighted !== 'spaceNumberTakenInRowOrColumn'){
+                newBoard[i][col].highlighted='spaceHighlighted';
+                console.log('highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
             }
-            else{
-                newBoard[i][col].highlighted='spaceNumberTakenInRowOrColumn';
+            if (i !== col && newBoard[row][i].highlighted !== 'spaceNumberTakenInRowOrColumn'){
+                newBoard[row][i].highlighted='spaceHighlighted';
+                console.log('highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
             }
-            console.log('highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].spaceTakenInRowOrColumn)
-            if (i !== col && !newBoard[row][i].spaceTakenInRowOrColumn){
-                newBoard[row][i].highlighted = 'spaceHighlighted';
-            }
-            else{
-                newBoard[row][i].highlighted='spaceNumberTakenInRowOrColumn';
-            }
-            console.log('highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].spaceTakenInRowOrColumn)
         }  
+
+        // 3x3 highlighting
         const topLeftRow = Math.floor(row / 3) * 3;
         const topLeftCol = Math.floor(col / 3) * 3;
         
         for (let i = topLeftRow; i < topLeftRow + 3; i++) {
             for (let j = topLeftCol; j < topLeftCol + 3; j++) {
-                if ((i !== row || j !== col) && !newBoard[i][j].spaceTakenInRowOrColumn){
+                if (newBoard[i][j].highlighted !== 'spaceNumberTakenInRowOrColumn'){
                     newBoard[i][j].highlighted='spaceHighlightedLookingAt';
-                    console.log('Highlighting square at ' + i + ', ' + j);
-                }
-                else if (newBoard[i][j].spaceTakenInRowOrColumn){
-                    newBoard[i][j].highlighted='spaceNumberTakenInRowOrColumn';
-                    console.log('Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].spaceTakenInRowOrColumn);
+                    console.log('Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
             }
         }
-        if (!newBoard[row][col].spaceTakenInRowOrColumn)
-            newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
-        else
-            newBoard[row][col].highlighted='spaceNumberTakenInRowOrColumn';
+        
+        // Check for any matching new data in the given row and column of the cell that was clicked
+        for (let i = 0; i < 9; i++){
+            for (let j = i + 1; j < 9; j++){
+                if (newBoard[row][i].data === newBoard[row][j].data && +newBoard[row][i].data !== 0){
+                    newBoard[row][i].highlighted='spaceNumberTakenInRowOrColumn';
+                    newBoard[row][j].highlighted='spaceNumberTakenInRowOrColumn';
+                }
+                if (newBoard[i][col].data === newBoard[j][col].data && +newBoard[row][i].data !== 0){
+                    newBoard[i][col].highlighted='spaceNumberTakenInRowOrColumn';
+                    newBoard[j][col].highlighted='spaceNumberTakenInRowOrColumn';
+                }
+            }
+        }
 
-        newBoard[3][3].locked=true;
+        // if the highlight is not a red space
+        if (newBoard[row][col].highlighted !== 'spaceNumberTakenInRowOrColumn'){
+            newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
+        }
+        // if the highlight is not due to a backspace
+        else if (+newBoard[row][col].data !== 0){
+            newBoard[row][col].highlighted='spaceNumberTakenInRowOrColumn';
+        }
+        // if all else fails, it's just a space you're looking at in the 3x3
+        else {
+            newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
+        }
+
     } catch (error) {
         console.log(error);
         console.log("fuck");
     }
+}
+
+export function Solve(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+    for (let i = 0; i < 9; i++){
+        for (let j = 0; j < 9; j++){
+            if (!newBoard[i][j].locked){
+                newBoard[i][j].highlighted='space';
+                newBoard[i][j].data=newBoard[i][j].hiddenData;
+            }
+        }
+    }
+    return newBoard;
 }
 
 export default SudokuBoard;

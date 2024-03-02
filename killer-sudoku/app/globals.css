@@ -12,8 +12,7 @@
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
 	.spaceHighlightedLookingAtSpecific,
-	.spaceNumberTakenInRowOrColumn,
-	.spaceNumberTakenInRowOrColumnSpecfic {
+	.spaceNumberTakenInRowOrColumn {
 		text-align: center;
 		transform: translate(5.55%, 5.55%);
 		display: inline-block;
@@ -46,9 +45,14 @@
 		background: red;
 		color: white;
 	}
-	.spaceNumberTakenInRowOrColumnSpecfic {
-		background: lightblue;
-		color: red;
+	.solveButton{
+		border-radius: 10%;
+		text-align: center;
+		width: 80px;
+		height: 25px;
+		background: lightgreen;
+		color: black;
+		border-color: black;
 	}
 	.Main {
 		align-items: flex-start;
@@ -68,7 +72,11 @@
 		font-weight: bold;
 		font-size: 48px;
 	}
-
+	.killerSudokuNames{
+		color: black;
+		font-size: 18px;
+		font-weight: 500;
+	}
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
