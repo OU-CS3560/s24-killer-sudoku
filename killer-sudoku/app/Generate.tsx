@@ -86,7 +86,7 @@ export function initBoard(): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let y = 0; y < 9; y++) {
-            arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: false};
+            arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: true};
         }
     }
 
@@ -114,6 +114,7 @@ export function initBoard(): SpaceButtonProperties[][] {
             let y: number = rand(0,8);
             if (arr[x][y].data != '') {
                 arr[x][y].data = '';
+                arr[x][y].locked = false;
                 t = true;
             }
         }
