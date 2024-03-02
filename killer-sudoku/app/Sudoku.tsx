@@ -36,6 +36,14 @@ const SudokuBoard = () => {
         });
     }
 
+    const handleClickClearButton = () => {
+        setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            Clear(newBoard);
+            return newBoard;
+        });
+    }
+
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
      * @param row - the row of the cell that was clicked
@@ -76,29 +84,73 @@ const SudokuBoard = () => {
                         val = +newBoard[row][col].data;
                         newBoard[row][col].data = e.target.value.toString();
                     }
+                    HandleHighlighting(row, col, newBoard, val);
                 }
-                HandleHighlighting(row, col, newBoard, val);
             }
             // This prevents the board from resetting completely when pressing enter
             e.preventDefault();
             return newBoard;
         })
     };
+    /*
+    setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            if (e.key === 'hello'){
+                
+            }
+            return newBoard;
+        })
+    */
+    const handleKeyboardPress = (row: number, col: number, e: React.KeyboardEvent<HTMLDivElement>) => {
+        setBoard(prevBoard => {
+            const newBoard = [...prevBoard];
+            switch (e.key) {
+                case e.ctrlKey && 'z': {
+                    e.preventDefault();
+                    break;
+                }
+                case 'ArrowUp':
+                    col -= 1;
+                    HandleHighlighting(row, col, newBoard);
+                    break;
+                
+                case 'ArrowDown':
+                    col += 1;
+                    HandleHighlighting(row, col, newBoard);
+                    break;
+                
+                case 'ArrowLeft':
+                    row -= 1;
+                    HandleHighlighting(row, col, newBoard);
+                    break;
+
+                case 'ArrowRight':
+                    row += 1;
+                    HandleHighlighting(row, col, newBoard);
+                    break;
+            
+                default:
+                    break;
+            }
+            console.log(e.key);
+            return newBoard;
+        })
+    };
 
     return (
         <div>
-            <div className="Main">
+            <div className='Main'>
             {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
-                <div key={rowIndex} id={rowIndex.toString()}>
+                    <div key={rowIndex} id={rowIndex.toString()}>
                     {row.map((space, columnIndex) => (
-                        <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
+                        <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)} onKeyDownCapture={(e) => handleKeyboardPress(rowIndex, columnIndex, e)}>
                             <input
-                                type='text' // because numbers are really fucking weird for some reason
+                                type='text' // Because numbers are really fucking weird for some reason
                                 autoComplete='off'
                                 autoCapitalize='off'
-                                value={space.data} // the incoming value
+                                value={space.data} // The incoming value
                                 className={space.highlighted}
-                                onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // what to do when clicked
+                                onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
                             />
                         </div>
                     ))}
@@ -108,6 +160,9 @@ const SudokuBoard = () => {
             </div>
             <button className='solveButton' onClick={() => handleClickSolveButton()}>
                 Solve
+            </button>
+            <button className='solveButton' onClick={() => handleClickClearButton()}>
+                Clear
             </button>
         </div>);
 };
@@ -123,9 +178,10 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         // Clear any current highlights
         for (let j = 0; j < 9; j++){
             for (let k = 0; k < 9; k++){
-                if (newBoard[j][k].highlighted !== 'spaceNumberTakenInRowOrColumn' && !newBoard[j][k].locked)
+                if (newBoard[j][k].highlighted !== 'spaceNumberTakenInRowOrColumn'){
                     newBoard[j][k].highlighted='space'
-                console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted)
+                    console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted)
+                }   
             }
         }
 
@@ -135,9 +191,11 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                 // Clear any previous highlights that this number once shared with matching data in this row or column
                 if (newBoard[row][i].highlighted === 'spaceNumberTakenInRowOrColumn' && +newBoard[row][i].data === difNum){
                     newBoard[row][i].highlighted = 'spaceHighlighted';
+                    console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
                 }
                 if (newBoard[i][col].highlighted === 'spaceNumberTakenInRowOrColumn' && +newBoard[i][col].data === difNum){
                     newBoard[i][col].highlighted = 'spaceHighlighted';
+                    console.log('highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
                 }
             }
         }
@@ -173,10 +231,14 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                 if (newBoard[row][i].data === newBoard[row][j].data && +newBoard[row][i].data !== 0){
                     newBoard[row][i].highlighted='spaceNumberTakenInRowOrColumn';
                     newBoard[row][j].highlighted='spaceNumberTakenInRowOrColumn';
+                    console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
+                    console.log('highlighting [row][j] ' + row + ', ' + j + ' with ' + newBoard[row][j].highlighted)
                 }
-                if (newBoard[i][col].data === newBoard[j][col].data && +newBoard[row][i].data !== 0){
+                if (newBoard[i][col].data === newBoard[j][col].data && +newBoard[i][col].data !== 0){
                     newBoard[i][col].highlighted='spaceNumberTakenInRowOrColumn';
                     newBoard[j][col].highlighted='spaceNumberTakenInRowOrColumn';
+                    console.log('highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
+                    console.log('highlighting [j][col] ' + j + ', ' + col + ' with ' + newBoard[j][col].highlighted)
                 }
             }
         }
@@ -184,14 +246,17 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         // if the highlight is not a red space
         if (newBoard[row][col].highlighted !== 'spaceNumberTakenInRowOrColumn'){
             newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
+            console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted)
         }
         // if the highlight is not due to a backspace
         else if (+newBoard[row][col].data !== 0){
             newBoard[row][col].highlighted='spaceNumberTakenInRowOrColumn';
+            console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted)
         }
         // if all else fails, it's just a space you're looking at in the 3x3
         else {
             newBoard[row][col].highlighted='spaceHighlightedLookingAtSpecific';
+            console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted)
         }
 
     } catch (error) {
@@ -200,13 +265,23 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
     }
 }
 
-export function Solve(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+function Solve(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
             if (!newBoard[i][j].locked){
                 newBoard[i][j].highlighted='space';
                 newBoard[i][j].data=newBoard[i][j].hiddenData;
             }
+        }
+    }
+    return newBoard;
+}
+
+function Clear(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+    for (let i = 0; i < 9; i++){
+        for (let j = 0; j < 9; j++){
+            newBoard[i][j].highlighted='space';
+            newBoard[i][j].data='';
         }
     }
     return newBoard;
