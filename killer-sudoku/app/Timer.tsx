@@ -42,7 +42,7 @@ const Timer = () => {
 
     //calculates minuets from seconds
 
-    const minuets = Math.floor((time / 60) % 60);
+    const minuets = Math.floor((time / 60));
 
     //Whether to start or stop the timer
 
