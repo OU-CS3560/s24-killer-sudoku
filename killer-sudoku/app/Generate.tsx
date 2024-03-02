@@ -81,6 +81,15 @@ export function initBoard(): SpaceButtonProperties[][] {
         }
     }
 
+    // Initialization Loop, put all values onto the board
+    let arr: SpaceButtonProperties[][] = [];
+    for (let x = 0; x < 9; x++) {
+        arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
+        for (let y = 0; y < 9; y++) {
+            arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: false};
+        }
+    }
+
     // TODO: i'd say hide/erase x-number of tiles (aka show as empty), as per game difficulty listed below
     // After that, the board should still have at least 1 solution
 
@@ -103,25 +112,15 @@ export function initBoard(): SpaceButtonProperties[][] {
         for (let t = false; t == false;) {
             let x: number = rand(0,8);
             let y: number = rand(0,8);
-            if (values[x][y] != '') {
-                values[x][y] = '';
+            if (arr[x][y].data != '') {
+                arr[x][y].data = '';
                 t = true;
             }
         }
     }
 
-    // Initialization Loop
-    let arr: SpaceButtonProperties[][] = [];
-    for (let x = 0; x < 9; x++) {
-        arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
-        for (let y = 0; y < 9; y++) {
-            arr[x][y] = {row: x, col: y, data: values[x][y], highlighted: 'space', locked: false, spaceTakenInRowOrColumn: false};
-        }
-    }
-
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
-
     return arr;
 }
 
