@@ -37,6 +37,8 @@ export function initBoard(): SpaceButtonProperties[][] {
             values[i][c2] = temp;
         }
     }
+
+    console.log("initBoard: Start");
     
     let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
         ['1','2','3',  '4','5','6',  '7','8','9'],
@@ -81,6 +83,8 @@ export function initBoard(): SpaceButtonProperties[][] {
         }
     }
 
+    console.log("initBoard: Randomization complete");
+
     // Initialization Loop, put all values onto the board
     let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
@@ -89,6 +93,8 @@ export function initBoard(): SpaceButtonProperties[][] {
             arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: true};
         }
     }
+
+    console.log("initBoard: Initialization complete");
 
     // TODO: i'd say hide/erase x-number of tiles (aka show as empty), as per game difficulty listed below
     // After that, the board should still have at least 1 solution
@@ -124,6 +130,8 @@ export function initBoard(): SpaceButtonProperties[][] {
     //for weird looking operator "??" look up "Nullish coalescing operator"
     //basically returns left value as long as it's not null or undefined, otherwise returns right
 
+    console.log("initBoard: Difficulty: %s. numHidden: %d ", difficulty, numHidden);
+
     // Masking Tiles
     for (let i = 0; i <= numHidden; i++) {
         for (let t = false; t == false;) {
@@ -136,6 +144,8 @@ export function initBoard(): SpaceButtonProperties[][] {
             }
         }
     }
+
+    console.log("initBoard: Masking complete");
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
