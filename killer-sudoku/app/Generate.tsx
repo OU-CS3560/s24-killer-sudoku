@@ -104,9 +104,27 @@ export function initBoard(): SpaceButtonProperties[][] {
     // --> K-Hard:   
     // --> K-Expert: 
 
-    //eventually have a manually-set difficulty string value & map that to a number
-    //for now, change "difficulty" here. 
-    const numHidden: number = 45;
+    //eventually have this value come from a UI element
+    const difficulty: string = "Medium";
+
+    const diffMap = new Map <string,number> ([
+        ["Easy"    , 44], //final
+        ["Medium"  , 49], //final
+        ["Hard"    , 49], //WIP here & down
+        ["Expert"  , 49],
+        ["Master"  , 49],
+        ["K-Easy"  , 49],
+        ["K-Medium", 49],
+        ["K-Hard"  , 49],
+        ["K-Master", 49]
+    ]);
+
+    if(typeof(diffMap.get(difficulty)) == undefined) {
+
+    }
+
+    const numHidden: number | undefined = diffMap.get(difficulty);
+
 
     // Masking Tiles
     for (let i = 0; i <= numHidden; i++) {
@@ -135,4 +153,3 @@ export function initBoard(): SpaceButtonProperties[][] {
 function rand(a: number, b: number): number {
     return Math.floor(Math.random() * (b-a+1) + a);
 };
-
