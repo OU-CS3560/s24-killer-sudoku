@@ -36,11 +36,11 @@ const Timer = () => {
 
     //puts time in seconds
 
-    const seconds = time;
+    const seconds = time % 60;
 
     //calculates minuets from seconds
 
-    const minuets = Math.floor(time / 60);
+    const minuets = Math.floor((time / 60) % 60);
 
     //Whether to start or stop the timer
 
@@ -52,7 +52,11 @@ const Timer = () => {
         setTime(0);
     };
 
-    
+    return (
+        <div>
+            {minuets} : {seconds}
+        </div>
+    );
 
 };
 
