@@ -1,4 +1,5 @@
 import SudokuBoard from "./Sudoku";
+import Timer from "./Timer";
 
 export default function Home() {
 
@@ -8,6 +9,7 @@ export default function Home() {
 				<div className="killerSudokuNames">
 					Zachary Wolfe, Drew Mullett, Kevin Belock, Nick Adkins
 				</div>
+				<Timer></Timer>
 				<div className="killerSudokuTitle">
 					Killer Sudoku
 				</div>

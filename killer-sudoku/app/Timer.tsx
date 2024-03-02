@@ -6,6 +6,8 @@
  * @version  1.0
 */
 
+"use client"; // for useState variables
+
 import * as React from 'react';
 
 import { useState } from 'react';
