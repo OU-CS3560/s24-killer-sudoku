@@ -21,7 +21,7 @@
 		font-size: 16px;
 		font-weight: 600;
 		border: 1px solid black;
-		/*border-top: ;*/
+		opacity: 80%;
 		background: lightgray;
 		padding: 2px;
 		margin: -1px;
@@ -58,6 +58,9 @@
 		color: black;
 		border-color: black;
 	}
+	.timer{
+		color: lightgray;
+	}
 	.Main {
 		display: flex;
 		flex-direction: row;
@@ -79,6 +82,39 @@
 		font-size: 18px;
 		font-weight: 500;
 	}
+	/*
+	.space[data-status='top'],
+	.spaceHighlighted[data-status='top'],
+	.spaceHighlightedLookingAt[data-status='top'],
+	.spaceHighlightedLookingAtSpecific[data-status='top'],
+	.spaceNumberTaken[data-status='top'] {
+		border-top: 4px solid black;
+	}
+
+	.space[data-status='left'],
+	.spaceHighlighted[data-status='left'],
+	.spaceHighlightedLookingAt[data-status='left'],
+	.spaceHighlightedLookingAtSpecific[data-status='left'],
+	.spaceNumberTaken[data-status='left'] {
+		border-left: 4px solid black;
+	}
+
+	.space[data-status='bottom'],
+	.spaceHighlighted[data-status='bottom'],
+	.spaceHighlightedLookingAt[data-status='bottom'],
+	.spaceHighlightedLookingAtSpecific[data-status='bottom'],
+	.spaceNumberTaken[data-status='bottom'] {
+		border-bottom: 4px solid black;
+	}
+
+	.space[data-status='right'],
+	.spaceHighlighted[data-status='right'],
+	.spaceHighlightedLookingAt[data-status='right'],
+	.spaceHighlightedLookingAtSpecific[data-status='right'],
+	.spaceNumberTaken[data-status='right'] {
+		border-right: 4px solid black;
+	}
+	*/
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
@@ -90,7 +126,7 @@
 /*DONT EDIT*/
 :root {
 	--foreground-rgb: 255, 255, 255;
-	--background-start-rgb: 214, 219, 220;
+	--background-start-rgb: 0, 0, 0;
 	--background-end-rgb: 255, 255, 255;
 }
 
@@ -105,5 +141,5 @@
 
 /*DONT EDIT*/
 body {
-	background: lightgray;
+	background: white;
 }

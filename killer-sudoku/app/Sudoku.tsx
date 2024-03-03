@@ -1,11 +1,11 @@
 /**
  * @file     Sudoku.tsx
  * @author   Zachary Wolfe (zw224021@ohio.edu)
- * @brief    An element which generates a 9x9 Sudoku board and handles cell clicks
+ * @brief    An element which generates a 9x9 Sudoku board, handles cell clicks, and relays timer information
  * @date     February 18, 2024
 */
 
-"use client"; // for useState variables
+"use client"; // For useState variables
 
 import React, { ChangeEvent, useRef, useState } from 'react';
 import Timer, { TimerRef } from "./Timer";
@@ -16,15 +16,19 @@ export interface SpaceButtonProperties {
     data: string,
     hiddenData: string,
     highlighted?: string,
-    locked: boolean
+    locked: boolean,
+    dataStatus: string,
 };
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
- * @returns The main board and handles almost all highlighting logic.
+ * @returns The main board and handles almost all highlighting logic
  */
 const SudokuBoard = () => {
+    // A reference to the timer such that I can use its functions
     const timerRef = useRef<TimerRef>(null);
+
+    // Variables for gamestate
     var gameOver: boolean = false;
     var used = 0;
 
@@ -33,6 +37,7 @@ const SudokuBoard = () => {
         return initBoard(used);
     });
 
+    // A function that solves the board when the 'Solve' button is pressed
     const handleClickSolveButton = () => {
         setBoard(prevBoard => {
             const newBoard = [...prevBoard];
@@ -41,6 +46,7 @@ const SudokuBoard = () => {
         });
     }
 
+    // A function that handles clearing the board when the 'Clear' button is pressed
     const handleClickClearButton = () => {
         setBoard(prevBoard => {
             const newBoard = [...prevBoard];
@@ -76,7 +82,13 @@ const SudokuBoard = () => {
             // Inherit the previous board state
             const newBoard = [...prevBoard];
             if (used === 80 || timerRef.current?.getMinutes() === 30){
-                checkGameOver(newBoard);
+                /**
+                 * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                 */
+                if (checkGameOver(newBoard)){
+                    handleClickStopButton();
+                    //victoryFunc();
+                }
             }
             if (!newBoard[row][col].locked){
                 // Cast target to int, because it's incoming as a string
@@ -86,11 +98,17 @@ const SudokuBoard = () => {
                     if (val === 0){ // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
                         val = +newBoard[row][col].data;
                         newBoard[row][col].data = '';
+                        /**
+                         * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                         */
                         used--;
                     }
                     else{
                         val = +newBoard[row][col].data;
                         newBoard[row][col].data = e.target.value.toString();
+                        /**
+                         * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                         */
                         used++;
                     }
                     HandleHighlighting(row, col, newBoard, val);
@@ -170,7 +188,7 @@ const SudokuBoard = () => {
                                 autoComplete='off'
                                 autoCapitalize='off'
                                 value={space.data} // The incoming value
-                                className={space.highlighted}
+                                className={space.highlighted + space.dataStatus}
                                 onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
                             />
                         </div>

@@ -80,7 +80,7 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
 
     return (
         <div>
-            {minutes} : {seconds}
+            {minutes}:{seconds}
         </div>
     );
 });
