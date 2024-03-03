@@ -110,12 +110,11 @@ export function initBoard(): SpaceButtonProperties[][] {
         ["K-Expert", 0 ]
     ]);
 
+    // for weird looking operator "??" look up "Nullish coalescing operator"
+    // basically returns left value as long as it's not null or undefined, otherwise returns right
     const numShown: number = diffMap.get(difficulty) ?? 81; //81 is default in case something goes wrong
 
     console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
-
-    // for weird looking operator "??" look up "Nullish coalescing operator"
-    // basically returns left value as long as it's not null or undefined, otherwise returns right
 
     // Showing Tiles
     for (let i = 0; i < numShown; i++) {
