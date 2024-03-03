@@ -37,6 +37,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             values[i][c2] = temp;
         }
     }
+
+    console.log("initBoard: Start");
     
     let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
         ['1','2','3',  '4','5','6',  '7','8','9'],
@@ -80,49 +82,56 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             }
         }
     }
+    console.log("initBoard: Randomization complete");
 
-    // Initialization Loop, put all values onto the board
+    // Initialization Loop, load all values onto the board's hidden data
     let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
         arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let y = 0; y < 9; y++) {
-            arr[x][y] = {data: values[x][y], hiddenData: values[x][y], highlighted: 'space', locked: true};
+            arr[x][y] = {data: '', hiddenData: values[x][y], highlighted: 'space', locked: false};
         }
     }
+    console.log("initBoard: Initialization complete");
 
-    // TODO: i'd say hide/erase x-number of tiles (aka show as empty), as per game difficulty listed below
-    // After that, the board should still have at least 1 solution
+    // Eventually have this value come from a UI element, instead of being defined here
+    let difficulty: string = "Medium";
 
-    // NOTES: # of tiles hidden:
-    // --> Easy:     42,45,45,44 --> Avg 44
-    // --> Medium:   51,46,51,49 --> Avg 49
-    // --> Hard:     (TODO)
-    // --> Expert:   
-    // --> Master:   
-    // --> K-Easy:   
-    // --> K-Medium: 
-    // --> K-Hard:   
-    // --> K-Expert: 
+    // Also feel free to change around these difficulty values a bit
+    // The number signifies how many tiles (out of 81) are shown at start
+    const diffMap = new Map<string,number> ([
+        ["Easy"    , 37],
+        ["Medium"  , 31],
+        ["Hard"    , 23],
+        ["Expert"  , 17],
+        ["K-Easy"  , 31],
+        ["K-Medium", 25],
+        ["K-Hard"  , 10],
+        ["K-Expert", 0 ]
+    ]);
 
-    //eventually have a manually-set difficulty string value & map that to a number
-    //for now, change "difficulty" here. 
-    const numHidden: number = 45;
+    // for weird looking operator "??" look up "Nullish coalescing operator"
+    // basically returns left value as long as it's not null or undefined, otherwise returns right
+    const numShown: number = diffMap.get(difficulty) ?? 81; //81 is default in case something goes wrong
 
-    // Masking Tiles
-    for (let i = 0; i <= numHidden; i++) {
-        for (let t = false; t === false;) {
+    console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
+
+    // Showing Tiles
+    for (let i = 0; i < numShown; i++) {
+        while (true) {
             let x: number = rand(0,8);
             let y: number = rand(0,8);
-            if (arr[x][y].data !== '') {
-                arr[x][y].data = '';
-                arr[x][y].locked = false;
-                t = true;
+            if (arr[x][y].data === '') {
+                arr[x][y].data = arr[x][y].hiddenData;
+                arr[x][y].locked = true;
+                break;
             }
             else{
                 used++;
             }
         }
     }
+    console.log("initBoard: Tile showing complete");
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
@@ -135,6 +144,6 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
  * @param b upper limit
  * @returns random value between a & b
  */
-function rand(a: number, b: number): number {
+export function rand(a: number, b: number): number {
     return Math.floor(Math.random() * (b-a+1) + a);
 };
