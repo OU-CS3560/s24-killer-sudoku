@@ -1,7 +1,7 @@
 /**
  * @file     Generate.tsx
  * @author   Nicholas Adkins (na761422@ohio.edu)
- * @brief    Generates a valid (full?) sudoku board
+ * @brief    Generates a valid full sudoku board
  * @date     February 26, 2024
 */
 
@@ -12,7 +12,7 @@ import { SpaceButtonProperties, HandleHighlighting } from "./Sudoku";
  *        data with SpaceButtonProperties, and highlights the origin to start.
  * @returns A 9x9 board
  */
-export function initBoard(): SpaceButtonProperties[][] {
+export function initBoard(used: number): SpaceButtonProperties[][] {
 
     /**
      * @brief Swaps a row in (values) with a different one
@@ -76,9 +76,9 @@ export function initBoard(): SpaceButtonProperties[][] {
         let i2: number = rand(1,9);
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (Number(values[x][y]) == i1) {values[x][y] = i2.toString();} 
+                if (Number(values[x][y]) === i1) {values[x][y] = i2.toString();} 
                 else 
-                if (Number(values[x][y]) == i2) {values[x][y] = i1.toString();}
+                if (Number(values[x][y]) === i2) {values[x][y] = i1.toString();}
             }
         }
     }
@@ -121,10 +121,13 @@ export function initBoard(): SpaceButtonProperties[][] {
         while (true) {
             let x: number = rand(0,8);
             let y: number = rand(0,8);
-            if (arr[x][y].data == '') {
+            if (arr[x][y].data === '') {
                 arr[x][y].data = arr[x][y].hiddenData;
                 arr[x][y].locked = true;
                 break;
+            }
+            else{
+                used++;
             }
         }
     }
