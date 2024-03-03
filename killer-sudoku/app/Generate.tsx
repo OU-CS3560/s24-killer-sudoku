@@ -72,62 +72,6 @@ export function initBoard(): SpaceButtonProperties[][] {
             }
         }
     }
-    function swapRow(r1: number, r2: number): void {
-        let temp: string[] = values[r1];
-        values[r1] = values[r2];
-        values[r2] = temp;
-    }
-    
-    function swapCol(c1: number, c2: number): void {
-        for (let i = 0; i < 9; i++) {
-            let temp: string = values[i][c1];
-            values[i][c1] = values[i][c2];
-            values[i][c2] = temp;
-        }
-    }
-
-    let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
-        ['1','2','3',  '4','5','6',  '7','8','9'],
-        ['4','5','6',  '7','8','9',  '1','2','3'],
-        ['7','8','9',  '1','2','3',  '4','5','6'],
-
-        ['2','3','1',  '5','6','4',  '8','9','7'],
-        ['5','6','4',  '8','9','7',  '2','3','1'],
-        ['8','9','7',  '2','3','1',  '5','6','4'],
-
-        ['3','1','2',  '6','4','5',  '9','7','8'],
-        ['6','4','5',  '9','7','8',  '3','1','2'],
-        ['9','7','8',  '3','1','2',  '6','4','5']
-    ];
-
-    for (let i = 0; i < 9; i++) { // Randomly swap row/col with a different one in the same set of 3
-        let row: number = Math.floor(i/3)*3 + rand(0,2);
-        swapRow(i,row);
-        let col: number = Math.floor(i/3)*3 + rand(0,2);
-        swapCol(i,col);
-    }
-
-    for (let r3x3_1 = 0; r3x3_1 < 3; r3x3_1++) { // Randomly swap set of 3 rows/cols with a different one
-        let r3x3_2: number = rand(0,2);
-        for (let i = 0; i < 3; i++) {
-            swapRow(r3x3_1 *3 +i, r3x3_2 *3 +i);
-        }
-        r3x3_2 = rand(0,2);
-        for (let i = 0; i < 3; i++) {
-            swapCol(r3x3_1 *3 +i, r3x3_2 *3 +i);
-        }
-    }
-
-    for (let i1: number = 1; i1 <= 9; i1++) { // Randomize the placement of each set of numbers
-        let i2: number = rand(1,9);
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                if (Number(values[x][y]) == i1) {values[x][y] = i2.toString();} 
-                else 
-                if (Number(values[x][y]) == i2) {values[x][y] = i1.toString();}
-            }
-        }
-    }
     
     console.log("initBoard: Randomization complete");
 
@@ -192,14 +136,65 @@ export function rand(a: number, b: number): number {
     return Math.floor(Math.random() * (b-a+1) + a);
 };
 
-//isValid function -> determines if board is valid (no overlaps)
+//solve function -> solves board & also determines if board is solvable with only one solution
+function solve(board: string[][]): [boolean, string[][]] {
+    
+    function isValInThisRowColOr3x3(val: number, row: number, col: number): boolean {
+        for (let i = 0; i < 9; i++) {
+            if (i != row && board[i][col] == val.toString()) return true;
+            if (i != col && board[row][i] == val.toString()) return true;
+            let a: number = i % 3; 
+            let b: number = Math.floor(i/3);
+            if (a != row && b != col && board[a][b] == val.toString()) return true;
+        }
+        return false;
+    }
 
+    let notes: boolean[][][] = [];
+    for (let x = 0; x < 9; x++) {
+        notes[x] = [];
+        for (let y = 0; y < 9; y++) {
+            if (board[x][y] != '') continue;
+            notes[x][y] = [];
+        }
+    }
 
-//isSolvable function -> determines if board is solvable with only one solution
+    for(let progress: boolean = false; !progress; progress = false) {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                if (board[x][y] != '') continue;
+                let sum: number = 0;
+                for (let n: number = 1; n <= 9; n++) {
+                    notes[x][y][n] = !isValInThisRowColOr3x3(n,x,y);
+                    sum += +notes[x][y][n];
+                }
+                if (sum != 1) continue; //if there is one boolean true
+                for (let n: number = 1; n <= 9; n++) {
+                    if (!notes[x][y][n]) continue;
+                    notes[x][y][n] = false;
+                    board[x][y] = n.toString();
+                    progress = true;
+                }
+            }
+        }
+    }
+    
+    let solved: boolean = true;
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            if (board[x][y] == '') solved = false;
+        }
+    }
+    return [solved, board];
+}
 
-
-//solveStep function -> searches the board & tries to figure out one tile
-
+/*isValid function -> determines if board is valid (no overlaps)
+function isValid(board: SpaceButtonProperties[][]): boolean {
+    //1: Check Rows & Cols
+    for (let a = 0; a < 9; a++) {
+        
+    }
+}*/
 
 /* Soon-to-be Tomb of the old generation algorithm (pretty fast, but isn't random enough)
 
