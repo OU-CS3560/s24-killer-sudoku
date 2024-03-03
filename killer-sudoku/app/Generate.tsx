@@ -137,15 +137,26 @@ export function rand(a: number, b: number): number {
 };
 
 //solve function -> solves board & also determines if board is solvable with only one solution
+//return 1: boolean true if it succeeded, false otherwise
+//return 2: board after it's attempt at solving it
 function solve(board: string[][]): [boolean, string[][]] {
     
     function isValInThisRowColOr3x3(val: number, row: number, col: number): boolean {
         for (let i = 0; i < 9; i++) {
-            if (i != row && board[i][col] == val.toString()) return true;
-            if (i != col && board[row][i] == val.toString()) return true;
-            let a: number = i % 3; 
-            let b: number = Math.floor(i/3);
-            if (a != row && b != col && board[a][b] == val.toString()) return true;
+            if (i != row && board[i][col] == val.toString()) {
+                //console.log(`row ${i}`);
+                return true;
+            }
+            if (i != col && board[row][i] == val.toString()) {
+                //console.log(`col ${i}`); 
+                return true;
+            }
+            let a: number = i % 3 + Math.floor(row/3)*3; 
+            let b: number = Math.floor(i/3) + Math.floor(col/3)*3;
+            if (a != row && b != col && board[a][b] == val.toString()) {
+                //console.log(`3x3 ${i}`);
+                return true;
+            }
         }
         return false;
     }
@@ -159,24 +170,30 @@ function solve(board: string[][]): [boolean, string[][]] {
         }
     }
 
-    for(let progress: boolean = false; !progress; progress = false) {
+    for (let progress: boolean = true; progress == true;) {
+        progress = false;
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
                 if (board[x][y] != '') continue;
                 let sum: number = 0;
                 for (let n: number = 1; n <= 9; n++) {
                     notes[x][y][n] = !isValInThisRowColOr3x3(n,x,y);
+                    //console.log(`c: ${x} ${y} ${n}, b: ${notes[x][y][n]}`)
                     sum += +notes[x][y][n];
                 }
-                if (sum != 1) continue; //if there is one boolean true
-                for (let n: number = 1; n <= 9; n++) {
-                    if (!notes[x][y][n]) continue;
-                    notes[x][y][n] = false;
-                    board[x][y] = n.toString();
-                    progress = true;
-                }
+
+                //Technique 1: if theres only one option, put it in
+                if (sum == 1) { //if there is one boolean true
+                    for (let n: number = 1; n <= 9; n++) {
+                        if (!notes[x][y][n]) continue;
+                        notes[x][y][n] = false;
+                        board[x][y] = n.toString();
+                        progress = true;
+                    }
+                } 
             }
         }
+        //console.log("lol");
     }
     
     let solved: boolean = true;
@@ -187,6 +204,10 @@ function solve(board: string[][]): [boolean, string[][]] {
     }
     return [solved, board];
 }
+
+
+
+
 
 /*isValid function -> determines if board is valid (no overlaps)
 function isValid(board: SpaceButtonProperties[][]): boolean {
