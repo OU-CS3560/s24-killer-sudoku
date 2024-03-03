@@ -10,21 +10,13 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import Timer, { TimerRef } from "./Timer";
 import { initBoard } from './Generate';
-
-// Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
-export interface SpaceButtonProperties {
-    data: string,
-    hiddenData: string,
-    highlighted?: string,
-    locked: boolean,
-    dataStatus: string,
-};
+import { SpaceButtonProperties } from './Sudoku';
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
  * @returns The main board and handles almost all highlighting logic
  */
-const Sudoku = () => {
+const KillerSudoku = () => {
     // A reference to the timer such that I can use its functions
     const timerRef = useRef<TimerRef>(null);
 
@@ -361,4 +353,4 @@ function checkGameOver(newBoard: SpaceButtonProperties[][]): boolean{
     }
 }
 
-export default Sudoku;
+export default KillerSudoku;
