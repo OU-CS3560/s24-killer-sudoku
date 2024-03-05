@@ -59,7 +59,9 @@
 		border-color: black;
 	}
 	.timer{
-		color: lightgray;
+		color: gray;
+		font-size: 15px;
+		font-weight: 700;
 	}
 	.Main {
 		display: flex;
