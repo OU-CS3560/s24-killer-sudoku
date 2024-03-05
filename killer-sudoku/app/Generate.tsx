@@ -142,7 +142,7 @@ export function rand(a: number, b: number): number {
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise
 //return 2: board after it's attempt at solving it
-function solve(board: string[][]): [boolean, string[][]] {
+export function solve(board: string[][]): [boolean, string[][]] {
     
     function isValInThisRowColOr3x3(val: number, row: number, col: number): boolean {
         for (let i = 0; i < 9; i++) {
