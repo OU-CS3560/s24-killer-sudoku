@@ -5,9 +5,11 @@
  * @date     March 8, 2024
 */
 
-//solve function -> solves board & also determines if board is solvable with only one solution
-//return 1: boolean true if it succeeded, false otherwise
-//return 2: board after it's attempt at solving it
+/**
+ * @brief takes input board & tries to solve it
+ * @param board input board of string[][] trying to be solved
+ * @returns tuple of a boolean (did it succeed or not) & the resulting board, completed or not
+ */
 export function solve(board: string[][]): [boolean, string[][]] {
 
     let notes: boolean[][][] = [];

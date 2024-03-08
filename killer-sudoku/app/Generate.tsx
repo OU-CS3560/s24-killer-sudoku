@@ -10,6 +10,7 @@ import { SpaceButtonProperties, HandleHighlighting } from "./Sudoku";
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
  *        data with SpaceButtonProperties, and highlights the origin to start.
+ * @param used (WIP)
  * @returns A 9x9 board
  */
 export function initBoard(used: number): SpaceButtonProperties[][] {
