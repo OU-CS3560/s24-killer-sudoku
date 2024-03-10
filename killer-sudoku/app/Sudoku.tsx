@@ -57,17 +57,17 @@ const Sudoku = () => {
 
     const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);  
+        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
         fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
-                    .then(response => response.json())
-                    .then(data => {
-                        // Handle the retrieved data
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        // Handle any errors
-                        console.error(error);
-                    });
+            .then(response => response.json())
+            .then(data => {
+                // Handle the retrieved data
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle any errors
+                console.error(error);
+            });
     }
 
     /**
@@ -106,10 +106,10 @@ const Sudoku = () => {
                 }
             }
             */
-            if (!newBoard[row][col].locked){
+            if (!newBoard[row][col].locked) {
                 // Cast target to int, because it's incoming as a string
                 let val = +e.target.value;
-                
+
                 // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
                 if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0) {
                     if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
@@ -180,7 +180,7 @@ const Sudoku = () => {
         })
     };
     */
-   
+
     const handleClickStartButton = () => {
         if (timerRef.current) {
             timerRef.current.start(); // Call the startStop function from the Timer component
@@ -203,21 +203,22 @@ const Sudoku = () => {
             <Timer ref={timerRef}></Timer>
             <div className='Main' onClick={handleClickStartButton}>
                 {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
-                    {row.map((space, columnIndex) => (
-                        <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
-                            <input
-                                type='text' // Because numbers are really fucking weird for some reason
-                                autoComplete='off'
-                                autoCapitalize='off'
-                                value={space.data} // The incoming value
-                                className={space.highlighted + space.dataStatus}
-                                onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
-                            />
-                        </div>
-                    ))}
-                    {rowIndex !== board.length - 1 && <br />}
-                </div> // This is so that after every 9 squares generated a break tag is inserted
-            ))}
+                    <div key={rowIndex} id={rowIndex.toString()}>
+                        {row.map((space, columnIndex) => (
+                            <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
+                                <input
+                                    type='text' // Because numbers are really fucking weird for some reason
+                                    autoComplete='off'
+                                    autoCapitalize='off'
+                                    value={space.data} // The incoming value
+                                    className={space.highlighted + space.dataStatus}
+                                    onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
+                                />
+                            </div>
+                        ))}
+                        {rowIndex !== board.length - 1 && <br />}
+                    </div> // This is so that after every 9 squares generated a break tag is inserted
+                ))}
             </div>
             <button className='solveButton' onClick={() => handleClickSolveButton()}>
                 Solve
@@ -252,10 +253,10 @@ const Sudoku = () => {
 export function HandleHighlighting(row: number, col: number, newBoard: SpaceButtonProperties[][], difNum?: number) {
     try {
         // Clear the board of highlights
-        for (let j = 0; j < 9; j++){
-            for (let k = 0; k < 9; k++){
-                if (newBoard[j][k].highlighted !== 'spaceNumberTaken'){
-                    newBoard[j][k].highlighted='space'
+        for (let j = 0; j < 9; j++) {
+            for (let k = 0; k < 9; k++) {
+                if (newBoard[j][k].highlighted !== 'spaceNumberTaken') {
+                    newBoard[j][k].highlighted = 'space'
                     console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted)
                 }
             }
@@ -263,25 +264,25 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
 
         // Change the corresponding row and column to be highlighted
         for (let i = 0; i < 9; i++) {
-            if (i !== row && newBoard[i][col].highlighted !== 'spaceNumberTaken'){
-                newBoard[i][col].highlighted='spaceHighlighted';
+            if (i !== row && newBoard[i][col].highlighted !== 'spaceNumberTaken') {
+                newBoard[i][col].highlighted = 'spaceHighlighted';
                 console.log('1 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
             }
-            if (i !== col && newBoard[row][i].highlighted !== 'spaceNumberTaken'){
-                newBoard[row][i].highlighted='spaceHighlighted';
+            if (i !== col && newBoard[row][i].highlighted !== 'spaceNumberTaken') {
+                newBoard[row][i].highlighted = 'spaceHighlighted';
                 console.log('1 highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
             }
-        }  
+        }
 
         // If the old value on the board is defined (if we passed it as a parameter to this function)
         // Clear any previous highlights that this number once shared with matching data in this row or column or 3x3
-        if (difNum){
-            for (let i = 0; i < 9; i++){
-                if (newBoard[row][i].highlighted === 'spaceNumberTaken' && +newBoard[row][i].data === difNum && i !== col && doesntHaveRowColumnMatching(row, i, newBoard)){
+        if (difNum) {
+            for (let i = 0; i < 9; i++) {
+                if (newBoard[row][i].highlighted === 'spaceNumberTaken' && +newBoard[row][i].data === difNum && i !== col && doesntHaveRowColumnMatching(row, i, newBoard)) {
                     newBoard[row][i].highlighted = 'spaceHighlighted';
                     console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
                 }
-                if (newBoard[i][col].highlighted === 'spaceNumberTaken' && +newBoard[i][col].data === difNum && i !== row && doesntHaveRowColumnMatching(i, col, newBoard)){
+                if (newBoard[i][col].highlighted === 'spaceNumberTaken' && +newBoard[i][col].data === difNum && i !== row && doesntHaveRowColumnMatching(i, col, newBoard)) {
                     newBoard[i][col].highlighted = 'spaceHighlighted';
                     console.log('2 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
                 }
@@ -291,14 +292,14 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
 
             for (let i = topLeftRow; i < topLeftRow + 3; i++) {
                 for (let j = topLeftCol; j < topLeftCol + 3; j++) {
-                    if (newBoard[i][j].highlighted === 'spaceNumberTaken' && +newBoard[i][j].data === difNum && i !== row && j !== col && doesntHaveRowColumnMatching(i, j, newBoard)){
-                        newBoard[i][j].highlighted='spaceHighlighted';
-                        console.log ("newBoard[i][j].highlighted === 'spaceNumberTaken' " + newBoard[i][j].highlighted === 'spaceNumberTaken');
-                        console.log ("+newBoard[i][j].data === difNum" + (+newBoard[i][j].data === difNum));
-                        console.log ("i !== row" + (i !== row));
-                        console.log ("j !== col" + (j !== col));
-                        console.log ("doesntHaveRowColumnMatching(i, j, newBoard)" + (doesntHaveRowColumnMatching(i, j, newBoard)));
-                        console.log ('Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
+                    if (newBoard[i][j].highlighted === 'spaceNumberTaken' && +newBoard[i][j].data === difNum && i !== row && j !== col && doesntHaveRowColumnMatching(i, j, newBoard)) {
+                        newBoard[i][j].highlighted = 'spaceHighlighted';
+                        console.log("newBoard[i][j].highlighted === 'spaceNumberTaken' " + newBoard[i][j].highlighted === 'spaceNumberTaken');
+                        console.log("+newBoard[i][j].data === difNum" + (+newBoard[i][j].data === difNum));
+                        console.log("i !== row" + (i !== row));
+                        console.log("j !== col" + (j !== col));
+                        console.log("doesntHaveRowColumnMatching(i, j, newBoard)" + (doesntHaveRowColumnMatching(i, j, newBoard)));
+                        console.log('Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                     }
                 }
             }
@@ -310,30 +311,30 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
 
         for (let i = topLeftRow; i < topLeftRow + 3; i++) {
             for (let j = topLeftCol; j < topLeftCol + 3; j++) {
-                if (newBoard[i][j].highlighted !== 'spaceNumberTaken'){
-                    newBoard[i][j].highlighted='spaceHighlightedLookingAt';
+                if (newBoard[i][j].highlighted !== 'spaceNumberTaken') {
+                    newBoard[i][j].highlighted = 'spaceHighlightedLookingAt';
                     console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
-                if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && +newBoard[i][j].data !== 0){
-                    newBoard[i][j].highlighted='spaceNumberTaken';
-                    newBoard[row][col].highlighted='spaceNumberTaken';
+                if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && +newBoard[i][j].data !== 0) {
+                    newBoard[i][j].highlighted = 'spaceNumberTaken';
+                    newBoard[row][col].highlighted = 'spaceNumberTaken';
                     console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
             }
         }
-        
+
         // Check for any new matching data in the given row and column of the cell that was clicked
-        for (let i = 0; i < 9; i++){
-            for (let j = i + 1; j < 9; j++){
-                if (newBoard[row][i].data === newBoard[row][j].data && +newBoard[row][i].data !== 0){
-                    newBoard[row][i].highlighted='spaceNumberTaken';
-                    newBoard[row][j].highlighted='spaceNumberTaken';
+        for (let i = 0; i < 9; i++) {
+            for (let j = i + 1; j < 9; j++) {
+                if (newBoard[row][i].data === newBoard[row][j].data && +newBoard[row][i].data !== 0) {
+                    newBoard[row][i].highlighted = 'spaceNumberTaken';
+                    newBoard[row][j].highlighted = 'spaceNumberTaken';
                     console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted)
                     console.log('highlighting [row][j] ' + row + ', ' + j + ' with ' + newBoard[row][j].highlighted)
                 }
-                if (newBoard[i][col].data === newBoard[j][col].data && +newBoard[i][col].data !== 0){
-                    newBoard[i][col].highlighted='spaceNumberTaken';
-                    newBoard[j][col].highlighted='spaceNumberTaken';
+                if (newBoard[i][col].data === newBoard[j][col].data && +newBoard[i][col].data !== 0) {
+                    newBoard[i][col].highlighted = 'spaceNumberTaken';
+                    newBoard[j][col].highlighted = 'spaceNumberTaken';
                     console.log('3 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted)
                     console.log('highlighting [j][col] ' + j + ', ' + col + ' with ' + newBoard[j][col].highlighted)
                 }
@@ -408,22 +409,22 @@ function checkGameOver(newBoard: SpaceButtonProperties[][]): boolean{
  * @param newBoard 
  * @returns 
  */
-function doesntHaveRowColumnMatching(row: number, col: number, newBoard: SpaceButtonProperties[][]): boolean{
-    for (let i = 0; i < 9; i++){
-        if (i !== col && newBoard[row][i].data === newBoard[row][col].data && +newBoard[row][i].data !== 0){
+function doesntHaveRowColumnMatching(row: number, col: number, newBoard: SpaceButtonProperties[][]): boolean {
+    for (let i = 0; i < 9; i++) {
+        if (i !== col && newBoard[row][i].data === newBoard[row][col].data && +newBoard[row][i].data !== 0) {
             return false;
         }
-        if (i !== row && newBoard[i][col].data === newBoard[row][col].data && +newBoard[i][col].data !== 0){
+        if (i !== row && newBoard[i][col].data === newBoard[row][col].data && +newBoard[i][col].data !== 0) {
             return false;
         }
     }
 
     const topLeftRow = Math.floor(row / 3) * 3;
     const topLeftCol = Math.floor(col / 3) * 3;
-    
+
     for (let i = topLeftRow; i < topLeftRow + 3; i++) {
         for (let j = topLeftCol; j < topLeftCol + 3; j++) {
-            if (newBoard[row][col].data === newBoard[i][j].data && !(i === row || j === col) && +newBoard[i][j].data !== 0){
+            if (newBoard[row][col].data === newBoard[i][j].data && !(i === row || j === col) && +newBoard[i][j].data !== 0) {
                 return false;
             }
         }
