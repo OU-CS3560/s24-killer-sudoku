@@ -9,7 +9,7 @@ export default function Home() {
 					Zachary Wolfe, Drew Mullett, Kevin Belock, Nick Adkins
 				</div>
 				<div className="killerSudokuTitle">
-					Killer Sudoku
+					Sudoku
 				</div>
                 <SudokuBoard></SudokuBoard>
 			</div>

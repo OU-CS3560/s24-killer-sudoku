@@ -51,8 +51,8 @@ const SudokuBoard = () => {
 
     const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " killer Sudoku puzzle requested");
-
-        fetch("http://localhost3000/?difficulty=" + buttonName)
+        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
+        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
                     .then(response => response.json())
                     .then(data => {
                         // Handle the retrieved data
