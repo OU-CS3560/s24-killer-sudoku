@@ -80,7 +80,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let y = 0; y < 9; y++) {
-            arr[x][y] = {data: '', hiddenData: values[x][y], highlighted: 'space', locked: false};
+            arr[x][y] = {data: '', hiddenData: values[x][y], highlighted: 'space', locked: false, dataStatus:''};
         }
     }
     console.log("initBoard: Initialization complete");
@@ -118,15 +118,36 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 break;
             }
             else{
+                /**
+                 * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                 */
                 used++;
             }
         }
     }
+    // initBoardBoldLines(arr);
     console.log("initBoard: Tile showing complete");
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
     return arr;
+}
+
+function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+    for (let i = 0; i < 9; i++){
+        newBoard[i][0].dataStatus='top';
+        newBoard[0][i].dataStatus='left';
+
+        newBoard[i][2].dataStatus='top';
+        newBoard[2][i].dataStatus='left';
+
+        newBoard[i][5].dataStatus='bottom';
+        newBoard[5][i].dataStatus='right';
+
+        newBoard[i][8].dataStatus='bottom';
+        newBoard[8][i].dataStatus='right';
+    }
+    return newBoard;
 }
 
 /**
@@ -135,7 +156,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
  * @param b upper limit
  * @returns random value between a & b
  */
-export function rand(a: number, b: number): number {
+function rand(a: number, b: number): number {
     return Math.floor(Math.random() * (b-a+1) + a);
 };
 

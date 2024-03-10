@@ -74,13 +74,30 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
 
     // Converts time to seconds
     const seconds = time % 60;
-
     // Converts time to minutes
     const minutes = Math.floor((time / 60));
+    
+    let secondsString = "";
+    let minutesString = "";
+
+    if (seconds < 10){
+        secondsString = '0' + seconds.toString();
+        
+    }
+    else{
+        secondsString = seconds.toString();
+    }
+
+    if (minutes < 10){
+        minutesString = '0' + minutes.toString();
+    }
+    else{
+        minutesString = minutes.toString();
+    }
 
     return (
-        <div>
-            {minutes} : {seconds}
+        <div className='timer'>
+            {minutesString}:{secondsString}
         </div>
     );
 });
