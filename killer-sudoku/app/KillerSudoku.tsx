@@ -1,5 +1,5 @@
 /**
- * @file     Sudoku.tsx
+ * @file     KillerSudoku.tsx
  * @author   Zachary Wolfe (zw224021@ohio.edu)
  * @brief    An element which generates a 9x9 Sudoku board, handles cell clicks, and relays timer information
  * @date     February 18, 2024
@@ -170,7 +170,7 @@ const KillerSudoku = () => {
     return (
         <div>
             <div className="killerSudokuTitle">
-                Sudoku
+                KillerSudoku
             </div>
             <Timer ref={timerRef}></Timer>
             <div className='Main' onClick={handleClickStartButton}>

@@ -18,11 +18,10 @@
 		display: inline-flex;
 		align-items: center;
 		flex-direction: column;
-		font-size: 16px;
-		font-weight: 600;
+		font-size: 20px;
+		font-weight: 400;
 		border: 1px solid black;
-		opacity: 80%;
-		background: lightgray;
+		background: white;
 		padding: 2px;
 		margin: -1px;
 		margin-bottom: -3px;
@@ -33,17 +32,12 @@
 	.row {
 		display: flex;
 	}
-	.spaceHighlighted {
-		background: gray;
-		color: white;
-	}
+	.spaceHighlighted,
 	.spaceHighlightedLookingAt {
-		background: blue;
-		color: white;
+		background: #00ffff;
 	}
 	.spaceHighlightedLookingAtSpecific {
-		background: lightblue;
-		color: white;
+		background: #bbdefb;
 	}
 	.spaceNumberTaken {
 		background: red;
@@ -56,7 +50,6 @@
 		height: 25px;
 		background: lightgreen;
 		color: black;
-		border-color: black;
 	}
 	.timer{
 		color: gray;
@@ -66,7 +59,6 @@
 	.Main {
 		display: flex;
 		flex-direction: row;
-		border: 4px solid blue; /*The outline of the container which holds all the cells*/
 		position: fixed;
 		transform: translate(50%, 50%);
 		width: 50%;

@@ -76,6 +76,7 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
     const seconds = time % 60;
     // Converts time to minutes
     const minutes = Math.floor((time / 60));
+    
     let secondsString = "";
     let minutesString = "";
 
