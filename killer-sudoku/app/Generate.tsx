@@ -5,7 +5,7 @@
  * @date     February 26, 2024
 */
 
-import { SpaceButtonProperties, HandleHighlighting } from "./Sudoku";
+import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -80,7 +80,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let y = 0; y < 9; y++) {
-            arr[x][y] = {data: '', hiddenData: values[x][y], highlighted: 'space', locked: false, dataStatus:''};
+            arr[x][y] = {data: '', hiddenData: values[x][y], highlighted: 'space', locked: false, dataStatus:'', savedData: '', savedHighlight: 'space'};
         }
     }
     console.log("initBoard: Initialization complete");
@@ -114,14 +114,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             let y: number = rand(0,8);
             if (arr[x][y].data === '') {
                 arr[x][y].data = arr[x][y].hiddenData;
+                arr[x][y].savedData = arr[x][y].data;
                 arr[x][y].locked = true;
                 break;
             }
             else{
                 /**
                  * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                 */
                 used++;
+                 */
             }
         }
     }
@@ -130,6 +131,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
+    SaveBoardState(arr);
     return arr;
 }
 
