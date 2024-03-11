@@ -10,7 +10,6 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
 import Timer, { TimerRef } from "./Timer";
 import { initBoard } from './Generate';
-import { getURL } from 'next/dist/shared/lib/utils';
 
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
