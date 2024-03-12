@@ -41,6 +41,7 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
         setIsRunning(false);
     }
     const reset = () => {
+        stop();
         setTime(0);
     };
     const getRunning = () => {
