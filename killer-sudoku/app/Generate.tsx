@@ -159,34 +159,77 @@ export function rand(a: number, b: number): number {
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise
 //return 2: board after it's attempt at solving it
-export function Solve(board: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
+export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
     
-    function isValInThisRowColOr3x3(val: number, row: number, col: number): boolean {
-        for (let i = 0; i < 9; i++) {
-            if (i != row && board[i][col].data == val.toString()) {
-                //console.log(`row ${i}`);
-                return true;
-            }
-            if (i != col && board[row][i].data == val.toString()) {
-                //console.log(`col ${i}`); 
-                return true;
-            }
-            let a: number = i % 3 + Math.floor(row/3)*3; 
-            let b: number = Math.floor(i/3) + Math.floor(col/3)*3;
-            if (a != row && b != col && board[a][b].data == val.toString()) {
-                //console.log(`3x3 ${i}`);
-                return true;
-            }
+    let boardSTR: string[][] = [];
+    for (let x = 0; x < 9; x++) {
+        boardSTR[x] = [];
+        for (let y = 0; y < 9; y++) {
+            boardSTR[x][y] = boardSBP[x][y].data;
         }
-        return false;
     }
 
-    let notes: boolean[][][] = [];
+    // Uses the reworked solve function in Solver.tsx
+    // Gonna make all of this look better later
+    let solved = solve(boardSTR);
+    // Also forgot arrays always return by reference in typescript, so i reworked that function as such
+
     for (let x = 0; x < 9; x++) {
-        notes[x] = [];
         for (let y = 0; y < 9; y++) {
-            if (board[x][y].data != '') continue;
-            notes[x][y] = [];
+            boardSBP[x][y].data = boardSTR[x][y];
+        }
+    }
+    
+    return [solved, boardSBP];
+}
+
+
+
+/* Tomb of the old generation algorithm (pretty fast, but isn't random enough)
+
+    function swapRow(r1: number, r2: number): void {
+        let temp: string[] = values[r1];
+        values[r1] = values[r2];
+        values[r2] = temp;
+    }
+    
+    function swapCol(c1: number, c2: number): void {
+        for (let i = 0; i < 9; i++) {
+            let temp: string = values[i][c1];
+            values[i][c1] = values[i][c2];
+            values[i][c2] = temp;
+        }
+    }
+
+    let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
+        ['1','2','3',  '4','5','6',  '7','8','9'],
+        ['4','5','6',  '7','8','9',  '1','2','3'],
+        ['7','8','9',  '1','2','3',  '4','5','6'],
+
+        ['2','3','1',  '5','6','4',  '8','9','7'],
+        ['5','6','4',  '8','9','7',  '2','3','1'],
+        ['8','9','7',  '2','3','1',  '5','6','4'],
+
+        ['3','1','2',  '6','4','5',  '9','7','8'],
+        ['6','4','5',  '9','7','8',  '3','1','2'],
+        ['9','7','8',  '3','1','2',  '6','4','5']
+    ];
+
+    for (let i = 0; i < 9; i++) { // Randomly swap row/col with a different one in the same set of 3
+        let row: number = (i/3 >>0)*3 + rand(0,2);
+        swapRow(i,row);
+        let col: number = (i/3 >>0)*3 + rand(0,2);
+        swapCol(i,col);
+    }
+
+    for (let r3x3_1 = 0; r3x3_1 < 3; r3x3_1++) { // Randomly swap set of 3 rows/cols with a different one
+        let r3x3_2: number = rand(0,2);
+        for (let i = 0; i < 3; i++) {
+            swapRow(r3x3_1 *3 +i, r3x3_2 *3 +i);
+        }
+        r3x3_2 = rand(0,2);
+        for (let i = 0; i < 3; i++) {
+            swapCol(r3x3_1 *3 +i, r3x3_2 *3 +i);
         }
     }
 
@@ -194,52 +237,10 @@ export function Solve(board: SpaceButtonProperties[][]): [boolean, SpaceButtonPr
         let i2: number = rand(1,9);
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (board[x][y].data != '') continue;
-                let sum: number = 0;
-                for (let n: number = 1; n <= 9; n++) {
-                    notes[x][y][n] = !isValInThisRowColOr3x3(n,x,y);
-                    //console.log(`c: ${x} ${y} ${n}, b: ${notes[x][y][n]}`)
-                    sum += +notes[x][y][n];
-                }
-
-                //Technique 1: if theres only one option, put it in
-                if (sum == 1) { //if there is one boolean true
-                    for (let n: number = 1; n <= 9; n++) {
-                        if (!notes[x][y][n]) continue;
-                        notes[x][y][n] = false;
-                        board[x][y].data = n.toString();
-                        progress = true;
-                    }
-                } 
+                if (Number(values[x][y]) === i1) {values[x][y] = i2.toString();} 
+                else 
+                if (Number(values[x][y]) === i2) {values[x][y] = i1.toString();}
             }
         }
-        //console.log("lol");
     }
-    
-    let solved: boolean = true;
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            if (board[x][y].data == '') solved = false;
-        }
-    }
-    
-    return [solved, board];
-}
-
-
-
-
-
-/*isValid function -> determines if board is valid (no overlaps)
-function isValid(board: SpaceButtonProperties[][]): boolean {
-    //1: Check Rows & Cols
-    for (let a = 0; a < 9; a++) {
-        
-    }
-}*/
-
-/* Soon-to-be Tomb of the old generation algorithm (pretty fast, but isn't random enough)
-
-
-
 */

@@ -5,6 +5,8 @@
  * @date     March 8, 2024
 */
 
+// TODO: Re-do Comments and such
+
 /**
  * @brief takes input board & tries to solve it
  * @param board input board of string[][] trying to be solved
