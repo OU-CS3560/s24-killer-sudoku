@@ -7,9 +7,7 @@
 
 "use client"; // For useState variables
 
-import React, { ChangeEvent, useRef, useState } from 'react';
-import Timer, { TimerRef } from "./Timer";
-import { initBoard } from './Generate';
+import React, { ChangeEvent} from 'react';
 
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
@@ -26,54 +24,7 @@ export interface SpaceButtonProperties {
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
  * @returns The main board and handles almost all highlighting logic
  */
-const Sudoku = () => {
-    // A reference to the timer such that I can use its functions
-    const timerRef = useRef<TimerRef>(null);
-
-    // Variables for gamestate
-    var gameOver: boolean = false;
-    var used = 0;
-    var question: boolean = false;
-
-    // Use state for the whole board
-    const [board, setBoard] = useState(() => {
-        return initBoard(used);
-    });
-
-    const [icon, setIcon] = useState("pause_circle");
-
-    // A function that solves the board when the 'Solve' button is pressed
-    const handleClickSolveButton = () => {
-        setBoard(prevBoard => {
-            const newBoard = [...prevBoard];
-            Solve(newBoard);
-            return newBoard;
-        });
-    }
-
-    // A function that handles clearing the board when the 'Clear' button is pressed
-    const handleClickClearButton = () => {
-        setBoard(prevBoard => {
-            const newBoard = [...prevBoard];
-            Clear(newBoard);
-            return newBoard;
-        });
-    }
-
-    const handleClickDifficultyButton = (buttonName: string) => {
-        console.log(buttonName, " Killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the retrieved data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-    }
+const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoard: React.Dispatch<React.SetStateAction<SpaceButtonProperties[][]>> }) => {
 
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
@@ -134,7 +85,7 @@ const Sudoku = () => {
                         */
                     }
                     HandleHighlighting(row, col, newBoard, val);
-                    console.log(used);
+                    // console.log(used);
                 }
             }
             // This prevents the board from resetting completely when pressing enter
@@ -186,53 +137,16 @@ const Sudoku = () => {
     };
     */
 
-    const handleClickStartButton = () => {
-        console.log("handling start button");
-        if (!timerRef.current?.getRunning()) {
-            timerRef.current?.start();
-            setIcon("pause_circle");
-            setBoard(prevBoard => {
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
-                ReApplyBoardState(newBoard);
-                return newBoard;
-            });
-        }
-    };
-
-    const handleClickStopButton = () => {
-        console.log("HREF " + window.location.href);
-        console.log("handling stop button");
-        if (timerRef.current?.getRunning()) {
-            timerRef.current?.stop(); // Call the stop function from the Timer component
-            setIcon("play_circle");
-            setBoard(prevBoard => {
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
-                SaveBoardState(newBoard);
-                HideBoard(newBoard);
-                return newBoard;
-            });
-        }
-    };
-
     // THIS GOES AFTER THE FUNCTION handleCellClickHighlight IN DIV WITH KEY = {COLUMNINDEX} BUT ARROW KEYS CURRENTLY AREN'T WORKING
     // onKeyDownCapture={(e) => handleKeyboardPress(rowIndex, columnIndex, e)}
     return (
         <div>
-            <div className="killerSudokuTitle">
-                Sudoku
-            </div>
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=optional:wght@100" rel="stylesheet" />
-            <div className='timerContainer'>
-                <Timer ref={timerRef}></Timer>
-                <button className="material-symbols-outlined" onClick={icon == "pause_circle" ? () => handleClickStopButton() : () => handleClickStartButton()}>{icon}</button>
-            </div>
             <div className='Main'>
                 {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
                     <div key={rowIndex} id={rowIndex.toString()}>
                         {row.map((space, columnIndex) => (
-                            <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)} onClickCapture={handleClickStartButton}>
+                            <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
                                 <input
                                     type='text' // Because numbers are really fucking weird for some reason
                                     autoComplete='off'
@@ -247,36 +161,7 @@ const Sudoku = () => {
                     </div> // This is so that after every 9 squares generated a break tag is inserted
                 ))}
             </div>
-            <div>
-                <button className='solveButton' onClick={() => {handleClickSolveButton()}}>
-                    Solve
-                    <button type="submit">
-                    </button>
-                </button>
-                <button className='solveButton' onClick={() => handleClickClearButton()}>
-                    Clear
-                </button>
-                <button>
-                    Classic
-                </button>
-                
-            </div>
-            <div>
-                <button name='Easy' className='difficultyButton' onClick={() => handleClickDifficultyButton("Easy")}>
-                    Easy
-                </button>
-                <button name='Medium' className='difficultyButton' onClick={() => handleClickDifficultyButton("Medium")}>
-                    Medium
-                </button>
-                <button name='Hard' className='difficultyButton' onClick={() => handleClickDifficultyButton("Hard")}>
-                    Hard
-                </button>
-                <button name='Expert' className='difficultyButton' onClick={() => handleClickDifficultyButton("Expert")}>
-                    Expert
-                </button>
-            </div>
         </div>);
-
 };
 
 /**
@@ -392,17 +277,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
     }
 }
 
-function Solve(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][] {
-    for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-            newBoard[i][j].highlighted = 'space';
-            newBoard[i][j].data = newBoard[i][j].hiddenData;
-        }
-    }
-    return newBoard;
-}
-
-function Clear(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+export function Clear(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             newBoard[i][j].highlighted='space';

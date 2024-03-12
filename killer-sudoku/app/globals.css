@@ -13,9 +13,9 @@
 	.spaceHighlightedLookingAt,
 	.spaceHighlightedLookingAtSpecific,
 	.spaceNumberTaken {
+		cursor: default;
 		text-align: center;
-		transform: translate(5.55%, 5.55%);
-		display: inline-flex;
+		display: flex;
 		align-items: center;
 		flex-direction: column;
 		font-size: 24px;
@@ -41,46 +41,125 @@
 		background: red;
 		color: white;
 	}
+	.avatar {
+		vertical-align: middle;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+	}	
+	hr.solid{
+		border-top: 1px solid gray;
+		margin-bottom: 20px;
+	}
+	.navbar {
+		width: 100%;
+		padding: 20px 0;
+		display: flex;
+		justify-content: center;
+		background:  white;
+	}
+	.navbar a{
+		position: relative;
+		display: inline-block;
+		font-size: 20px;
+		color: black;
+		text-decoration: none;
+		margin: 0 25px;
+	}
+	.navbar a::after{
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: -4px;
+		width: 100%;
+		height: 3px;
+		background: mediumblue;
+		border-radius: 40px;
+		transform: scaleX(0);
+		transform-origin: right;
+		transition: transform .3s;
+	}	
+	.navbar a:hover::after{
+		transform-origin: left;
+		transform: scaleX(1);
+	}
+	.numberPanel{
+		border-radius: 5px;
+		color: cornflowerblue;
+		font-size: 40px;
+		font-weight: 300;
+		background: lightgray;
+		width: 60px;
+		height: 60px;
+		margin: 7.5px;
+	}
+	.numberPanel:hover{
+		color: darkturquoise;
+		background: whitesmoke;
+	}
+	.panelConglomerate{
+		margin-left: 10px;
+	}
+	.boardAndButtons{
+		display: flex;
+		justify-content: flex-end;
+		translate: 50%;
+	}
+	.newGame{
+		align-items: center;
+		border-radius: 5px;
+		color: white;
+		height: 65px;
+		width: 225px;
+		font-size: 18px;
+		font-weight: 600;
+		background: royalblue;
+	}
+	.newGame:hover{
+		background: cornflowerblue;
+	}
+	.difficultyButton,
 	.solveButton{
-		border-radius: 10%;
+		margin: 5px;
+		padding-right: 10px;
+		padding-left: 10px;
 		text-align: center;
-		width: 80px;
-		height: 25px;
-		background: lightgreen;
+		height: 30px;
 		color: black;
 	}
+	.difficultyButton:hover,
+	.solveButton:hover{
+		background: lightgray;
+		border-radius: 10px;
+	}
+	.buttonsContainer{
+		align-items: center;
+		display: inline-flex;
+		flex-direction: row;
+	}
+	.buttonsContainerTwo{
+		align-items: center;
+		display: inline-flex;
+		flex-direction: column;
+	}
 	.timerContainer{
+		translate: 50%;
 		display: inline-flex;
 		align-items: center;
 		padding: 20px;
 	}
 	.timer{
 		color: gray;
-		font-size: 15px;
-		font-weight: 700;
-	}
-	.difficultyButton{
-		border-radius: 10%;
-		text-align: center;
-		width: 80px;
-		height: 25px;
-		background: gray;
-		color: black;
-		border-color: black;
+		font-size: 18px;
+		font-weight: 250;
 	}
 	.Main {
 		display: flex;
 		flex-direction: row;
-		position: fixed;
-		transform: translate(50%, 50%);
-		width: 50%;
-		height: 360px;
 	}
 	.killerSudokuTitle{
-		position: fixed;
-		top: 15%;
-		left: 50%;
-		font-weight: bold;
+		translate: 50%;
+		font-weight: 400;
 		font-size: 48px;
 	}
 	.killerSudokuNames{
@@ -93,7 +172,7 @@
 	}
 	.material-symbols-outlined:hover{
 		color: lightslategray;
-		font-size: 30px;
+		font-size: 27px;
 	}
 	/*
 	.space[data-status='top'],

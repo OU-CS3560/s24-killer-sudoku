@@ -165,21 +165,21 @@ function rand(a: number, b: number): number {
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise
 //return 2: board after it's attempt at solving it
-export function solve(board: string[][]): [boolean, string[][]] {
+export function Solve(board: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
     
     function isValInThisRowColOr3x3(val: number, row: number, col: number): boolean {
         for (let i = 0; i < 9; i++) {
-            if (i != row && board[i][col] == val.toString()) {
+            if (i != row && board[i][col].data == val.toString()) {
                 //console.log(`row ${i}`);
                 return true;
             }
-            if (i != col && board[row][i] == val.toString()) {
+            if (i != col && board[row][i].data == val.toString()) {
                 //console.log(`col ${i}`); 
                 return true;
             }
             let a: number = i % 3 + Math.floor(row/3)*3; 
             let b: number = Math.floor(i/3) + Math.floor(col/3)*3;
-            if (a != row && b != col && board[a][b] == val.toString()) {
+            if (a != row && b != col && board[a][b].data == val.toString()) {
                 //console.log(`3x3 ${i}`);
                 return true;
             }
@@ -191,7 +191,7 @@ export function solve(board: string[][]): [boolean, string[][]] {
     for (let x = 0; x < 9; x++) {
         notes[x] = [];
         for (let y = 0; y < 9; y++) {
-            if (board[x][y] != '') continue;
+            if (board[x][y].data != '') continue;
             notes[x][y] = [];
         }
     }
@@ -200,7 +200,7 @@ export function solve(board: string[][]): [boolean, string[][]] {
         progress = false;
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (board[x][y] != '') continue;
+                if (board[x][y].data != '') continue;
                 let sum: number = 0;
                 for (let n: number = 1; n <= 9; n++) {
                     notes[x][y][n] = !isValInThisRowColOr3x3(n,x,y);
@@ -213,7 +213,7 @@ export function solve(board: string[][]): [boolean, string[][]] {
                     for (let n: number = 1; n <= 9; n++) {
                         if (!notes[x][y][n]) continue;
                         notes[x][y][n] = false;
-                        board[x][y] = n.toString();
+                        board[x][y].data = n.toString();
                         progress = true;
                     }
                 } 
@@ -225,9 +225,10 @@ export function solve(board: string[][]): [boolean, string[][]] {
     let solved: boolean = true;
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
-            if (board[x][y] == '') solved = false;
+            if (board[x][y].data == '') solved = false;
         }
     }
+    
     return [solved, board];
 }
 
