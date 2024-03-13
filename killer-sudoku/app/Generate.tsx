@@ -6,7 +6,7 @@
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { solve, isAvailable, isValid } from "./Solver";
+import { solve, isAvailable, isValid, makeBoard } from "./Solver";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -22,37 +22,36 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     let iter: number = 0;
     do {
-        board = [];
-        for (let a = 0; a < 9; a++) {
-            board.push([]);
-            for (let b = 0; b < 9; b++) {
-                board[a].push('');
-            }
-        }
+        board = makeBoard('');
         gen(board, 0);
+        //printBoard(board);
     } while (!isValid(board));
 
-    function gen(board: string[][], num: number): boolean {
+    function gen(input: string[][], num: number): boolean {
+        let genBoard: string[][] = makeBoard(input);
+
         if (iter++ > 1000) {iter = 0; return true;}
 
-        if (num > 54) {
-            let tboard = board;
-            if (solve(tboard)) {board = tboard; return true;}
-        }
-    
-        let x: number = num % 9;
-        let y: number = (num / 9) >>0;
+        let solved: boolean = false;
+        ([solved, genBoard] = solve(genBoard));
+        if (solved) {board = makeBoard(genBoard); return true;}
+
+        let x: number = 0, y: number = 0;
+        do {
+            x = rand(0,8);
+            y = rand(0,8);
+        } while (genBoard[x][y] != '');
             
         let options: number[] = [1,2,3,4,5,6,7,8,9];
         shuffleArray(options);
-    
+
         for (let o of options) {
-            if (!isAvailable(board,o,x,y)) continue;
-            board[x][y] = o.toString();
+            if (!isAvailable(genBoard,o,x,y)) continue;
+            genBoard[x][y] = o.toString();
             //printBoard(board);
-            if (gen(board, num+1)) return true;
+            if (gen(genBoard, num+1)) return true;
+            genBoard[x][y] = '';
         }
-        board[x][y] = '';
         return false;
     }
 
@@ -63,7 +62,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
         for (let y = 0; y < 9; y++) {
-            arr[x][y] = {data: '', hiddenData: board[x][y], highlighted: 'space', locked: false, dataStatus:'', savedData: '', savedHighlight: 'space'};
+            arr[x][y] = {
+                data: '', 
+                hiddenData: board[x][y], 
+                highlighted: 'space', 
+                locked: false, 
+                dataStatus: '', 
+                savedData: '', 
+                savedHighlight: 'space'
+            };
         }
     }
     console.log("initBoard: Initialization complete");
@@ -91,24 +98,41 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
 
     // Showing Tiles
-    for (let i = 0; i < numShown; i++) {
-        while (true) {
-            let x: number = rand(0,8);
-            let y: number = rand(0,8);
-            if (arr[x][y].data === '') {
-                arr[x][y].data = arr[x][y].hiddenData;
-                arr[x][y].savedData = arr[x][y].data;
-                arr[x][y].locked = true;
-                break;
-            }
-            else{
-                /**
-                 * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                used++;
-                 */
+    let shown: string[][] = [], temp: string[][] = [];
+    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve(shown))) {
+        for (let x = 0; x < 9; x++) {
+            shown[x] = []; temp[x] = [];
+            for (let y = 0; y < 9; y++) {
+                shown[x][y] = ''; temp[x][y] = '';
             }
         }
+        for (let i = 0; i < numShown; i++) {
+            while (true) {
+                let x: number = rand(0,8);
+                let y: number = rand(0,8);
+                if (shown[x][y] == '') {
+                    shown[x][y] = board[x][y];
+                    break;
+                }
+                else {
+                    /**
+                     * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                    used++;
+                    * i changed everything surrounding this code here, just FYI - Nick
+                    */
+                }
+            }
+        }
+    };
+
+    // Applying changes from those values to actual board
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            arr[x][y].savedData = arr[x][y].data = shown[x][y]; // Assign both at same time
+            if (shown[x][y] == '') arr[x][y].locked = true;
+        }
     }
+
     // initBoardBoldLines(arr);
     console.log("initBoard: Tile showing complete");
 
@@ -171,7 +195,8 @@ export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButto
 
     // Uses the reworked solve function in Solver.tsx
     // Gonna make all of this look better later
-    let solved = solve(boardSTR);
+    let solved: boolean = false;
+    ([solved, boardSTR] = solve(boardSTR));
     // Also forgot arrays always return by reference in typescript, so i reworked that function as such
 
     for (let x = 0; x < 9; x++) {
