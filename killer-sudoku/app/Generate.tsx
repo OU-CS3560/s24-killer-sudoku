@@ -123,7 +123,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 }
             }
         }
-    };
+    }
 
     // Applying changes from those values to actual board
     for (let x = 0; x < 9; x++) {
