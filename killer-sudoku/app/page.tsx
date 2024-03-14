@@ -1,13 +1,14 @@
 "use client";
 
 import { Solve, initBoard } from "./Generate";
-import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
+import SudokuBoard, { Clear, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
 import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "./Timer";
 export default function Home() {
 
 	var gameOver: boolean = false;
     var used = 0;
+    const [panelNum, setPanelNum] = useState(0);
 	const [icon, setIcon] = useState("play_circle");
 	const timerRef = useRef<TimerRef>(null);
 	const [board, setBoard] = useState(() => {
@@ -89,32 +90,15 @@ export default function Home() {
     }
 
     const handleClickPanel = (num: number) => {
+        setPanelNum(num);
         setBoard(prevBoard => {
-            const newBoard = [...prevBoard];
-            
-            /*
-            for (let i = 0; i < 9; i++) {
-                for (let j = 0; j < 9; j++) {
-                    if (newBoard[i][j].highlighted === 'spaceHighlightedLookingAtSpecific' || newBoard[i][j].highlighted === 'spaceNumberTaken' && !newBoard[i][j].locked){
-                        if (+newBoard[i][j].data === num){
-                            return newBoard;
-                        }
-                        let val = +newBoard[i][j].data;
-                        newBoard[i][j].data = num.toString();
-                        HandleHighlighting(i, j, newBoard, val);
-                        SaveBoardState(newBoard);
-                        console.log("i: " + i + " j: " + j);
-                        return newBoard;
-                    }
-                    else{
-                        console.log("i: " + i + " j: " + j + " is not spaceHighlightedLookingAtSpecific or numbertaken")
-                    } 
-                }
-            }
-            console.log("Panel Click in set: " + num.toString());
-            */
+            const newBoard = prevBoard.map(row => row.map(cell => {
+                // Only update the unlocked cells with the selected panel number
+                return !cell.locked ? { ...cell, data: num.toString() } : cell;
+            }));
             return newBoard;
         });
+        console.log("Panel Click in set: " + num.toString());
     }
 
 	return (

@@ -67,7 +67,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 hiddenData: board[x][y], 
                 highlighted: 'space', 
                 locked: false, 
-                highlightedStatus: '', 
+                dataStatus: '', 
                 savedData: '', 
                 savedHighlight: 'space'
             };
@@ -137,7 +137,6 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Tile showing complete");
 
     // Initially highlight the board at the origin
-    initBoardBoldLines(arr);
     HandleHighlighting(4, 4, arr);
     SaveBoardState(arr);
     return arr;
@@ -156,30 +155,18 @@ function shuffleArray(arr: number[]): void {
 
 function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
     for (let i = 0; i < 9; i++){
-        newBoard[i][0].highlightedStatus='Top';
-        newBoard[0][i].highlightedStatus='Left';        
+        newBoard[i][0].dataStatus='top';
+        newBoard[0][i].dataStatus='left';
 
-        newBoard[i][3].highlightedStatus='Top';
-        newBoard[3][i].highlightedStatus='Left';
+        newBoard[i][2].dataStatus='top';
+        newBoard[2][i].dataStatus='left';
 
-        newBoard[i][6].highlightedStatus='Top';
-        newBoard[6][i].highlightedStatus='Left';
+        newBoard[i][5].dataStatus='bottom';
+        newBoard[5][i].dataStatus='right';
 
-        newBoard[i][8].highlightedStatus='Bottom';
-        newBoard[8][i].highlightedStatus='Right';
+        newBoard[i][8].dataStatus='bottom';
+        newBoard[8][i].dataStatus='right';
     }
-    for (let i = 0; i < 9; i += 3){
-        for (let j = 0; j < 9; j += 3){
-            newBoard[i][j].highlightedStatus='TopLeft'
-        }
-    }
-    for (let i = 0; i <= 6; i += 3){
-        newBoard[i][8].highlightedStatus='BottomLeft';
-        newBoard[8][i].highlightedStatus='TopRight';
-    }
-
-    newBoard[8][8].highlightedStatus='BottomRight';
-
     return newBoard;
 }
 
