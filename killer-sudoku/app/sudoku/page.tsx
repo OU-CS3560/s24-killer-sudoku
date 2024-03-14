@@ -220,7 +220,7 @@ export default function Home() {
                     </div>
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
-                            <div onClick={() => {SaveBoardState(board); handleClickStartButton}}>
+                            <div onClick={() => handleClickStartButton()}>
                                 <SudokuBoard board={board} setBoard={setBoard}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
