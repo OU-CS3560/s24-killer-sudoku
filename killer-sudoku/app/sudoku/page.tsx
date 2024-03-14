@@ -1,3 +1,10 @@
+/**
+ * @file     page.tsx
+ * @author   Zachary Wolfe (zw224021@ohio.edu)
+ * @brief    A file to organize all elements necessary to function as a proper Sudoku
+ * @date     March 13, 2024
+*/
+
 "use client";
 
 import { Solve, initBoard } from "../Generate";
@@ -6,73 +13,125 @@ import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "../Timer";
 export default function Home() {
 
-	var gameOver: boolean = false;
+	// var gameOver: boolean = false;
     var used = 0;
+
+    // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
+    
+    // A useState to access methods of the Timer
 	const timerRef = useRef<TimerRef>(null);
+
+    // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         return initBoard(used)
     });
 
+    // A function to handle when the user clicks the solve button
 	const handleClickSolveButton = () => {
+
+        // If the Timer exists and is running
         if (timerRef.current?.getRunning()){
+
+            // Stop the Timer
+            timerRef.current?.stop();
+            setIcon("play_circle");
+
             setBoard(prevBoard => {
+                
+                // Inherit the previous board state
                 const newBoard = [...prevBoard];
-                timerRef.current?.stop();
-                setIcon("play_circle");
+
+                // Solve the Sudoku
                 Solve(newBoard);
+
                 return newBoard;
             });
         }
     }
 
+    // A function to handle when the user clicks on the Timer's icon
 	const handleClickStartButton = () => {
         console.log("handling start button");
+
+        // If the Timer exists and ISN'T running (so we can start it)
         if (!timerRef.current?.getRunning()) {
+
+            // Start the Timer
             timerRef.current?.start();
             setIcon("pause_circle");
+
             setBoard(prevBoard => {
+
                 // Inherit the previous board state
                 const newBoard = [...prevBoard];
+                
+                // Apply the board state that was hidden from the user
                 ReApplyBoardState(newBoard);
+                
                 return newBoard;
             });
         }
     };
 
+    // A function to handle when the user clicks on the Timer's icon
 	const handleClickStopButton = () => {
         console.log("handling stop button");
+
+        // If the Timer exists and IS running (so we can stop it)
         if (timerRef.current?.getRunning()) {
-            timerRef.current?.stop(); // Call the stop function from the Timer component
+
+            // Stop the Timer
+            timerRef.current?.stop(); 
             setIcon("play_circle");
+
             setBoard(prevBoard => {
+
                 // Inherit the previous board state
                 const newBoard = [...prevBoard];
+
+                // Save the current board state to be able to hide it from the user
                 SaveBoardState(newBoard);
+
+                // Hide the board
                 HideBoard(newBoard);
+
                 return newBoard;
             });
         }
     };
 
+    // A function to handle when the user clicks Clear
 	const handleClickClearButton = () => {
         if (timerRef.current?.getRunning()){
+
+            // Reset the Time the user has accumulated
+            timerRef.current?.reset();
+
             setBoard(prevBoard => {
+                
+                // Inherit the previous board state
                 const newBoard = [...prevBoard];
+
+                // Clear the board (except locked cells) and highlight at the origin of the board
                 Clear(newBoard);
+
                 return newBoard;
             });
         }
     }
 
+    // A function to handle when the user clicks New Game
 	const handleClickNewGame = () => {
         setBoard(prevBoard => {
-            // Inherit the previous board state
+
+            // Reset the Time the user has accumulated
             timerRef.current?.reset();
             return initBoard(used);
         });
     };
 
+    // A function to handle when the user selects a new difficulty
 	const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " Killer Sudoku puzzle requested");
         alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
@@ -88,31 +147,36 @@ export default function Home() {
             });
     }
 
+    // A function to handle when the user presses on the panel off to the right-hand side of the board
     const handleClickPanel = (num: number) => {
         setBoard(prevBoard => {
             const newBoard = [...prevBoard];
-            SaveBoardState(newBoard);
-            var flag = false;
-            var row = 1;
-            var col = 1;
+
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
-                    if (newBoard[i][j].highlighted === 'spaceHighlightedLookingAtSpecific'){
-                        row = i;
-                        col = j;
-                        flag = true;
-                        console.log("i: " + i + " j: " + j)
+
+                    /******************************************
+                       Same algorithm as handleCellClickInput
+                    ******************************************/
+                   
+                    if (!newBoard[i][j].locked && (newBoard[i][j].highlighted === 'spaceHighlightedLookingAtSpecific' || newBoard[i][j].highlighted === 'spaceNumberTaken')) {
+                        // Cast target to int, because it's incoming as a string
+                        let val = num;
+
+                        if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                            val = +newBoard[i][j].data;
+                            newBoard[i][j].data = '';
+                        }
+                        else {
+                            val = +newBoard[i][j].data;
+                            newBoard[i][j].data = num.toString();
+                        }
+                        HandleHighlighting(i, j, newBoard, val);
+                        SaveBoardState(newBoard);
                         break;
+                        // console.log(used);
                     }
-                    else{
-                        console.log("i: " + i + " j: " + j + " is not spaceHighlightedLookingAtSpecific" )
-                    } 
                 }
-            }
-            if (!newBoard[row][col].locked && flag){
-                newBoard[row][col].data = num.toString();
-                HandleHighlighting(row, col, newBoard);
-                SaveBoardState(newBoard);
             }
             console.log("Panel Click in set: " + num.toString());
             return newBoard;
@@ -165,7 +229,7 @@ export default function Home() {
                                         <button className='solveButton' onClick={() => {handleClickSolveButton()}}>
                                             Solve
                                         </button>
-                                        <button className='solveButton' onClick={() => handleClickClearButton()}>
+                                        <button className='solveButton' onClick={() => {handleClickClearButton()}}>
                                             Clear
                                         </button>
                                     </div>
