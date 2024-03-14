@@ -12,47 +12,7 @@
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
 	.spaceHighlightedLookingAtSpecific,
-	.spaceNumberTaken,
-	.spaceTop,
-	.spaceHighlightedTop,
-	.spaceHighlightedLookingAtTop,
-	.spaceHighlightedLookingAtSpecificTop,
-	.spaceNumberTakenTop,
-	.spaceLeft,
-	.spaceHighlightedLeft,
-	.spaceHighlightedLookingAtLeft,
-	.spaceHighlightedLookingAtSpecificLeft,
-	.spaceNumberTakenLeft,
-	.spaceBottom,
-	.spaceHighlightedBottom,
-	.spaceHighlightedLookingAtBottom,
-	.spaceHighlightedLookingAtSpecificBottom,
-	.spaceNumberTakenBottom,
-	.spaceRight,
-	.spaceHighlightedRight,
-	.spaceHighlightedLookingAtRight,
-	.spaceHighlightedLookingAtSpecificRight,
-	.spaceNumberTakenRight,
-	.spaceBottomLeft,
-	.spaceHighlightedBottomLeft,
-	.spaceHighlightedLookingAtBottomLeft,
-	.spaceHighlightedLookingAtSpecificBottomLeft,
-	.spaceNumberTakenBottomLeft,
-	.spaceBottomRight,
-	.spaceHighlightedBottomRight,
-	.spaceHighlightedLookingAtBottomRight,
-	.spaceHighlightedLookingAtSpecificBottomRight,
-	.spaceNumberTakenBottomRight,
-	.spaceTopLeft,
-	.spaceHighlightedTopLeft,
-	.spaceHighlightedLookingAtTopLeft,
-	.spaceHighlightedLookingAtSpecificTopLeft,
-	.spaceNumberTakenTopLeft,
-	.spaceTopRight,
-	.spaceHighlightedTopRight,
-	.spaceHighlightedLookingAtTopRight,
-	.spaceHighlightedLookingAtSpecificTopRight,
-	.spaceNumberTakenTopRight {
+	.spaceNumberTaken {
 		cursor: default;
 		text-align: center;
 		display: flex;
@@ -60,54 +20,24 @@
 		flex-direction: column;
 		font-size: 24px;
 		font: lighter;
-		font-weight: 200;
-		border: 1px solid rgb(150, 150, 150);
+		font-weight: 150;
+		border: 1px solid black;
 		background: white;
+		padding: 2px;
+		margin: -1px;
+		margin-bottom: -3px;
 		width: 40px;
 		height: 40px;
 		position: relative;
-		color: #344861;
 	}
 	.spaceHighlighted,
-	.spaceHighlightedTop,
-	.spaceHighlightedBottom,
-	.spaceHighlightedLeft,
-	.spaceHighlightedRight,
-	.spaceHighlightedTopLeft,
-	.spaceHighlightedTopRight,
-	.spaceHighlightedBottomLeft,
-	.spaceHighlightedBottomRight,
-	.spaceHighlightedLookingAt,
-	.spaceHighlightedLookingAtRight,
-	.spaceHighlightedLookingAtLeft,
-	.spaceHighlightedLookingAtTop,
-	.spaceHighlightedLookingAtBottom,
-	.spaceHighlightedLookingAtTopLeft,
-	.spaceHighlightedLookingAtTopRight,
-	.spaceHighlightedLookingAtBottomLeft,
-	.spaceHighlightedLookingAtBottomRight {
-		background: #e1eaf3;
+	.spaceHighlightedLookingAt {
+		background: lightblue;
 	}
-	.spaceHighlightedLookingAtSpecific,
-	.spaceHighlightedLookingAtSpecificTop,
-	.spaceHighlightedLookingAtSpecificBottom,
-	.spaceHighlightedLookingAtSpecificLeft,
-	.spaceHighlightedLookingAtSpecificRight,
-	.spaceHighlightedLookingAtSpecificTopLeft,
-	.spaceHighlightedLookingAtSpecificTopRight,
-	.spaceHighlightedLookingAtSpecificBottomLeft,
-	.spaceHighlightedLookingAtSpecificBottomRight {
-		background: #bbdefb;
+	.spaceHighlightedLookingAtSpecific {
+		background: #00ffff;
 	}
-	.spaceNumberTaken,
-	.spaceNumberTakenRight,
-	.spaceNumberTakenLeft,
-	.spaceNumberTakenTop,
-	.spaceNumberTakenBottom,
-	.spaceNumberTakenTopRight,
-	.spaceNumberTakenBottomRight,
-	.spaceNumberTakenTopLeft,
-	.spaceNumberTakenBottomLeft {
+	.spaceNumberTaken {
 		background: red;
 		color: white;
 	}
@@ -199,7 +129,7 @@
 	}
 	.difficultyButton:hover,
 	.solveButton:hover{
-		background: #c1c7d6;
+		background: lightgray;
 		border-radius: 10px;
 	}
 	.buttonsContainer{
@@ -244,73 +174,39 @@
 		color: lightslategray;
 		font-size: 27px;
 	}
-	.spaceTop,
-	.spaceHighlightedTop,
-	.spaceHighlightedLookingAtTop,
-	.spaceHighlightedLookingAtSpecificTop,
-	.spaceNumberTakenTop {
-		border-top: 2px solid #344861;
+	/*
+	.space[data-status='top'],
+	.spaceHighlighted[data-status='top'],
+	.spaceHighlightedLookingAt[data-status='top'],
+	.spaceHighlightedLookingAtSpecific[data-status='top'],
+	.spaceNumberTaken[data-status='top'] {
+		border-top: 4px solid black;
 	}
 
-	.spaceLeft,
-	.spaceHighlightedLeft,
-	.spaceHighlightedLookingAtLeft,
-	.spaceHighlightedLookingAtSpecificLeft,
-	.spaceNumberTakenLeft {
-		border-left: 2px solid #344861;
+	.space[data-status='left'],
+	.spaceHighlighted[data-status='left'],
+	.spaceHighlightedLookingAt[data-status='left'],
+	.spaceHighlightedLookingAtSpecific[data-status='left'],
+	.spaceNumberTaken[data-status='left'] {
+		border-left: 4px solid black;
 	}
 
-	.spaceBottom,
-	.spaceHighlightedBottom,
-	.spaceHighlightedLookingAtBottom,
-	.spaceHighlightedLookingAtSpecificBottom,
-	.spaceNumberTakenBottom {
-		border-bottom: 2px solid #344861;
+	.space[data-status='bottom'],
+	.spaceHighlighted[data-status='bottom'],
+	.spaceHighlightedLookingAt[data-status='bottom'],
+	.spaceHighlightedLookingAtSpecific[data-status='bottom'],
+	.spaceNumberTaken[data-status='bottom'] {
+		border-bottom: 4px solid black;
 	}
 
-	.spaceRight,
-	.spaceHighlightedRight,
-	.spaceHighlightedLookingAtRight,
-	.spaceHighlightedLookingAtSpecificRight,
-	.spaceNumberTakenRight {
-		border-right: 2px solid #344861;
+	.space[data-status='right'],
+	.spaceHighlighted[data-status='right'],
+	.spaceHighlightedLookingAt[data-status='right'],
+	.spaceHighlightedLookingAtSpecific[data-status='right'],
+	.spaceNumberTaken[data-status='right'] {
+		border-right: 4px solid black;
 	}
-	.spaceTopRight,
-	.spaceHighlightedTopRight,
-	.spaceHighlightedLookingAtTopRight,
-	.spaceHighlightedLookingAtSpecificTopRight,
-	.spaceNumberTakenTopRight {
-		border-right: 2px solid #344861;
-		border-top: 2px solid #344861;
-	}
-	
-	.spaceTopLeft,
-	.spaceHighlightedTopLeft,
-	.spaceHighlightedLookingAtTopLeft,
-	.spaceHighlightedLookingAtSpecificTopLeft,
-	.spaceNumberTakenTopLeft {
-		border-left: 2px solid #344861;
-		border-top: 2px solid #344861;
-	}
-
-	.spaceBottomRight,
-	.spaceHighlightedBottomRight,
-	.spaceHighlightedLookingAtBottomRight,
-	.spaceHighlightedLookingAtSpecificBottomRight,
-	.spaceNumberTakenBottomRight {
-		border-right: 2px solid #344861;
-		border-bottom: 2px solid #344861;
-	}
-	
-	.spaceBottomLeft,
-	.spaceHighlightedBottomLeft,
-	.spaceHighlightedLookingAtBottomLeft,
-	.spaceHighlightedLookingAtSpecificBottomLeft,
-	.spaceNumberTakenBottomLeft {
-		border-left: 2px solid #344861;
-		border-bottom: 2px solid #344861;
-	}
-
+	*/
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
