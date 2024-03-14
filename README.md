@@ -8,10 +8,10 @@ A sister to Sudoku, which requires randomly sized boxes to be filled to add up t
 **Problem/Project name:** Killer Sudoku \
 **Team Name:** bash$ :(){ :|:&};:}   
 **Members (4):**  
-- Zachary Wolfe (email: zw224021@ohio.edu, gh: github.com/ZacharyWolfe)
-- Drew Mullett   (email: dm247120@ohio.edu, gh: github.com/Snaredrumhero)
-- Nick Adkins   (email: na761422@ohio.edu, gh: github.com/nickadkins47)
-- Kevin Belock  (email: kb848020@ohio.edu, gh: github.com/Phoenix2317)
+- Zachary Wolfe ([Email](zw224021@ohio.edu), [Github](github.com/ZacharyWolfe))
+- Drew Mullett   ([Email](dm247120@ohio.edu), [Github](github.com/Snaredrumhero))
+- Nick Adkins   ([Email](na761422@ohio.edu), [Github](github.com/nickadkins47))
+- Kevin Belock  ([Email](kb848020@ohio.edu), [Github](github.com/Phoenix2317))
 
 ## About this project
 
@@ -19,7 +19,7 @@ Killer Sudoku is a logical reasoning number puzzle game that combines elements o
 
 ## Platform
 
-Our application utilizes the typical Typescript back-end and CSS front-end. Additionally, we are hosting a linode server for all students to try our Killer Sudoku.
+Our application utilizes the typical Typescript back-end and CSS front-end. Additionally, we are hosting a [linode server](https://sudoku.drewmullett.net) for all students to try our Killer Sudoku.
 
 ## Frameworks/Tools
 
@@ -27,13 +27,18 @@ This application is built on Next.js for the React component, and relies on Tail
 
 ## How to build/compile
 
-To build this project you must have the most recent versions of NPM, NODE, and BREW. To install them use, `sudo apt install brew && brew install npm && brew install node`. Check that they are installed with `node -v && npm -v` being the latest versions Compile the project by simply locating the ./killer-sudoku file path, and executing `make` in a ZSH, BASH, or Ubuntu WSL terminal **OR** executing `npm run build`, and starting it using `npm run start`. Go to the posted team-killer-sudoku website and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Issues`.
+- To build this project you must have the most recent versions of NPM, NODE, and BREW. 
+- Install these by executing, `sudo apt install brew` or windows equivalent && `brew install node`.
+- Installing node will also install npm. 
+- Check that these dependencies are installed with `node -v && npm -v`. They should be the latest releases.
+- Compile the project by simply executing `make` in a ZSH, BASH, or Ubuntu WSL terminal **OR** build by `npm run build`, and start by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
+- Go to the posted team-killer-sudoku [website](https://sudoku.drewmullett.net) and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Issues`.
 
 ## Known Issues
 
 Safari renders items differently than Google Chrome, please use Google Chrome to get the most visually appealing product.
 
-If the installation process is not working try these solutions:
+If the installation process isn't working try these solutions:
 
 - `sudo apt update`
 - `sudo apt-get upgrade`
@@ -43,8 +48,7 @@ then:
 
 - `sudo apt-get install brew`
 - Check Homebrew is installed by, `brew -v`, if not, follow Homebrew issues.
-- `brew install npm`
-- `brew install node`
+- `brew install node`, npm automatically will come with this installation. If not `brew install npm`
 
 Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 
