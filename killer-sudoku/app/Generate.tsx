@@ -129,7 +129,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             arr[x][y].savedData = arr[x][y].data = shown[x][y]; // Assign both at same time
-            if (shown[x][y] == '') arr[x][y].locked = true;
+            if (shown[x][y] != '') arr[x][y].locked = true;
         }
     }
 
