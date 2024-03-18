@@ -12,8 +12,8 @@
  * @param board input board of string[][] trying to be solved
  * @returns tuple of a boolean (did it succeed or not) & the resulting board, completed or not
  */
-export function solve(input: string[][]): [boolean, string[][]] {
-    let board: string[][] = makeBoard(input);
+export function solve_str(input: string[][]): [boolean, string[][]] {
+    let board: string[][] = copyBoard(input);
 
     let notes: boolean[][][] = [];
     for (let x = 0; x < 9; x++) {
@@ -105,7 +105,7 @@ export function solve(input: string[][]): [boolean, string[][]] {
 
 //Checks if given value is in this board's row, column, or 3x3
 export function isAvailable(input: string[][], val: number, row: number, col: number): boolean {
-    const board: string[][] = makeBoard(input);
+    const board: string[][] = copyBoard(input);
     for (let i = 0; i < 9; i++) {
         if (i != row && board[i][col] == val.toString()) {
             //console.log(`row ${i}`);
@@ -128,7 +128,7 @@ export function isAvailable(input: string[][], val: number, row: number, col: nu
 
 //isValid function -> determines if board is valid (no overlaps)
 export function isValid(input: string[][]): boolean {
-    const board: string[][] = makeBoard(input);
+    const board: string[][] = copyBoard(input);
     for (let d1 = 0; d1 < 9; d1++) {
         let nums1: boolean[] = [];
         let nums2: boolean[] = [];
@@ -167,14 +167,25 @@ export function toNum(input: string): number {
     }
 }
 
-// Creates 9x9 board from either a specific character or copies another board
-export function makeBoard(input: string | string[][]): string[][] {
-    let b: boolean = (typeof input === 'string');
+// Creates 9x9 blank board
+export function makeBoard(): string[][] {
     let result: string[][] = [];
     for (let x = 0; x < 9; x++) {
         result[x] = [];
         for (let y = 0; y < 9; y++) {
-            result[x][y] = b ? (input as string) : (input as string[][])[x][y];
+            result[x][y] = '';
+        }
+    }
+    return result;
+}
+
+// Copies a board by value
+export function copyBoard(input: string[][]): string[][] {
+    let result: string[][] = [];
+    for (let x = 0; x < 9; x++) {
+        result[x] = [];
+        for (let y = 0; y < 9; y++) {
+            result[x][y] = input[x][y];
         }
     }
     return result;

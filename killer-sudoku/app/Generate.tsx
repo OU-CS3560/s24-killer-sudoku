@@ -6,7 +6,7 @@
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { solve, isAvailable, isValid, makeBoard } from "./Solver";
+import { solve_str, isAvailable, isValid, makeBoard, copyBoard } from "./Solver";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -22,19 +22,19 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     let iter: number = 0;
     do {
-        board = makeBoard('');
+        board = makeBoard();
         gen(board, 0);
         //printBoard(board);
     } while (!isValid(board));
 
     function gen(input: string[][], num: number): boolean {
-        let genBoard: string[][] = makeBoard(input);
+        let genBoard: string[][] = copyBoard(input);
 
         if (iter++ > 1000) {iter = 0; return true;}
 
         let solved: boolean = false;
-        ([solved, genBoard] = solve(genBoard));
-        if (solved) {board = makeBoard(genBoard); return true;}
+        ([solved, genBoard] = solve_str(genBoard));
+        if (solved) {board = copyBoard(genBoard); return true;}
 
         let x: number = 0, y: number = 0;
         do {
@@ -99,7 +99,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     // Showing Tiles
     let shown: string[][] = [], temp: string[][] = [];
-    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve(shown))) {
+    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve_str(shown))) {
         for (let x = 0; x < 9; x++) {
             shown[x] = []; temp[x] = [];
             for (let y = 0; y < 9; y++) {
@@ -183,7 +183,7 @@ export function rand(a: number, b: number): number {
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise
 //return 2: board after it's attempt at solving it
-export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
+export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
     
     let boardSTR: string[][] = [];
     for (let x = 0; x < 9; x++) {
@@ -196,7 +196,7 @@ export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButto
     // Uses the reworked solve function in Solver.tsx
     // Gonna make all of this look better later
     let solved: boolean = false;
-    ([solved, boardSTR] = solve(boardSTR));
+    ([solved, boardSTR] = solve_str(boardSTR));
     // Also forgot arrays always return by reference in typescript, so i reworked that function as such
 
     for (let x = 0; x < 9; x++) {
