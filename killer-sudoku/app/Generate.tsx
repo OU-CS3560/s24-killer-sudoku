@@ -19,38 +19,30 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Start");
 
     let board: string[][] = [];
-
-    let iter: number = 0;
     do {
         board = makeBoard();
         generate(board, 0);
-        //printBoard(board);
     } while (!isValid(board));
 
     function generate(input: string[][], num: number): boolean {
         let genBoard: string[][] = copyBoard(input);
 
-        if (iter++ > 1000) {iter = 0; return true;}
-
-        let solved: boolean = false;
-        ([solved, genBoard] = solve_str(genBoard));
-        if (solved) {board = copyBoard(genBoard); return true;}
+        if (num > 20) { // Ran tests, and 20 is best number for performance for some reason
+            let solved: boolean = false;
+            ([solved, genBoard] = solve_str(genBoard));
+            if (solved) {board = copyBoard(genBoard); return true;}
+        }
 
         let x: number = 0, y: number = 0;
         do {
             x = rand(0,8);
             y = rand(0,8);
         } while (genBoard[x][y] != '');
-            
-        let options: number[] = [1,2,3,4,5,6,7,8,9];
-        shuffleArray(options);
 
-        for (let o of options) {
+        for (let o of ['1','2','3','4','5','6','7','8','9']) {
             if (!isAvailable(genBoard,o,x,y)) continue;
-            genBoard[x][y] = o.toString();
-            //printBoard(board);
+            genBoard[x][y] = o;
             if (generate(genBoard, num+1)) return true;
-            genBoard[x][y] = '';
         }
         return false;
     }
@@ -82,12 +74,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     // Showing Tiles
     let shown: string[][] = [], temp: string[][] = [];
     for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve_str(shown))) {
-        for (let x = 0; x < 9; x++) {
-            shown[x] = []; temp[x] = [];
-            for (let y = 0; y < 9; y++) {
-                shown[x][y] = ''; temp[x][y] = '';
-            }
-        }
+        shown = makeBoard();
         for (let i = 0; i < numShown; i++) {
             while (true) {
                 let x: number = rand(0,8);

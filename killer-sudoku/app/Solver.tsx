@@ -27,7 +27,8 @@ export function solve_str(input: string[][]): [boolean, string[][]] {
         }
     }
 
-    for (let progress: boolean = true; progress == true;) {
+    let progress: boolean = true
+    while (progress) {
         progress = false;
 
         // Updating Notes
@@ -35,7 +36,7 @@ export function solve_str(input: string[][]): [boolean, string[][]] {
             for (let y = 0; y < 9; y++) {
                 if (board[x][y] != '') continue;
                 for (let n: number = 1; n <= 9; n++) {
-                    notes[x][y][n] = isAvailable(board,n,x,y);
+                    notes[x][y][n] = isAvailable(board,n.toString(),x,y);
                     //console.log(`c: ${x} ${y} ${n}, b: ${notes[x][y][n]}`)
                 }
             }
@@ -104,21 +105,21 @@ export function solve_str(input: string[][]): [boolean, string[][]] {
 }
 
 //Checks if given value is in this board's row, column, or 3x3
-export function isAvailable(input: string[][], val: number, row: number, col: number): boolean {
+export function isAvailable(input: string[][], val: string, row: number, col: number): boolean {
     const board: string[][] = copyBoard(input);
     for (let i = 0; i < 9; i++) {
-        if (i != row && board[i][col] == val.toString()) {
+        if (i != row && board[i][col] == val) {
             //console.log(`row ${i}`);
             return false;
         }
-        if (i != col && board[row][i] == val.toString()) {
+        if (i != col && board[row][i] == val) {
             //console.log(`col ${i}`);
             return false;
         }
         let a: number = (i % 3) + (row/3 >>0) *3;
         if (a == row) continue;
         let b: number = (i/3 >>0) + (col/3 >>0) *3;
-        if (b != col && board[a][b] == val.toString()) {
+        if (b != col && board[a][b] == val) {
             //console.log(`3x3 ${i}`);
             return false;
         }
@@ -169,14 +170,17 @@ export function toNum(input: string): number {
 
 // Creates 9x9 blank board
 export function makeBoard(): string[][] {
-    let result: string[][] = [];
-    for (let x = 0; x < 9; x++) {
-        result[x] = [];
-        for (let y = 0; y < 9; y++) {
-            result[x][y] = '';
-        }
-    }
-    return result;
+    return [
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','',''],
+        ['','','','','','','','','']
+    ];
 }
 
 // Copies a board by value
