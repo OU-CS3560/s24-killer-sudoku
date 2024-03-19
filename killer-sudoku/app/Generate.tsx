@@ -23,11 +23,11 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     let iter: number = 0;
     do {
         board = makeBoard();
-        gen(board, 0);
+        generate(board, 0);
         //printBoard(board);
     } while (!isValid(board));
 
-    function gen(input: string[][], num: number): boolean {
+    function generate(input: string[][], num: number): boolean {
         let genBoard: string[][] = copyBoard(input);
 
         if (iter++ > 1000) {iter = 0; return true;}
@@ -49,31 +49,13 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             if (!isAvailable(genBoard,o,x,y)) continue;
             genBoard[x][y] = o.toString();
             //printBoard(board);
-            if (gen(genBoard, num+1)) return true;
+            if (generate(genBoard, num+1)) return true;
             genBoard[x][y] = '';
         }
         return false;
     }
 
     console.log("initBoard: Randomization complete");
-
-    // Initialization Loop, load all values onto the board's hidden data
-    let arr: SpaceButtonProperties[][] = [];
-    for (let x = 0; x < 9; x++) {
-        arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
-        for (let y = 0; y < 9; y++) {
-            arr[x][y] = {
-                data: '', 
-                hiddenData: board[x][y], 
-                highlighted: 'space', 
-                locked: false, 
-                dataStatus: '', 
-                savedData: '', 
-                savedHighlight: 'space'
-            };
-        }
-    }
-    console.log("initBoard: Initialization complete");
 
     // Eventually have this value come from a UI element, instead of being defined here
     let difficulty: string = "Medium";
@@ -125,16 +107,28 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         }
     }
 
-    // Applying changes from those values to actual board
+    console.log("initBoard: Tile showing complete");
+
+    // Initialization Loop, load all values onto the board's data
+    let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
+        arr[x] = [];
         for (let y = 0; y < 9; y++) {
-            arr[x][y].savedData = arr[x][y].data = shown[x][y]; // Assign both at same time
-            if (shown[x][y] != '') arr[x][y].locked = true;
+            arr[x][y] = {
+                data: shown[x][y], 
+                hiddenData: board[x][y], 
+                highlighted: 'space', 
+                locked: (shown[x][y] != ''), // <-- Lock the tile if it's not blank
+                dataStatus: '', 
+                savedData: shown[x][y], 
+                savedHighlight: 'space'
+            };
         }
     }
 
+    console.log("initBoard: Initialization complete");
+
     // initBoardBoldLines(arr);
-    console.log("initBoard: Tile showing complete");
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
