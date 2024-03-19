@@ -57,8 +57,8 @@ const Sudoku = () => {
 
     const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
+        // alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
+        const response = fetch("https://jsonplaceholder.typicode.com/posts")
             .then(response => response.json())
             .then(data => {
                 // Handle the retrieved data
@@ -68,6 +68,7 @@ const Sudoku = () => {
                 // Handle any errors
                 console.error(error);
             });
+        alert(response.data);
     }
 
     /**
@@ -227,16 +228,16 @@ const Sudoku = () => {
                 Clear
             </button>
             <div>
-                <button name='Easy' className='difficultyButton' onClick={() => handleClickDifficultyButton("Easy")}>
+                <button name='Easy' className='difficultyButton' onClick={() => handleClickDifficultyButton("easy")}>
                     Easy
                 </button>
-                <button name='Medium' className='difficultyButton' onClick={() => handleClickDifficultyButton("Medium")}>
+                <button name='Medium' className='difficultyButton' onClick={() => handleClickDifficultyButton("medium")}>
                     Medium
                 </button>
-                <button name='Hard' className='difficultyButton' onClick={() => handleClickDifficultyButton("Hard")}>
+                <button name='Hard' className='difficultyButton' onClick={() => handleClickDifficultyButton("hard")}>
                     Hard
                 </button>
-                <button name='Expert' className='difficultyButton' onClick={() => handleClickDifficultyButton("Expert")}>
+                <button name='Expert' className='difficultyButton' onClick={() => handleClickDifficultyButton("expert")}>
                     Expert
                 </button>
             </div>
