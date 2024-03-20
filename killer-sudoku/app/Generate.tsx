@@ -18,16 +18,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
-    let board: string[][] = [];
-    do {
-        board = makeBoard();
-        generate(board, 0);
-    } while (!isValid(board));
+    let recNumber: number = 0;
+    let board: string[][] = makeBoard();
+    generate(board);
 
-    function generate(input: string[][], num: number): boolean {
+    function generate(input: string[][]): boolean {
         let genBoard: string[][] = copyBoard(input);
+        recNumber++;
 
-        if (num > 20) { // Ran tests, and 20 is best number for performance for some reason
+        if (recNumber > 20) { // Ran tests, and 20 is best number for performance for some reason
             let solved: boolean = false;
             ([solved, genBoard] = solve_str(genBoard));
             if (solved) {board = copyBoard(genBoard); return true;}
@@ -42,8 +41,9 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         for (let o of ['1','2','3','4','5','6','7','8','9']) {
             if (!isAvailable(genBoard,o,x,y)) continue;
             genBoard[x][y] = o;
-            if (generate(genBoard, num+1)) return true;
+            if (generate(genBoard)) return true;
         }
+        recNumber--;
         return false;
     }
 
@@ -72,8 +72,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
 
     // Showing Tiles
-    let shown: string[][] = [], temp: string[][] = [];
-    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve_str(shown))) {
+    let shown: string[][] = [];
+    for (let solvable: boolean = false; !solvable; solvable = solve_str(shown)[0]) {
         shown = makeBoard();
         for (let i = 0; i < numShown; i++) {
             while (true) {
