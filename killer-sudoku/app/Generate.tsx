@@ -6,7 +6,7 @@
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { solve, isAvailable, isValid, makeBoard } from "./Solver";
+import { solve_str, isAvailable, isValid, makeBoard, copyBoard } from "./Solver";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -19,61 +19,35 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Start");
 
     let board: string[][] = [];
-
-    let iter: number = 0;
     do {
-        board = makeBoard('');
-        gen(board, 0);
-        //printBoard(board);
+        board = makeBoard();
+        generate(board, 0);
     } while (!isValid(board));
 
-    function gen(input: string[][], num: number): boolean {
-        let genBoard: string[][] = makeBoard(input);
+    function generate(input: string[][], num: number): boolean {
+        let genBoard: string[][] = copyBoard(input);
 
-        if (iter++ > 1000) {iter = 0; return true;}
-
-        let solved: boolean = false;
-        ([solved, genBoard] = solve(genBoard));
-        if (solved) {board = makeBoard(genBoard); return true;}
+        if (num > 20) { // Ran tests, and 20 is best number for performance for some reason
+            let solved: boolean = false;
+            ([solved, genBoard] = solve_str(genBoard));
+            if (solved) {board = copyBoard(genBoard); return true;}
+        }
 
         let x: number = 0, y: number = 0;
         do {
             x = rand(0,8);
             y = rand(0,8);
         } while (genBoard[x][y] != '');
-            
-        let options: number[] = [1,2,3,4,5,6,7,8,9];
-        shuffleArray(options);
 
-        for (let o of options) {
+        for (let o of ['1','2','3','4','5','6','7','8','9']) {
             if (!isAvailable(genBoard,o,x,y)) continue;
-            genBoard[x][y] = o.toString();
-            //printBoard(board);
-            if (gen(genBoard, num+1)) return true;
-            genBoard[x][y] = '';
+            genBoard[x][y] = o;
+            if (generate(genBoard, num+1)) return true;
         }
         return false;
     }
 
     console.log("initBoard: Randomization complete");
-
-    // Initialization Loop, load all values onto the board's hidden data
-    let arr: SpaceButtonProperties[][] = [];
-    for (let x = 0; x < 9; x++) {
-        arr[x] = []; // <-- Don't change unless better solution, need to fill the initial columns with a row vector.
-        for (let y = 0; y < 9; y++) {
-            arr[x][y] = {
-                data: '', 
-                hiddenData: board[x][y], 
-                highlighted: 'space', 
-                locked: false, 
-                dataStatus: '', 
-                savedData: '', 
-                savedHighlight: 'space'
-            };
-        }
-    }
-    console.log("initBoard: Initialization complete");
 
     // Eventually have this value come from a UI element, instead of being defined here
     let difficulty: string = "Medium";
@@ -99,13 +73,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     // Showing Tiles
     let shown: string[][] = [], temp: string[][] = [];
-    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve(shown))) {
-        for (let x = 0; x < 9; x++) {
-            shown[x] = []; temp[x] = [];
-            for (let y = 0; y < 9; y++) {
-                shown[x][y] = ''; temp[x][y] = '';
-            }
-        }
+    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve_str(shown))) {
+        shown = makeBoard();
         for (let i = 0; i < numShown; i++) {
             while (true) {
                 let x: number = rand(0,8);
@@ -125,16 +94,28 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         }
     }
 
-    // Applying changes from those values to actual board
+    console.log("initBoard: Tile showing complete");
+
+    // Initialization Loop, load all values onto the board's data
+    let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
+        arr[x] = [];
         for (let y = 0; y < 9; y++) {
-            arr[x][y].savedData = arr[x][y].data = shown[x][y]; // Assign both at same time
-            if (shown[x][y] != '') arr[x][y].locked = true;
+            arr[x][y] = {
+                data: shown[x][y], 
+                hiddenData: board[x][y], 
+                highlighted: 'space', 
+                locked: (shown[x][y] != ''), // <-- Lock the tile if it's not blank
+                dataStatus: '', 
+                savedData: shown[x][y], 
+                savedHighlight: 'space'
+            };
         }
     }
 
+    console.log("initBoard: Initialization complete");
+
     // initBoardBoldLines(arr);
-    console.log("initBoard: Tile showing complete");
 
     // Initially highlight the board at the origin
     HandleHighlighting(4, 4, arr);
@@ -183,7 +164,7 @@ export function rand(a: number, b: number): number {
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise
 //return 2: board after it's attempt at solving it
-export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
+export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
     
     let boardSTR: string[][] = [];
     for (let x = 0; x < 9; x++) {
@@ -196,7 +177,7 @@ export function Solve(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButto
     // Uses the reworked solve function in Solver.tsx
     // Gonna make all of this look better later
     let solved: boolean = false;
-    ([solved, boardSTR] = solve(boardSTR));
+    ([solved, boardSTR] = solve_str(boardSTR));
     // Also forgot arrays always return by reference in typescript, so i reworked that function as such
 
     for (let x = 0; x < 9; x++) {

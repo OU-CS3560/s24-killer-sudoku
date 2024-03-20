@@ -1,6 +1,6 @@
 "use client";
 
-import { Solve, initBoard } from "../Generate";
+import { solve_sbp, initBoard } from "../Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../Sudoku";
 import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "../Timer";
@@ -20,7 +20,7 @@ export default function Home() {
                 const newBoard = [...prevBoard];
                 timerRef.current?.stop();
                 setIcon("play_circle");
-                Solve(newBoard);
+                solve_sbp(newBoard);
                 return newBoard;
             });
         }
