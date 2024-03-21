@@ -55,20 +55,20 @@ const Sudoku = () => {
         });
     }
 
-    const handleClickDifficultyButton = (buttonName: string) => {
+    const handleClickDifficultyButton = async (buttonName: string) => {
         console.log(buttonName, " killer Sudoku puzzle requested");
-        // alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        const response = fetch("https://jsonplaceholder.typicode.com/posts")
-            .then(response => response.json())
-            .then(data => {
-                // Handle the retrieved data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-        alert(response.data);
+        //alert("Making GET request to http://localhost3000/difficulty/?difficulty=" + buttonName);
+            try {
+                // Make GET request
+                const response = await fetch('http://localhost:3000/difficulty/?difficulty=' + buttonName);
+                const data = await response.json();
+                console.log(data.message);
+                // alert(data.message);
+                // Set data in state
+              } catch (error) {
+                console.error('Error:', error);
+              }
+              
     }
 
     /**
