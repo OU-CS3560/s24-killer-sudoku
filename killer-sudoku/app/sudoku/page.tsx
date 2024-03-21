@@ -6,8 +6,8 @@ import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "../Timer";
 export default function Home() {
 
-	var gameOver: boolean = false;
-    var used = 0;
+	const gameOver: boolean = false;
+    const used = 0;
 	const [icon, setIcon] = useState("play_circle");
 	const timerRef = useRef<TimerRef>(null);
 	const [board, setBoard] = useState(() => {
@@ -92,9 +92,9 @@ export default function Home() {
         setBoard(prevBoard => {
             const newBoard = [...prevBoard];
             SaveBoardState(newBoard);
-            var flag = false;
-            var row = 1;
-            var col = 1;
+            let flag = false;
+            let row = 1;
+            let col = 1;
             for (let i = 0; i < 9; i++) {
                 for (let j = 0; j < 9; j++) {
                     if (newBoard[i][j].highlighted === 'spaceHighlightedLookingAtSpecific'){

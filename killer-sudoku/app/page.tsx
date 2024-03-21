@@ -6,8 +6,8 @@ import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "./Timer";
 export default function Home() {
 
-	var gameOver: boolean = false;
-    var used = 0;
+	const gameOver: boolean = false;
+    const used = 0;
     const [panelNum, setPanelNum] = useState(0);
 	const [icon, setIcon] = useState("play_circle");
 	const timerRef = useRef<TimerRef>(null);

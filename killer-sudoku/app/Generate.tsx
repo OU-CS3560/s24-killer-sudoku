@@ -39,7 +39,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             y = rand(0,8);
         } while (genBoard[x][y] != '');
 
-        for (let o of ['1','2','3','4','5','6','7','8','9']) {
+        for (const o of ['1','2','3','4','5','6','7','8','9']) {
             if (!isAvailable(genBoard,o,x,y)) continue;
             genBoard[x][y] = o;
             if (generate(genBoard, num+1)) return true;
@@ -50,7 +50,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Randomization complete");
 
     // Eventually have this value come from a UI element, instead of being defined here
-    let difficulty: string = "Medium";
+    const difficulty: string = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start
@@ -77,8 +77,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         shown = makeBoard();
         for (let i = 0; i < numShown; i++) {
             while (true) {
-                let x: number = rand(0,8);
-                let y: number = rand(0,8);
+                const x: number = rand(0,8);
+                const y: number = rand(0,8);
                 if (shown[x][y] == '') {
                     shown[x][y] = board[x][y];
                     break;
@@ -97,7 +97,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Tile showing complete");
 
     // Initialization Loop, load all values onto the board's data
-    let arr: SpaceButtonProperties[][] = [];
+    const arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
@@ -125,10 +125,10 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
 //shuffles an array of numbers
 function shuffleArray(arr: number[]): void {
-    let end = arr.length-1;
+    const end = arr.length-1;
     for (let i = 0; i < end; i++) {
-        let j: number = rand(0, end);
-        let temp = arr[i];
+        const j: number = rand(0, end);
+        const temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
     }
@@ -159,7 +159,7 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
  */
 export function rand(a: number, b: number): number {
     return (Math.random() * (b-a+1) + a) >>0;
-};
+}
 
 //solve function -> solves board & also determines if board is solvable with only one solution
 //return 1: boolean true if it succeeded, false otherwise

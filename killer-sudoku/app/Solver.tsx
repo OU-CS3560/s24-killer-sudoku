@@ -13,9 +13,9 @@
  * @returns tuple of a boolean (did it succeed or not) & the resulting board, completed or not
  */
 export function solve_str(input: string[][]): [boolean, string[][]] {
-    let board: string[][] = copyBoard(input);
+    const board: string[][] = copyBoard(input);
 
-    let notes: boolean[][][] = [];
+    const notes: boolean[][][] = [];
     for (let x = 0; x < 9; x++) {
         notes[x] = [];
         for (let y = 0; y < 9; y++) {
@@ -116,9 +116,9 @@ export function isAvailable(input: string[][], val: string, row: number, col: nu
             //console.log(`col ${i}`);
             return false;
         }
-        let a: number = (i % 3) + (row/3 >>0) *3;
+        const a: number = (i % 3) + (row/3 >>0) *3;
         if (a == row) continue;
-        let b: number = (i/3 >>0) + (col/3 >>0) *3;
+        const b: number = (i/3 >>0) + (col/3 >>0) *3;
         if (b != col && board[a][b] == val) {
             //console.log(`3x3 ${i}`);
             return false;
@@ -131,17 +131,17 @@ export function isAvailable(input: string[][], val: string, row: number, col: nu
 export function isValid(input: string[][]): boolean {
     const board: string[][] = copyBoard(input);
     for (let d1 = 0; d1 < 9; d1++) {
-        let nums1: boolean[] = [];
-        let nums2: boolean[] = [];
-        let nums3: boolean[] = [];
+        const nums1: boolean[] = [];
+        const nums2: boolean[] = [];
+        const nums3: boolean[] = [];
         for (let d2 = 0; d2 < 9; d2++) {
-            let tile1 = toNum(board[d1][d2]);
+            const tile1 = toNum(board[d1][d2]);
             if (nums1[tile1] || tile1 == 0) return false;
             nums1[tile1] = true;
-            let tile2 = toNum(board[d2][d1]);
+            const tile2 = toNum(board[d2][d1]);
             if (nums2[tile2] || tile2 == 0) return false;
             nums2[tile2] = true;
-            let tile3 = toNum( board
+            const tile3 = toNum( board
                 [(d2 % 3) + (d1/3 >>0)*3]
                 [(d2/3 >>0) + (d1/3 >>0)*3]
             );
@@ -185,7 +185,7 @@ export function makeBoard(): string[][] {
 
 // Copies a board by value
 export function copyBoard(input: string[][]): string[][] {
-    let result: string[][] = [];
+    const result: string[][] = [];
     for (let x = 0; x < 9; x++) {
         result[x] = [];
         for (let y = 0; y < 9; y++) {
