@@ -5,7 +5,9 @@ RUN apt update
 RUN apt upgrade -y
 RUN apt-get install npm -y
 RUN apt-get install curl -y
-RUN apt-get install -y nodejs -y
+RUN cd ~
+RUN curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
+RUN apt-get install nodejs -y
 
 WORKDIR /killer-sudoku/app
 
