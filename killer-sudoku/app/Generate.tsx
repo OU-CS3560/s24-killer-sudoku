@@ -18,15 +18,13 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
-    let recNumber: number = 0;
     let board: string[][] = makeBoard();
-    generate(board);
+    generate(board,0);
 
-    function generate(input: string[][]): boolean {
+    function generate(input: string[][], filled: number): boolean {
         let genBoard: string[][] = copyBoard(input);
-        recNumber++;
-
-        if (recNumber > 20) { // Ran tests, and 20 is best number for performance for some reason
+        
+        if (filled > 20) { // Ran tests, and 20 is best number for performance for some reason
             let solved: boolean = false;
             ([solved, genBoard] = solve_str(genBoard));
             if (solved) {board = copyBoard(genBoard); return true;}
@@ -41,9 +39,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         for (let o of ['1','2','3','4','5','6','7','8','9']) {
             if (!isAvailable(genBoard,o,x,y)) continue;
             genBoard[x][y] = o;
-            if (generate(genBoard)) return true;
+            if (generate(genBoard,filled+1)) return true;
         }
-        recNumber--;
         return false;
     }
 
