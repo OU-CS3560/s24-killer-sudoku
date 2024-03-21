@@ -7,7 +7,7 @@
 
 "use client";
 
-import { Solve, initBoard } from "./Generate";
+import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
 import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "./Timer";
@@ -42,10 +42,9 @@ export default function Home() {
                 
                 // Inherit the previous board state
                 const newBoard = [...prevBoard];
-
-                // Solve the Sudoku
-                Solve(newBoard);
-
+                timerRef.current?.stop();
+                setIcon("play_circle");
+                solve_sbp(newBoard);
                 return newBoard;
             });
         }

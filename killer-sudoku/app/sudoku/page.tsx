@@ -156,30 +156,6 @@ export default function Home() {
                     </div>
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
-                            <div className="spaceLeft">
-                                3
-                            </div>
-                            <div className="spaceTop">
-                                4
-                            </div>
-                            <div className="spaceRight">
-                                5
-                            </div>
-                            <div className="spaceBottom">
-                                6
-                            </div>
-                            <div className="spaceTopLeft">
-                                7
-                            </div>
-                            <div className="spaceTopRight">
-                                8
-                            </div>
-                            <div className="spaceBottomLeft">
-                                9
-                            </div>
-                            <div className="spaceBottomRight">
-                                0
-                            </div>
                             <div onClick={() => {SaveBoardState(board); handleClickStartButton}}>
                                 <SudokuBoard board={board} setBoard={setBoard}></SudokuBoard>
                             </div>
