@@ -21,8 +21,8 @@ const KillerSudoku = () => {
     const timerRef = useRef<TimerRef>(null);
 
     // Variables for gamestate
-    var gameOver: boolean = false;
-    var used = 0;
+    const gameOver: boolean = false;
+    let used = 0;
 
     // Use state for the whole board
     const [board, setBoard] = useState(() => {
