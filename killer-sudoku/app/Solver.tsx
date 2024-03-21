@@ -94,8 +94,14 @@ export function solve_str(input: string[][]): [boolean, string[][]] {
             }
         }
     }
-
-    return [isValid(board), board];
+    
+    let solved: boolean = true;
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            if (board[x][y] == '') solved = false;
+        }
+    }
+    return [solved, board];
 }
 
 //Checks if given value is in this board's row, column, or 3x3

@@ -19,7 +19,10 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Start");
 
     let board: string[][] = makeBoard();
-    generate(board,0);
+    do {
+        board = makeBoard();
+        generate(board,0);
+    } while (!isValid(board));
 
     function generate(input: string[][], filled: number): boolean {
         let genBoard: string[][] = copyBoard(input);
