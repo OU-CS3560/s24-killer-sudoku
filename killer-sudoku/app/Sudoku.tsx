@@ -14,10 +14,10 @@ export interface SpaceButtonProperties {
     data: string,
     highlighted: string,
     savedData: string,
-    savedHighlight: string,
     hiddenData: string,
     highlightedStatus: string,
     locked: boolean,
+    previousHighlight: string,
 };
 
 /**
@@ -144,6 +144,7 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
     // onKeyDownCapture={(e) => handleKeyboardPress(rowIndex, columnIndex, e)}
     return (
         <div>
+            {/* eslint-disable-next-line */}
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=optional:wght@100" rel="stylesheet" />
             <div className='Main'>
                 {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
@@ -180,6 +181,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         for (let j = 0; j < 9; j++) {
             for (let k = 0; k < 9; k++) {
                 if (newBoard[j][k].highlighted !== 'spaceNumberTaken') {
+                    newBoard[j][k].previousHighlight = newBoard[j][k].highlighted;
                     newBoard[j][k].highlighted = 'space'
                     console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
                 }
@@ -189,10 +191,12 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         // Change the corresponding row and column to be highlighted
         for (let i = 0; i < 9; i++) {
             if (i !== row && newBoard[i][col].highlighted !== 'spaceNumberTaken') {
+                newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
                 newBoard[i][col].highlighted = 'spaceHighlighted';
                 console.log('1 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
             }
             if (i !== col && newBoard[row][i].highlighted !== 'spaceNumberTaken') {
+                newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
                 newBoard[row][i].highlighted = 'spaceHighlighted';
                 console.log('1 highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
             }
@@ -204,10 +208,12 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
             console.log("difNum: " + difNum);
             for (let i = 0; i < 9; i++) {
                 if (newBoard[row][i].highlighted === 'spaceNumberTaken' && +newBoard[row][i].data === difNum && i !== col && doesntHaveRowColumnMatching(row, i, newBoard)) {
+                    newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
                     newBoard[row][i].highlighted = 'spaceHighlighted';
                     console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
                 }
                 if (newBoard[i][col].highlighted === 'spaceNumberTaken' && +newBoard[i][col].data === difNum && i !== row && doesntHaveRowColumnMatching(i, col, newBoard)) {
+                    newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
                     newBoard[i][col].highlighted = 'spaceHighlighted';
                     console.log('2 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
                 }
@@ -218,6 +224,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
             for (let i = topLeftRow; i < topLeftRow + 3; i++) {
                 for (let j = topLeftCol; j < topLeftCol + 3; j++) {
                     if (newBoard[i][j].highlighted === 'spaceNumberTaken' && +newBoard[i][j].data === difNum && i !== row && j !== col && doesntHaveRowColumnMatching(i, j, newBoard)) {
+                        newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
                         newBoard[i][j].highlighted = 'spaceHighlighted';
                         console.log('Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                     }
@@ -232,11 +239,14 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         for (let i = topLeftRow; i < topLeftRow + 3; i++) {
             for (let j = topLeftCol; j < topLeftCol + 3; j++) {
                 if (newBoard[i][j].highlighted !== 'spaceNumberTaken') {
+                    newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
                     newBoard[i][j].highlighted = 'spaceHighlightedLookingAt';
                     console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
                 if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && +newBoard[i][j].data !== 0) {
+                    newBoard[i][j].previousHighlight = newBoard[i][j].highlighted
                     newBoard[i][j].highlighted = 'spaceNumberTaken';
+                    newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
                     newBoard[row][col].highlighted = 'spaceNumberTaken';
                     console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
@@ -247,12 +257,16 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
         for (let i = 0; i < 9; i++) {
             for (let j = i + 1; j < 9; j++) {
                 if (newBoard[row][i].data === newBoard[row][j].data && newBoard[row][i].data !== '') {
+                    newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
+                    newBoard[row][j].previousHighlight = newBoard[row][j].highlighted;
                     newBoard[row][i].highlighted = 'spaceNumberTaken';
                     newBoard[row][j].highlighted = 'spaceNumberTaken';
                     console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
                     console.log('highlighting [row][j] ' + row + ', ' + j + ' with ' + newBoard[row][j].highlighted);
                 }
                 if (newBoard[i][col].data === newBoard[j][col].data && newBoard[i][col].data !== '') {
+                    newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
+                    newBoard[j][col].previousHighlight = newBoard[j][col].highlighted;
                     newBoard[i][col].highlighted = 'spaceNumberTaken';
                     newBoard[j][col].highlighted = 'spaceNumberTaken';
                     console.log('3 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
@@ -263,11 +277,13 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
 
         // if the highlight is not a red space
         if (newBoard[row][col].highlighted !== 'spaceNumberTaken' || newBoard[row][col].data === '' || doesntHaveRowColumnMatching(row, col, newBoard)) {
+            newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
             console.log ("BEFORE HIGHLIGHTING ROW COL " + newBoard[row][col].highlighted);
             newBoard[row][col].highlighted = 'spaceHighlightedLookingAtSpecific';
             console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted);
         }
         else {
+            newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
             console.log ("BEFORE HIGHLIGHTING ROW COL 2 " + newBoard[row][col].highlighted);
             newBoard[row][col].highlighted = 'spaceNumberTaken';
             console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted);
@@ -282,6 +298,7 @@ export function Clear(newBoard: SpaceButtonProperties[][]) {
     console.log("user clicked clear button");
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
+            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
             newBoard[i][j].highlighted='space';
             if (!newBoard[i][j].locked) {
                 newBoard[i][j].data='';
@@ -296,6 +313,7 @@ export function HideBoard(newBoard: SpaceButtonProperties[][]) {
     console.log("hide board");
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
+            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
             newBoard[i][j].highlighted = 'space';
             newBoard[i][j].data = '';
         }
@@ -306,7 +324,7 @@ export function SaveBoardState(newBoard: SpaceButtonProperties[][]) {
     console.log("save board state");
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
-            newBoard[i][j].savedHighlight = newBoard[i][j].highlighted;
+            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
             newBoard[i][j].savedData = newBoard[i][j].data;
         }
     }
@@ -317,7 +335,7 @@ export function ReApplyBoardState(newBoard: SpaceButtonProperties[][]){
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
             newBoard[i][j].data = newBoard[i][j].savedData;
-            newBoard[i][j].highlighted = newBoard[i][j].savedHighlight;
+            newBoard[i][j].highlighted = newBoard[i][j].previousHighlight;
         }
     }
 }

@@ -69,7 +69,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 locked: false, 
                 highlightedStatus: '', 
                 savedData: '', 
-                savedHighlight: 'space'
+                previousHighlight: 'space'
             };
         }
     }

@@ -144,6 +144,7 @@ const KillerSudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], s
     // onKeyDownCapture={(e) => handleKeyboardPress(rowIndex, columnIndex, e)}
     return (
         <div>
+            {/* eslint-disable-next-line */}
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=optional:wght@100" rel="stylesheet" />
             <div className='Main'>
                 {board.map((row, rowIndex) => ( /* Map the row to a column with an onclick of handling highlights and an input form */
