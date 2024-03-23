@@ -15,6 +15,7 @@ export interface TimerRef {
     start:      () => void;
     stop:       () => void;
     reset:      () => void;
+    getRunning: () => boolean;
     getTime:    () => number;
     getMinutes: () => number;
     getSeconds: () => number;
@@ -40,8 +41,12 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
         setIsRunning(false);
     }
     const reset = () => {
+        stop();
         setTime(0);
     };
+    const getRunning = () => {
+        return isRunning;
+    }
     const getTime = () => {
         return time;
     }
@@ -67,6 +72,7 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
         start,
         stop,
         reset,
+        getRunning,
         getTime,
         getMinutes,
         getSeconds,
@@ -77,22 +83,14 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
     // Converts time to minutes
     const minutes = Math.floor((time / 60));
     
-    let secondsString = "";
-    let minutesString = "";
+    let secondsString = seconds.toString();
+    let minutesString = minutes.toString();
 
     if (seconds < 10){
-        secondsString = '0' + seconds.toString();
-        
+        secondsString = '0' + secondsString;
     }
-    else{
-        secondsString = seconds.toString();
-    }
-
     if (minutes < 10){
-        minutesString = '0' + minutes.toString();
-    }
-    else{
-        minutesString = minutes.toString();
+        minutesString = '0' + minutesString;
     }
 
     return (
