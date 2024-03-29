@@ -27,17 +27,12 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     } while (!isValid(board));
 
     function generate(board: genBoardType): boolean {
-        if (iter++ > 50) {
-            //if (debug) console.log("Iter Limit, Restart");
-            iter = 0;
-            return true;
-        }
+        if (iter++ > 50) {iter = 0; return true;}
         
         //Calls solver & records all changes it made
         const changes: [number,number,number][] = solve_gen(board,2);
         if (board.state >= 0) {
             if (board.occ == 81) return true;
-            //if (debug) printBoard(board,true);
 
             let x: number = 0, y: number = 0;
             do {
@@ -48,11 +43,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             //Look through every available option
             for (let val of randomOptions(board.note[x][y])) { 
                 boardAdd(board,val,x,y);
-                //if (debug) console.log(`Gen: ${val} @ [${x} ${y}]`);
                 if (generate(board)) return true;
-                //if (debug) console.log("Back");
                 boardRem(board,val,x,y);
-                //if (debug) printBoard(board,true)
             }
         }
 
@@ -93,26 +85,21 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     while (!isValid(temp)) {
         shown = makeBoard(); temp = makeBoard();
         for (let i = 0; i < numShown; i++) {
-            while (true) {
-                let x: number = rand(0,8);
-                let y: number = rand(0,8);
-                if (shown.tile[x][y] == 0) {
-                    boardAdd(shown,board.tile[x][y],x,y);
-                    break;
-                }
-                else {
-                    /**
-                     * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                    used++;
-                    * i changed everything surrounding this code here, just FYI - Nick
-                    */
-                }
-            }
+            let x: number = 0, y: number = 0;
+            do {
+                x = rand(0,8); y = rand(0,8);
+            } while (shown.tile[x][y] != 0)
+            boardAdd(shown,board.tile[x][y],x,y);
+            /**
+             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+            used++;
+            * i changed everything surrounding this code here, just FYI - Nick
+            */
         }
-        for (let x of [0,1,2,3,4,5,6,7,8]) {
-            for (let y of [0,1,2,3,4,5,6,7,8]) {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
                 temp.tile[x][y] = shown.tile[x][y];
-                for (let n of [1,2,3,4,5,6,7,8,9]) {
+                for (let n = 1; n <= 9; n++) {
                     temp.note[x][y][n] = shown.note[x][y][n];
                 }
             }
@@ -128,13 +115,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
+            const tile = toStr(shown.tile[x][y]);
+            const hidd = toStr(board.tile[x][y]);
             arr[x][y] = {
-                data: toStr(shown.tile[x][y]),
-                hiddenData: toStr(board.tile[x][y]), 
+                data: tile,
+                hiddenData: hidd, 
                 highlighted: 'space', 
-                locked: (shown.tile[x][y] != 0), // <-- Lock the tile if it's not blank
+                locked: (tile != ' '), // <-- Lock the tile if it's not blank
                 dataStatus: '', 
-                savedData: toStr(shown.tile[x][y]), 
+                savedData: tile, 
                 savedHighlight: 'space'
             };
         }
