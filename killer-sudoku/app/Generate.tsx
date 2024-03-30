@@ -6,7 +6,7 @@
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { genBoardType, makeBoard, isValid, solve_str as solve_gen, randomOptions, rand, boardAdd, boardRem } from "./Solver";
+import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -19,13 +19,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Start");
 
     let iter: number = 0;
-    let board: genBoardType = makeBoard();
-    do {
-        board = makeBoard();
-        generate(board);
-    } while (!isValid(board));
 
-    function generate(board: genBoardType): boolean {
+    const generate = (board: genBoardType): boolean => {
         if (iter++ > 50) {iter = 0; return true;}
         
         //Calls solver & records all changes it made
@@ -54,6 +49,12 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         board.state = 0;
         return false;
     }
+
+    let board: genBoardType = makeBoard();
+    do {
+        board = makeBoard();
+        generate(board);
+    } while (!isValid(board));
 
     console.log("initBoard: Randomization complete");
 
@@ -181,6 +182,8 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceB
     return [isValid(board), boardSBP];
 }
 
+//Extra stuff below:
+
 //Convert num to str, with 0 becoming ' '
 function toStr(input: number): string {
     return (input == 0) ? ' ' : input.toString();
@@ -188,4 +191,52 @@ function toStr(input: number): string {
 //Convert str to num, with ' ' becoming 0
 function toNum(input: string): number {
     return (input == ' ') ? 0 : Number(input);
+}
+
+//isValid function -> determines if board is valid (no overlaps)
+function isValid(board: genBoardType): boolean {
+    for (let d1 = 0; d1 < 9; d1++) {
+        const a = (d1%3)*3, b = (d1/3>>0)*3;
+        let nums1: boolean[] = [];
+        let nums2: boolean[] = [];
+        let nums3: boolean[] = [];
+        for (let d2 = 0; d2 < 9; d2++) {
+            const tile1 = board.tile[d1][d2];
+            if (nums1[tile1] || tile1 == 0) return false;
+            nums1[tile1] = true;
+            const tile2 = board.tile[d2][d1];
+            if (nums2[tile2] || tile2 == 0) return false;
+            nums2[tile2] = true;
+            const tile3 = board.tile[a+(d2%3)][b+(d2/3>>0)];
+            if (nums3[tile3] || tile3 == 0) return false;
+            nums3[tile3] = true;
+        }
+    }
+    return true;
+}
+
+//takes a note tile, turns it into randomized array of those available numbers
+function randomOptions(tile: boolean[]): number[] {
+    let arr: number[] = [];
+    for (let i: number = 1; i <= 9; i++) {
+        if (tile[i]) arr.push(i);
+    }
+    const sz = arr.length;
+    for (let i = 0; i < sz; i++) {
+        let j = rand(0,sz-1);
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+}
+
+/**
+ * @brief Random number generator, in range (a,b) inclusive
+ * @param a lower limit
+ * @param b upper limit
+ * @returns random value between a & b
+ */
+function rand(a: number, b: number): number {
+    return (Math.random() * (b-a+1) + a) >>0;
 }
