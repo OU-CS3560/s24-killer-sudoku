@@ -7,7 +7,6 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 import { genBoardType, makeBoard, isValid, solve_str as solve_gen, randomOptions, rand, boardAdd, boardRem } from "./Solver";
-import { Tilt_Warp } from "next/font/google";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
