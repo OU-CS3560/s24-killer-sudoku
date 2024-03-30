@@ -7,7 +7,7 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 import { genBoardType, makeBoard, isValid, solve_str as solve_gen, randomOptions, rand, boardAdd, boardRem } from "./Solver";
-import { stringify } from "querystring";
+import { Tilt_Warp } from "next/font/google";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -164,15 +164,13 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceB
     let board: genBoardType = makeBoard();
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
-            const num = toNum(boardSBP[x][y].data);
-            boardAdd(board,num,x,y);
+            const tile = boardSBP[x][y];
+            const num = (tile.data == '' || tile.data == tile.hiddenData) ? tile.data : tile.hiddenData;
+            boardAdd(board,toNum(num),x,y);
         }
     }
 
-    // TODO: Check for incorrect tiles & correct them
-
-    // Uses the solve function in Solver.tsx
-    solve_gen(board);
+    solve_gen(board,2); // Uses the solve function in Solver.tsx
 
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {

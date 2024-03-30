@@ -62,7 +62,7 @@ export function solve_str(board: genBoardType, opt: number = 0, debug: boolean =
                     success(val,x,y,10);
                 }
                 if (val == -1) {
-                    if (debug) console.log(`Nop: @ [${x} ${y}]`);
+                    //if (debug) console.log(`Nop: @ [${x} ${y}]`);
                     board.state = -1;
                     return changes;
                 }
