@@ -1,51 +1,58 @@
 /**
  * @file     Generate.tsx
- * @author   Nicholas Adkins (na761422@ohio.edu)
- * @brief    Generates a valid full sudoku board
+ * @author   Nicholas Adkins <na761422@ohio.edu>
+ * @brief    Generates a valid full sudoku board, both with hidden & visible values
  * @date     February 26, 2024
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { solve_str, isAvailable, isValid, makeBoard, copyBoard } from "./Solver";
+import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
  *        data with SpaceButtonProperties, and highlights the origin to start.
- * @param used (WIP)
- * @returns A 9x9 board
+ * @param {number} used (WIP?)
+ * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
 export function initBoard(used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
-    let board: string[][] = [];
-    do {
-        board = makeBoard();
-        generate(board, 0);
-    } while (!isValid(board));
+    let iter: number = 0;
 
-    function generate(input: string[][], num: number): boolean {
-        let genBoard: string[][] = copyBoard(input);
+    const generate = (board: genBoardType): boolean => {
+        if (iter++ > 50) {iter = 0; return true;}
+        
+        //Calls solver & records all changes it made
+        const changes: [number,number][] = solve_gen(board,2);
+        if (board.state) {
+            if (board.occ == 81) return true;
 
-        if (num > 20) { // Ran tests, and 20 is best number for performance for some reason
-            let solved: boolean = false;
-            ([solved, genBoard] = solve_str(genBoard));
-            if (solved) {board = copyBoard(genBoard); return true;}
+            let x: number = 0, y: number = 0;
+            do {
+                x = rand(0,8);
+                y = rand(0,8);
+            } while (board.tile[x][y] != 0);
+
+            //Look through every available option
+            for (let val of randomOptions(board.note[x][y])) { 
+                boardAdd(board,val,x,y);
+                if (generate(board)) return true;
+                boardRem(board,x,y);
+            }
         }
 
-        let x: number = 0, y: number = 0;
-        do {
-            x = rand(0,8);
-            y = rand(0,8);
-        } while (genBoard[x][y] != '');
-
-        for (const o of ['1','2','3','4','5','6','7','8','9']) {
-            if (!isAvailable(genBoard,o,x,y)) continue;
-            genBoard[x][y] = o;
-            if (generate(genBoard, num+1)) return true;
-        }
+        //If board is unsolvable, undo all solver changes & return false
+        for (let ch of changes) boardRem(board,ch[0],ch[1]);
+        board.state = true;
         return false;
     }
+
+    let board: genBoardType = makeBoard();
+    do {
+        board = makeBoard();
+        generate(board);
+    } while (!isValid(board));
 
     console.log("initBoard: Randomization complete");
 
@@ -69,29 +76,34 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     // basically returns left value as long as it's not null or undefined, otherwise returns right
     const numShown: number = diffMap.get(difficulty) ?? 81; //81 is default in case something goes wrong
 
-    console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
+    console.log(`initBoard: Difficulty: ${difficulty}. numShown: ${numShown}`);
 
     // Showing Tiles
-    let shown: string[][] = [], temp: string[][] = [];
-    for (let solvable: boolean = false; !solvable; ([solvable, temp] = solve_str(shown))) {
-        shown = makeBoard();
+    let shown: genBoardType = makeBoard(), temp: genBoardType = makeBoard();
+    while (!isValid(temp)) {
+        shown = makeBoard(); temp = makeBoard();
         for (let i = 0; i < numShown; i++) {
-            while (true) {
-                const x: number = rand(0,8);
-                const y: number = rand(0,8);
-                if (shown[x][y] == '') {
-                    shown[x][y] = board[x][y];
-                    break;
-                }
-                else {
-                    /**
-                     * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                    used++;
-                    * i changed everything surrounding this code here, just FYI - Nick
-                    */
+            let x: number = 0, y: number = 0;
+            do {
+                x = rand(0,8); y = rand(0,8);
+            } while (shown.tile[x][y] != 0)
+            boardAdd(shown,board.tile[x][y],x,y);
+            /**
+             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+            used++;
+            * i changed everything surrounding this code here, just FYI - Nick
+            */
+        }
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                temp.tile[x][y] = shown.tile[x][y];
+                for (let n = 1; n <= 9; n++) {
+                    temp.note[x][y][n] = shown.note[x][y][n];
                 }
             }
         }
+        temp.occ = shown.occ; temp.state = shown.state;
+        solve_gen(temp,2);
     }
 
     console.log("initBoard: Tile showing complete");
@@ -101,13 +113,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
+            const tile = toStr(shown.tile[x][y]);
+            const hidd = toStr(board.tile[x][y]);
             arr[x][y] = {
-                data: shown[x][y], 
-                hiddenData: board[x][y], 
+                data: tile,
+                hiddenData: hidd, 
                 highlighted: 'space', 
-                locked: (shown[x][y] != ''), // <-- Lock the tile if it's not blank
+                locked: (tile != ''), // <-- Lock the tile if it's not blank
                 dataStatus: '', 
-                savedData: shown[x][y], 
+                savedData: tile, 
                 savedHighlight: 'space'
             };
         }
@@ -121,17 +135,6 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     HandleHighlighting(4, 4, arr);
     SaveBoardState(arr);
     return arr;
-}
-
-//shuffles an array of numbers
-function shuffleArray(arr: number[]): void {
-    const end = arr.length-1;
-    for (let i = 0; i < end; i++) {
-        const j: number = rand(0, end);
-        const temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
 }
 
 function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
@@ -152,101 +155,101 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
 }
 
 /**
+ * @brief solves the board: copies data values onto a genBoardType, solves that, then converts back
+ * @param {SpaceButtonProperties[][]} boardSBP input board to be solved
+ * @return {void} None (input is passed by reference)
+ */
+export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
+    let board: genBoardType = makeBoard();
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            const tile = boardSBP[x][y];
+            //also fixes incorrect tiles so solver works properly
+            if (tile.data == tile.hiddenData) {
+                boardAdd(board,toNum(tile.data),x,y)
+            }
+        }
+    }
+    solve_gen(board,2); // Uses the solve function in Solver.tsx
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            boardSBP[x][y].data = toStr(board.tile[x][y]);
+        }
+    }
+}
+
+//Extra stuff below:
+
+/**
+ * @brief Tile value conversion: genBoardType  -> SBP[][]
+ * @param {number} input input number
+ * @returns {string} input as a string, with 0 becoming ''
+ */
+function toStr(input: number): string {
+    return (input == 0) ? '' : input.toString();
+}
+
+/**
+ * @brief Tile value conversion: SBP[][] -> genBoardType
+ * @param {string} input input string
+ * @returns {number} input as a number, with '' becoming 0
+ */
+function toNum(input: string): number {
+    return (input == '') ? 0 : Number(input);
+}
+
+/**
+ * @brief determines if the given board is full & is a valid sudoku board
+ * @param {genBoardType} board input board
+ * @returns {boolean} true if full & valid/solved, false otherwise
+ */
+function isValid(board: genBoardType): boolean {
+    for (let d1 = 0; d1 < 9; d1++) {
+        const a = (d1%3)*3, b = (d1/3>>0)*3;
+        let nums1: boolean[] = [];
+        let nums2: boolean[] = [];
+        let nums3: boolean[] = [];
+        for (let d2 = 0; d2 < 9; d2++) {
+            const tile1 = board.tile[d1][d2];
+            if (nums1[tile1] || tile1 == 0) return false;
+            nums1[tile1] = true;
+            const tile2 = board.tile[d2][d1];
+            if (nums2[tile2] || tile2 == 0) return false;
+            nums2[tile2] = true;
+            const tile3 = board.tile[a+(d2%3)][b+(d2/3>>0)];
+            if (nums3[tile3] || tile3 == 0) return false;
+            nums3[tile3] = true;
+        }
+    }
+    return true;
+}
+
+/**
+ * @brief takes a note tile, turns it into randomized array of those available numbers
+ * @param {boolean[]} tile notes of a tile
+ * @returns {number[]} random array of available number options for this tile
+ */
+function randomOptions(tile: boolean[]): number[] {
+    let arr: number[] = [];
+    for (let i: number = 1; i <= 9; i++) {
+        if (tile[i]) arr.push(i);
+    }
+    const sz = arr.length;
+    for (let i = 0; i < sz; i++) {
+        let j = rand(0,sz-1);
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+    return arr;
+}
+
+/**
  * @brief Random number generator, in range (a,b) inclusive
- * @param a lower limit
- * @param b upper limit
- * @returns random value between a & b
+ * @param {number} a lower limit
+ * @param {number} b upper limit
+ * @returns {number} random value between a & b
  */
 export function rand(a: number, b: number): number {
     return (Math.random() * (b-a+1) + a) >>0;
 }
-
-//solve function -> solves board & also determines if board is solvable with only one solution
-//return 1: boolean true if it succeeded, false otherwise
-//return 2: board after it's attempt at solving it
-export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
-    
-    let boardSTR: string[][] = [];
-    for (let x = 0; x < 9; x++) {
-        boardSTR[x] = [];
-        for (let y = 0; y < 9; y++) {
-            boardSTR[x][y] = boardSBP[x][y].data;
-        }
-    }
-
-    // Uses the reworked solve function in Solver.tsx
-    // Gonna make all of this look better later
-    let solved: boolean = false;
-    ([solved, boardSTR] = solve_str(boardSTR));
-    // Also forgot arrays always return by reference in typescript, so i reworked that function as such
-
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            boardSBP[x][y].data = boardSTR[x][y];
-        }
-    }
-    
-    return [solved, boardSBP];
-}
-
-
-
-/* Tomb of the old generation algorithm (pretty fast, but isn't random enough)
-
-    function swapRow(r1: number, r2: number): void {
-        let temp: string[] = values[r1];
-        values[r1] = values[r2];
-        values[r2] = temp;
-    }
-    
-    function swapCol(c1: number, c2: number): void {
-        for (let i = 0; i < 9; i++) {
-            let temp: string = values[i][c1];
-            values[i][c1] = values[i][c2];
-            values[i][c2] = temp;
-        }
-    }
-
-    let values: string[][] = [ // Start with a valid Sudoku board, shuffle it in a way that it stays valid
-        ['1','2','3',  '4','5','6',  '7','8','9'],
-        ['4','5','6',  '7','8','9',  '1','2','3'],
-        ['7','8','9',  '1','2','3',  '4','5','6'],
-
-        ['2','3','1',  '5','6','4',  '8','9','7'],
-        ['5','6','4',  '8','9','7',  '2','3','1'],
-        ['8','9','7',  '2','3','1',  '5','6','4'],
-
-        ['3','1','2',  '6','4','5',  '9','7','8'],
-        ['6','4','5',  '9','7','8',  '3','1','2'],
-        ['9','7','8',  '3','1','2',  '6','4','5']
-    ];
-
-    for (let i = 0; i < 9; i++) { // Randomly swap row/col with a different one in the same set of 3
-        let row: number = (i/3 >>0)*3 + rand(0,2);
-        swapRow(i,row);
-        let col: number = (i/3 >>0)*3 + rand(0,2);
-        swapCol(i,col);
-    }
-
-    for (let r3x3_1 = 0; r3x3_1 < 3; r3x3_1++) { // Randomly swap set of 3 rows/cols with a different one
-        let r3x3_2: number = rand(0,2);
-        for (let i = 0; i < 3; i++) {
-            swapRow(r3x3_1 *3 +i, r3x3_2 *3 +i);
-        }
-        r3x3_2 = rand(0,2);
-        for (let i = 0; i < 3; i++) {
-            swapCol(r3x3_1 *3 +i, r3x3_2 *3 +i);
-        }
-    }
-
-    for (let i1: number = 1; i1 <= 9; i1++) { // Randomize the placement of each set of numbers
-        let i2: number = rand(1,9);
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                if (Number(values[x][y]) === i1) {values[x][y] = i2.toString();} 
-                else 
-                if (Number(values[x][y]) === i2) {values[x][y] = i1.toString();}
-            }
-        }
-    }
-*/
