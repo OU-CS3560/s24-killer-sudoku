@@ -249,6 +249,6 @@ function randomOptions(tile: boolean[]): number[] {
  * @param {number} b upper limit
  * @returns {number} random value between a & b
  */
-function rand(a: number, b: number): number {
+export function rand(a: number, b: number): number {
     return (Math.random() * (b-a+1) + a) >>0;
 }
