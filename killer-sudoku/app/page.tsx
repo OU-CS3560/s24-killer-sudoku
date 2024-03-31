@@ -159,10 +159,7 @@ export default function Home() {
                        Same algorithm as handleCellClickInput
                     ******************************************/
                    
-                    if (!newBoard[i][j].locked && (newBoard[i][j].highlighted === 'spaceHighlightedLookingAtSpecific' || (newBoard[i][j].highlighted === 'spaceNumberTaken' && newBoard[i][j].previousHighlight === 'spaceHighlightedLookingAtSpecific'))) {
-                        console.log("***************************");
-                        console.log("PREVBOARD HIGHLIGHT: " + prevBoard[i][j].highlighted);
-                        console.log("***************************");
+                    if (!newBoard[i][j].locked && newBoard[i][j].marked) {
                         // Cast target to int, because it's incoming as a string
                         let val = num;
 

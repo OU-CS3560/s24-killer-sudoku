@@ -18,6 +18,7 @@ export interface SpaceButtonProperties {
     highlightedStatus: string,
     locked: boolean,
     previousHighlight: string,
+    marked: boolean,
 };
 
 /**
@@ -185,6 +186,10 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     newBoard[j][k].highlighted = 'space'
                     console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
                 }
+
+                if (newBoard[j][k].marked){
+                    newBoard[j][k].marked = false;
+                }
             }
         }
 
@@ -288,6 +293,8 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
             newBoard[row][col].highlighted = 'spaceNumberTaken';
             console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted);
         }
+
+        newBoard[row][col].marked = true;
     } catch (error) {
         console.log(error);
         console.log("fuck");

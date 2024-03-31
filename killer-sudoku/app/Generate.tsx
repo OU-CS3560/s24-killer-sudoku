@@ -108,7 +108,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 locked: (shown[x][y] != ''), // <-- Lock the tile if it's not blank
                 highlightedStatus: '', 
                 savedData: shown[x][y], 
-                previousHighlight: 'space'
+                previousHighlight: 'space',
+                marked: false,
             };
         }
     }
@@ -158,7 +159,6 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
         newBoard[i][8].highlightedStatus='BottomLeft';
         newBoard[8][i].highlightedStatus='TopRight';
     }
-
     newBoard[8][8].highlightedStatus='BottomRight';
 
     return newBoard;
