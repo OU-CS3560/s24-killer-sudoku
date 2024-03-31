@@ -57,7 +57,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Randomization complete");
 
     // Eventually have this value come from a UI element, instead of being defined here
-    let difficulty: string = "Medium";
+    const difficulty: string = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start
@@ -109,7 +109,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Tile showing complete");
 
     // Initialization Loop, load all values onto the board's data
-    let arr: SpaceButtonProperties[][] = [];
+    const arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
