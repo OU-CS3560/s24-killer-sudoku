@@ -119,7 +119,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
                 data: tile,
                 hiddenData: hidd, 
                 highlighted: 'space', 
-                locked: (tile != ' '), // <-- Lock the tile if it's not blank
+                locked: (tile != ''), // <-- Lock the tile if it's not blank
                 dataStatus: '', 
                 savedData: tile, 
                 savedHighlight: 'space'
@@ -164,15 +164,16 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const tile = boardSBP[x][y];
-            const num = (tile.data == '' || tile.data == tile.hiddenData) ? tile.data : tile.hiddenData;
-            boardAdd(board,toNum(num),x,y);
+            //also fixes incorrect tiles so solver works properly
+            if (tile.data == tile.hiddenData) {
+                boardAdd(board,toNum(tile.data),x,y)
+            }
         }
     }
     solve_gen(board,2); // Uses the solve function in Solver.tsx
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
-            const num = toStr(board.tile[x][y]);
-            boardSBP[x][y].data = num;
+            boardSBP[x][y].data = toStr(board.tile[x][y]);
         }
     }
 }
@@ -180,21 +181,21 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
 //Extra stuff below:
 
 /**
- * @brief Converts number to string, with 0 becoming ' '
+ * @brief Tile value conversion: genBoardType  -> SBP[][]
  * @param {number} input input number
- * @returns {string} input as a string, with 0 becoming ' '
+ * @returns {string} input as a string, with 0 becoming ''
  */
 function toStr(input: number): string {
-    return (input == 0) ? ' ' : input.toString();
+    return (input == 0) ? '' : input.toString();
 }
 
 /**
- * @brief Converts string to number, with ' ' becoming 0
+ * @brief Tile value conversion: SBP[][] -> genBoardType
  * @param {string} input input string
- * @returns {number} input as a number, with ' ' becoming 0
+ * @returns {number} input as a number, with '' becoming 0
  */
 function toNum(input: string): number {
-    return (input == ' ') ? 0 : Number(input);
+    return (input == '') ? 0 : Number(input);
 }
 
 /**
