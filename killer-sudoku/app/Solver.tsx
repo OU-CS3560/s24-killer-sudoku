@@ -1,19 +1,19 @@
 /**
  * @file     Solver.tsx
- * @author   Nicholas Adkins (na761422@ohio.edu)
- * @brief    Function to solve a board / determine if it's solvable
+ * @author   Nicholas Adkins <na761422@ohio.edu>
+ * @brief    Function to solve a board / make progress in solving it
  * @date     March 8, 2024
 */
 
-// TODO: Re-do Comments and such
-
 /**
  * @brief takes input board & tries to solve it
- * @param board TODO
- * @returns TODO
+ * @param {genBoardType} board input board to be solved (passed by reference) 
+ * @param {number} opt (WIP) parameter to select which solving methods to use:
+ *  0 (default) for all, 1 for 1st method only, 2 for 1st & 2nd, etc. 3,4,5 are WIP
+ * @returns {[number,number][]} array of changed tiles, stored as a tuple of [x,y], both numbers
  */
-export function solve_gen(board: genBoardType, opt: number = 0): [number,number,number][] {
-    let changes: [number,number,number][] = [];
+export function solve_gen(board: genBoardType, opt: number = 0): [number,number][] {
+    let changes: [number,number][] = [];
     let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
 
     for (let progress: boolean = true; progress == true;) {
@@ -22,7 +22,7 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number,
         //solved a tile successfully, do stuff
         const success = (val: number, x: number, y: number): void => {
             progress = true; 
-            changes.push([val,x,y]);
+            changes.push([x,y]);
             boardAdd(board,val,x,y);
         }
 
@@ -41,7 +41,7 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number,
                     success(val,x,y);
                 }
                 if (val == -1) { //tile is blank w/ no possible options -> BAD, return
-                    board.state = -1;
+                    board.state = false;
                     return changes;
                 }
             }
@@ -80,7 +80,6 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number,
 
         // Method 3: if one note exists only in two/three tiles in a 3x3, and
         // those are in same row/col, then remove all others in that row/col
-
         // NOTE: This doesnt work properly, but i dont really have
         // the time to fix it, need to focus on other things
         /*if (opt == 0 || opt >= 3) {
@@ -139,20 +138,24 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number,
 
 //Extra stuff below:
 
+/**
+ * @brief data type used during the generation process
+ * @member tile keeping track of the actual present values on the board
+ * @member note keep track of all available options for the other tiles
+ * @member occ number of tiles occupied
+ * @member state set to false if board is unsolvable -> go back
+ */
 export type genBoardType = {
-    tile: number[][], note: boolean[][][], occ: number, state: number
+    tile: number[][], note: boolean[][][], occ: number, state: boolean
 };
 
-export function allTrue(): boolean[] {
-    return [true,true,true,true,true,true,true,true,true,true];
-}
-export function allFalse(): boolean[] {
-    return [false,false,false,false,false,false,false,false,false,false];
-}
-
-//kinda obtuse, but it works
+/**
+ * @brief creates a blank genBoardType, with each value initialized
+ * @note looks weird, but this way there are no duplicate values, or arrays pointing to the same value
+ * @returns {genBoardType} initialized board
+ */
 export function makeBoard(): genBoardType {
-    const bl = allTrue;
+    const bl = () => {return [true,true,true,true,true,true,true,true,true,true]};
     return {
         tile: [
         [0,0,0,0,0,0,0,0,0],
@@ -174,10 +177,18 @@ export function makeBoard(): genBoardType {
         [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
         [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
         [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()]],
-        occ: 0, state: 0
+        occ: 0, state: true
     };
 }
 
+/**
+ * @brief Adds a value to a tile of a board, adjusts the notes accordingly
+ * @param {genBoardType} board board to be modified
+ * @param {number} val value being inserted
+ * @param {number} x coordinate of this tile
+ * @param {number} y coordinate of this tile
+ * @returns {void} None
+ */
 export function boardAdd(board: genBoardType, val: number, x: number, y: number): void {
     board.tile[x][y] = val;
     board.occ++;
@@ -190,7 +201,14 @@ export function boardAdd(board: genBoardType, val: number, x: number, y: number)
     }
 }
 
-export function boardRem(board: genBoardType, val: number, x: number, y: number): void {
+/**
+ * @brief Removes a value from a tile of a board, adjusts the notes accordingly
+ * @param {genBoardType} board board to be modified
+ * @param {number} x coordinate of this tile
+ * @param {number} y coordinate of this tile
+ * @returns {void} None
+ */
+export function boardRem(board: genBoardType, x: number, y: number): void {
     const reCalcNote = (val:number, x: number, y: number): boolean => {
         const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
         for (let i = 0; i < 9; i++) {
@@ -200,7 +218,7 @@ export function boardRem(board: genBoardType, val: number, x: number, y: number)
         }
         return true;
     }
-
+    const val = board.tile[x][y];
     board.tile[x][y] = 0;
     board.occ--;
     const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
