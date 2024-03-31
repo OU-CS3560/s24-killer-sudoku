@@ -1,7 +1,7 @@
 /**
  * @file     Generate.tsx
- * @author   Nicholas Adkins (na761422@ohio.edu)
- * @brief    Generates a valid full sudoku board
+ * @author   Nicholas Adkins <na761422@ohio.edu>
+ * @brief    Generates a valid full sudoku board, both with hidden & visible values
  * @date     February 26, 2024
 */
 
@@ -11,8 +11,8 @@ import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
  *        data with SpaceButtonProperties, and highlights the origin to start.
- * @param used (WIP)
- * @returns A 9x9 board
+ * @param {number} used (WIP?)
+ * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
 export function initBoard(used: number): SpaceButtonProperties[][] {
 
@@ -24,8 +24,8 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
         if (iter++ > 50) {iter = 0; return true;}
         
         //Calls solver & records all changes it made
-        const changes: [number,number,number][] = solve_gen(board,2);
-        if (board.state >= 0) {
+        const changes: [number,number][] = solve_gen(board,2);
+        if (board.state) {
             if (board.occ == 81) return true;
 
             let x: number = 0, y: number = 0;
@@ -38,15 +38,13 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             for (let val of randomOptions(board.note[x][y])) { 
                 boardAdd(board,val,x,y);
                 if (generate(board)) return true;
-                boardRem(board,val,x,y);
+                boardRem(board,x,y);
             }
         }
 
         //If board is unsolvable, undo all solver changes & return false
-        for (let ch of changes) { 
-            boardRem(board,ch[0],ch[1],ch[2]);
-        }
-        board.state = 0;
+        for (let ch of changes) boardRem(board,ch[0],ch[1]);
+        board.state = true;
         return false;
     }
 
@@ -78,7 +76,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     // basically returns left value as long as it's not null or undefined, otherwise returns right
     const numShown: number = diffMap.get(difficulty) ?? 81; //81 is default in case something goes wrong
 
-    console.log("initBoard: Difficulty: %s. numShown: %d ", difficulty, numShown);
+    console.log(`initBoard: Difficulty: ${difficulty}. numShown: ${numShown}`);
 
     // Showing Tiles
     let shown: genBoardType = makeBoard(), temp: genBoardType = makeBoard();
@@ -156,11 +154,12 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
     return newBoard;
 }
 
-//solve function -> solves board & also determines if board is solvable with only one solution
-//return 1: boolean true if it succeeded, false otherwise
-//return 2: board after it's attempt at solving it
-export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceButtonProperties[][]] {
-    
+/**
+ * @brief solves the board: copies data values onto a genBoardType, solves that, then converts back
+ * @param {SpaceButtonProperties[][]} boardSBP input board to be solved
+ * @return {void} None (input is passed by reference)
+ */
+export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
     let board: genBoardType = makeBoard();
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
@@ -169,31 +168,40 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): [boolean, SpaceB
             boardAdd(board,toNum(num),x,y);
         }
     }
-
     solve_gen(board,2); // Uses the solve function in Solver.tsx
-
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const num = toStr(board.tile[x][y]);
             boardSBP[x][y].data = num;
         }
     }
-    
-    return [isValid(board), boardSBP];
 }
 
 //Extra stuff below:
 
-//Convert num to str, with 0 becoming ' '
+/**
+ * @brief Converts number to string, with 0 becoming ' '
+ * @param {number} input input number
+ * @returns {string} input as a string, with 0 becoming ' '
+ */
 function toStr(input: number): string {
     return (input == 0) ? ' ' : input.toString();
 }
-//Convert str to num, with ' ' becoming 0
+
+/**
+ * @brief Converts string to number, with ' ' becoming 0
+ * @param {string} input input string
+ * @returns {number} input as a number, with ' ' becoming 0
+ */
 function toNum(input: string): number {
     return (input == ' ') ? 0 : Number(input);
 }
 
-//isValid function -> determines if board is valid (no overlaps)
+/**
+ * @brief determines if the given board is full & is a valid sudoku board
+ * @param {genBoardType} board input board
+ * @returns {boolean} true if full & valid/solved, false otherwise
+ */
 function isValid(board: genBoardType): boolean {
     for (let d1 = 0; d1 < 9; d1++) {
         const a = (d1%3)*3, b = (d1/3>>0)*3;
@@ -215,7 +223,11 @@ function isValid(board: genBoardType): boolean {
     return true;
 }
 
-//takes a note tile, turns it into randomized array of those available numbers
+/**
+ * @brief takes a note tile, turns it into randomized array of those available numbers
+ * @param {boolean[]} tile notes of a tile
+ * @returns {number[]} random array of available number options for this tile
+ */
 function randomOptions(tile: boolean[]): number[] {
     let arr: number[] = [];
     for (let i: number = 1; i <= 9; i++) {
@@ -233,9 +245,9 @@ function randomOptions(tile: boolean[]): number[] {
 
 /**
  * @brief Random number generator, in range (a,b) inclusive
- * @param a lower limit
- * @param b upper limit
- * @returns random value between a & b
+ * @param {number} a lower limit
+ * @param {number} b upper limit
+ * @returns {number} random value between a & b
  */
 function rand(a: number, b: number): number {
     return (Math.random() * (b-a+1) + a) >>0;
