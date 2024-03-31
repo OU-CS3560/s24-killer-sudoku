@@ -9,43 +9,28 @@
 
 /**
  * @brief takes input board & tries to solve it
- * @param board input board of string[][] trying to be solved
- * @returns tuple of a boolean (did it succeed or not) & the resulting board, completed or not
+ * @param board TODO
+ * @returns TODO
  */
-export function solve_str(input: string[][]): [boolean, string[][]] {
-    let board: string[][] = copyBoard(input);
+export function solve_gen(board: genBoardType, opt: number = 0): [number,number,number][] {
+    let changes: [number,number,number][] = [];
+    let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
 
-    let notes: boolean[][][] = [];
-    for (let x = 0; x < 9; x++) {
-        notes[x] = [];
-        for (let y = 0; y < 9; y++) {
-            if (board[x][y] != '') continue;
-            notes[x][y] = [];
-            for (let n: number = 1; n <= 9; n++) {
-                notes[x][y][n] = false;
-            }
-        }
-    }
-
-    let progress: boolean = true
-    while (progress) {
+    for (let progress: boolean = true; progress == true;) {
         progress = false;
 
-        // Updating Notes
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                if (board[x][y] != '') continue;
-                for (let n: number = 1; n <= 9; n++) {
-                    notes[x][y][n] = isAvailable(board,n.toString(),x,y);
-                    //console.log(`c: ${x} ${y} ${n}, b: ${notes[x][y][n]}`)
-                }
-            }
+        //solved a tile successfully, do stuff
+        const success = (val: number, x: number, y: number): void => {
+            progress = true; 
+            changes.push([val,x,y]);
+            boardAdd(board,val,x,y);
         }
 
         // Method 1: if theres only one note in a tile, put it in
+        if (true) { //opt == 0 || opt >= 1 -> true
         for (let x = 0; x < 9; x++) { 
             for (let y = 0; y < 9; y++) {
-                if (board[x][y] != '') continue;
+                if (tiles[x][y] != 0) continue;
                 let val: number = -1;
                 for (let n: number = 1; n <= 9; n++) {
                     if (notes[x][y][n]) {
@@ -53,144 +38,177 @@ export function solve_str(input: string[][]): [boolean, string[][]] {
                     }
                 }
                 if (val >= 0) { //if there is one boolean true
-                    //console.log(`val: ${val}`);
-                    board[x][y] = val.toString();
-                    progress = true;
+                    success(val,x,y);
+                }
+                if (val == -1) { //tile is blank w/ no possible options -> BAD, return
+                    board.state = -1;
+                    return changes;
                 }
             }
-        }
+        }}
 
-        // Method 2: if theres only one note of a type in a row/col/3x3, put it in
-        for (let d1 = 0; d1 < 9; d1++) { 
+        // Method 2: if theres only one note of a type in a row/col, put it in
+        if (opt == 0 || opt >= 2) {
+        for (let d1 = 0; d1 < 9; d1++) {
             for (let n: number = 1; n <= 9; n++) {
                 let valR: number = -1;
                 for (let d2 = 0; d2 < 9; d2++) {
-                    if (board[d1][d2] == n.toString()) {
+                    if (tiles[d1][d2] == n) {
                         valR = -3; break;
                     }
-                    if (board[d1][d2] == '' && notes[d1][d2][n]) {
+                    if (tiles[d1][d2] == 0 && notes[d1][d2][n]) {
                         valR = (valR == -1) ? d2 : -2;
                     }
                 }
                 if (valR >= 0) { //if there is one boolean true
-                    //console.log(`valR: ${valR}`);
-                    board[d1][valR] = n.toString();
-                    progress = true;
+                    success(n,d1,valR);
                 }
                 let valC: number = -1;
                 for (let d2 = 0; d2 < 9; d2++) {
-                    if (board[d2][d1] == n.toString()) {
+                    if (tiles[d2][d1] == n) {
                         valC = -3; break;
                     }
-                    if (board[d2][d1] == '' && notes[d2][d1][n]) {
+                    if (tiles[d2][d1] == 0 && notes[d2][d1][n]) {
                         valC = (valC == -1) ? d2 : -2;
                     }
                 }
                 if (valC >= 0) { //if there is one boolean true
-                    //console.log(`valC: ${valC}`);
-                    board[valC][d1] = n.toString();
-                    progress = true;
+                    success(n,valC,d1);
                 }
             }
-        }
+        }}
+
+        // Method 3: if one note exists only in two/three tiles in a 3x3, and
+        // those are in same row/col, then remove all others in that row/col
+
+        // NOTE: This doesnt work properly, but i dont really have
+        // the time to fix it, need to focus on other things
+        /*if (opt == 0 || opt >= 3) {
+            //eliminate all notes in this row
+            const clearRow = (row: number, val: number): void => {
+                for (let y = 0; y < 9; y++) {
+                    notes[row][y][val] = false;
+                }
+            }
+            //eliminate all notes in this col
+            const clearCol = (col: number, val: number): void => {
+                for (let x = 0; x < 9; x++) {
+                    notes[x][col][val] = false;
+                }
+            }
+
+            for (let n: number = 1; n <= 9; n++) {
+                for (let x = 0; x < 9; x++) {
+                    let arr: [number,number][] = [];
+                    for (let y = 0; y < 9; y++) {
+                        const a = (y % 3)+(x % 3)*3, b = (y/3 >>0)+(x/3 >>0)*3;
+                        if (tiles[a][b] == n) {arr = []; break;}
+                        if (tiles[a][b] == 0 && notes[a][b][n]) arr.push([a,b]);
+                    }
+                    if (arr.length == 2) {
+                        if (arr[0][0] == arr[1][0]) { //if same 'a' val
+                            clearRow(arr[0][0],n);
+                        }
+                        if (arr[0][1] == arr[1][1]) { //if same 'b' val
+                            clearCol(arr[0][1],n);
+                        }
+                    }
+                    if (arr.length == 3) {
+                        if (arr[0][0] == arr[1][0] && arr[1][0] == (arr[2])[0]) { //if same 'a' val
+                            clearRow(arr[0][0],n); 
+                        }
+                        if (arr[0][1] == arr[1][1] && arr[1][1] == (arr[2])[1]) { //if same 'b' val
+                            clearCol(arr[0][1],n);
+                        }
+                    }
+                }
+            }
+        }*/
+
+        // Method 4: if two types of notes form a pair, then remove all other
+        //  notes from those tiles & those notes from that 3x3
+        //if (opt == 0 || opt >= 4) {}
+
+        // Method 5: idk how else to describe it: its the last one in this link
+        //  https://www.conceptispuzzles.com/index.aspx?uri=puzzle/sudoku/techniques
+        //if (opt == 0 || opt >= 5) {}
+
     }
-    
-    let solved: boolean = true;
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            if (board[x][y] == '') solved = false;
-        }
-    }
-    return [solved, board];
+    return changes;
 }
 
-//Checks if given value is in this board's row, column, or 3x3
-export function isAvailable(input: string[][], val: string, row: number, col: number): boolean {
-    const board: string[][] = copyBoard(input);
+//Extra stuff below:
+
+export type genBoardType = {
+    tile: number[][], note: boolean[][][], occ: number, state: number
+};
+
+export function allTrue(): boolean[] {
+    return [true,true,true,true,true,true,true,true,true,true];
+}
+export function allFalse(): boolean[] {
+    return [false,false,false,false,false,false,false,false,false,false];
+}
+
+//kinda obtuse, but it works
+export function makeBoard(): genBoardType {
+    const bl = allTrue;
+    return {
+        tile: [
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0]],
+        note: [
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
+        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()]],
+        occ: 0, state: 0
+    };
+}
+
+export function boardAdd(board: genBoardType, val: number, x: number, y: number): void {
+    board.tile[x][y] = val;
+    board.occ++;
+    const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
     for (let i = 0; i < 9; i++) {
-        if (i != row && board[i][col] == val) {
-            //console.log(`row ${i}`);
-            return false;
-        }
-        if (i != col && board[row][i] == val) {
-            //console.log(`col ${i}`);
-            return false;
-        }
-        let a: number = (i % 3) + (row/3 >>0) *3;
-        if (a == row) continue;
-        let b: number = (i/3 >>0) + (col/3 >>0) *3;
-        if (b != col && board[a][b] == val) {
-            //console.log(`3x3 ${i}`);
-            return false;
-        }
-    }
-    return true;
-}
-
-//isValid function -> determines if board is valid (no overlaps)
-export function isValid(input: string[][]): boolean {
-    const board: string[][] = copyBoard(input);
-    for (let d1 = 0; d1 < 9; d1++) {
-        let nums1: boolean[] = [];
-        let nums2: boolean[] = [];
-        let nums3: boolean[] = [];
-        for (let d2 = 0; d2 < 9; d2++) {
-            let tile1 = toNum(board[d1][d2]);
-            if (nums1[tile1] || tile1 == 0) return false;
-            nums1[tile1] = true;
-            let tile2 = toNum(board[d2][d1]);
-            if (nums2[tile2] || tile2 == 0) return false;
-            nums2[tile2] = true;
-            let tile3 = toNum( board
-                [(d2 % 3) + (d1/3 >>0)*3]
-                [(d2/3 >>0) + (d1/3 >>0)*3]
-            );
-            if (nums3[tile3] || tile3 == 0) return false;
-            nums3[tile3] = true;
-        }
-    }
-    return true;
-}
-
-//Converts character value to number, specifically single digit values
-export function toNum(input: string): number {
-    switch (input) {
-        case '1': return 1;
-        case '2': return 2;
-        case '3': return 3;
-        case '4': return 4;
-        case '5': return 5;
-        case '6': return 6;
-        case '7': return 7;
-        case '8': return 8;
-        case '9': return 9;
-        default : return 0;
+        board.note[i][y][val] = false; //each in row
+        board.note[x][i][val] = false; //each in col
+        board.note[a+(i%3)][b+(i/3>>0)][val] = false; //each in 3x3
+        board.note[x][y][i+1] = false; //each in this tile
     }
 }
 
-// Creates 9x9 blank board
-export function makeBoard(): string[][] {
-    return [
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','',''],
-        ['','','','','','','','','']
-    ];
-}
-
-// Copies a board by value
-export function copyBoard(input: string[][]): string[][] {
-    let result: string[][] = [];
-    for (let x = 0; x < 9; x++) {
-        result[x] = [];
-        for (let y = 0; y < 9; y++) {
-            result[x][y] = input[x][y];
+export function boardRem(board: genBoardType, val: number, x: number, y: number): void {
+    const reCalcNote = (val:number, x: number, y: number): boolean => {
+        const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
+        for (let i = 0; i < 9; i++) {
+            if (board.tile[i][y] == val) return false;
+            if (board.tile[x][i] == val) return false;
+            if (board.tile[a+(i%3)][b+(i/3>>0)] == val) return false;
         }
+        return true;
     }
-    return result;
+
+    board.tile[x][y] = 0;
+    board.occ--;
+    const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
+    for (let i = 0; i < 9; i++) {
+        if (board.tile[i][y] == 0) board.note[i][y][val] = reCalcNote(val,i,y); //each in row
+        if (board.tile[x][i] == 0) board.note[x][i][val] = reCalcNote(val,x,i); //each in col
+        const c = a+(i%3), d = b+(i/3>>0);
+        if (board.tile[c][d] == 0) board.note[c][d][val] = reCalcNote(val,c,d); //each in 3x3
+        board.note[x][y][i+1] = reCalcNote(i+1,x,y); //each in this tile
+    }
 }
