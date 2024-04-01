@@ -8,6 +8,18 @@
 		text-wrap: balance;
 	}
 	/*All containers hold these properties to generate a default space*/
+	.dashedBorder,
+	.dashedBorderTopOpen,
+	.dashedBorderRightOpen,
+	.dashedBorderLeftOpen,
+	.dashedBorderBottomOpen,
+	.dashedBorderRightBottomOpen,
+	.dashedBorderRightTopOpen,
+	.dashedBorderLeftBottomOpen,
+	.dashedBorderLeftTopOpen,
+	.dashedBorderTopBottomOpen,
+	.dashedBorderLeftRightOpen,
+	.dashedBorderAllClosed,
 	.space,
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
@@ -58,16 +70,89 @@
 		display: flex;
 		align-items: center;
 		flex-direction: column;
-		font-size: 24px;
+		font-size: 20px;
 		font: lighter;
 		font-weight: 200;
 		border: 1px solid rgb(150, 150, 150);
 		background: white;
-		width: 40px;
-		height: 40px;
+		width: 45px;
+		height: 45px;
 		position: relative;
 		color: #344861;
 	}
+	.dashedBorder,
+	.dashedBorderTopOpen,
+	.dashedBorderRightOpen,
+	.dashedBorderLeftOpen,
+	.dashedBorderBottomOpen,
+	.dashedBorderRightBottomOpen,
+	.dashedBorderRightTopOpen,
+	.dashedBorderLeftBottomOpen,
+	.dashedBorderLeftTopOpen,
+	.dashedBorderTopBottomOpen,
+	.dashedBorderLeftRightOpen,
+	.dashedBorderAllClosed{
+		display: flex;
+		vertical-align: middle;
+		color: inherit;
+		background: inherit;
+		margin:	auto;
+		margin-top: 0;
+		border: none;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+		align-items: center;
+	}
+	.dashedBorderLeftOpen{
+		border-right: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderTopOpen{
+		border-right: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderRightOpen{
+		border-top: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderBottomOpen{
+		border-right: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderLeftRightOpen{
+		border-bottom: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderTopBottomOpen{
+		border-left: 2px dashed #344861;
+		border-right: 2px dashed #344861;
+	}
+	.dashedBorderLeftTopOpen{
+		border-right: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderLeftBottomOpen{
+		border-right: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderRightTopOpen{
+		border-bottom: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+	}
+	.dashedBorderRightBottomOpen{
+		border-top: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+	}
+
+	.dashedBorderAllClosed{
+		border: 2px dashed #344861;
+	}
+
 	.spaceHighlighted,
 	.spaceHighlightedTop,
 	.spaceHighlightedBottom,
@@ -309,6 +394,27 @@
 	.spaceNumberTakenBottomLeft {
 		border-left: 2px solid #344861;
 		border-bottom: 2px solid #344861;
+	}
+
+	input{
+		display: block;
+		position: absolute;
+		text-align: center;
+		margin: auto;
+		width: 20px;
+		height: 20px;
+		background: inherit;
+		padding: 0;
+	}
+
+	legend {
+		align-content: first baseline;
+		height: 11px;
+		text-align: left;
+		font-size: 12px;
+		font-weight: bold;
+		color: #344861;
+		padding-top: 5px 5px;
 	}
 
 	/* Chrome, Safari, Edge, Opera */

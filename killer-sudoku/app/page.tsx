@@ -7,10 +7,10 @@
 
 "use client";
 
+import Timer, { TimerRef } from "./Timer";
+import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
-import React, { useRef, useState } from 'react'
-import Timer, { TimerRef } from "./Timer";
 export default function Home() {
 
 	// var gameOver: boolean = false;
@@ -95,7 +95,6 @@ export default function Home() {
 
                 // Hide the board
                 HideBoard(newBoard);
-
                 return newBoard;
             });
         }
@@ -104,9 +103,9 @@ export default function Home() {
     // A function to handle when the user clicks Clear
 	const handleClickClearButton = () => {
         if (timerRef.current?.getRunning()){
-
             // Reset the Time the user has accumulated
             timerRef.current?.reset();
+            setIcon("play_circle");
 
             setBoard(prevBoard => {
                 
@@ -115,7 +114,6 @@ export default function Home() {
 
                 // Clear the board (except locked cells) and highlight at the origin of the board
                 Clear(newBoard);
-
                 return newBoard;
             });
         }
@@ -127,6 +125,8 @@ export default function Home() {
 
             // Reset the Time the user has accumulated
             timerRef.current?.reset();
+
+            setIcon("play_circle");
             return initBoard(used);
         });
     };
@@ -162,13 +162,12 @@ export default function Home() {
                     if (!newBoard[i][j].locked && newBoard[i][j].marked) {
                         // Cast target to int, because it's incoming as a string
                         let val = num;
-
+                        val = +newBoard[i][j].data;
+                        
                         if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                            val = +newBoard[i][j].data;
                             newBoard[i][j].data = '';
                         }
                         else {
-                            val = +newBoard[i][j].data;
                             newBoard[i][j].data = num.toString();
                         }
                         HandleHighlighting(i, j, newBoard, val);

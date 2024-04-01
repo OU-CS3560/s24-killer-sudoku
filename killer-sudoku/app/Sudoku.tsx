@@ -15,10 +15,12 @@ export interface SpaceButtonProperties {
     highlighted: string,
     savedData: string,
     hiddenData: string,
-    highlightedStatus: string,
+    fixedStatus: string,
+    mutableStatus: string,
     locked: boolean,
     previousHighlight: string,
     marked: boolean,
+    topleftnumber: number,
 };
 
 /**
@@ -38,7 +40,7 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
             // Inherit the previous board state
             const newBoard = [...prevBoard];
             console.log("*********************");
-            console.log("newBoard[row][col], row " + row + ", " + col + " highlightedStatus, " + newBoard[row][col].highlightedStatus);
+            console.log("newBoard[row][col], row " + row + ", " + col + " highlightedStatus, " + newBoard[row][col].fixedStatus);
             console.log("*********************");
             HandleHighlighting(row, col, newBoard);
             return newBoard;
@@ -72,8 +74,8 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
 
                 // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
                 if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0) {
+                    val = +newBoard[row][col].data;
                     if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = '';
                         /**
                          * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
@@ -81,7 +83,6 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                         */
                     }
                     else {
-                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = e.target.value.toString();
                         /**
                          * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
@@ -152,15 +153,21 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                     <div key={rowIndex} id={rowIndex.toString()}>
                         {row.map((space, columnIndex) => (
                             <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
-                                <input
-                                    type='text' // Because numbers are really fucking weird for some reason
-                                    autoComplete='off'
-                                    autoCapitalize='off'
-                                    value={space.data} // The incoming value
-                                    className={space.highlighted + space.highlightedStatus}
-                                    onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
-                                    style={{ outline: 'none'}}
-                                />
+                                <div className={space.highlighted + space.fixedStatus}>
+                                    <fieldset className={space.mutableStatus}>
+                                        <legend>
+                                            {space.topleftnumber === 0 ? "" : space.topleftnumber}
+                                        </legend>
+                                        <input
+                                            type='text' // Because numbers are really fucking weird for some reason
+                                            autoComplete='off'
+                                            autoCapitalize='off'
+                                            value={space.data} // The incoming value
+                                            onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
+                                            style={{ outline: 'none'}}
+                                        />
+                                    </fieldset>
+                                </div>
                             </div>
                         ))}
                         {rowIndex !== board.length - 1 && <br />}
@@ -248,7 +255,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     newBoard[i][j].highlighted = 'spaceHighlightedLookingAt';
                     console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                 }
-                if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && +newBoard[i][j].data !== 0) {
+                if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && newBoard[i][j].data !== '') {
                     newBoard[i][j].previousHighlight = newBoard[i][j].highlighted
                     newBoard[i][j].highlighted = 'spaceNumberTaken';
                     newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
