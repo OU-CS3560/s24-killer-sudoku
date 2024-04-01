@@ -44,7 +44,9 @@ export default function Home() {
                 const newBoard = [...prevBoard];
                 timerRef.current?.stop();
                 setIcon("play_circle");
+                Clear(newBoard);
                 solve_sbp(newBoard);
+                HandleHighlighting(4, 4, newBoard);
                 return newBoard;
             });
         }
@@ -102,18 +104,20 @@ export default function Home() {
 
     // A function to handle when the user clicks Clear
 	const handleClickClearButton = () => {
+        console.log("Clear button pressed");
         if (timerRef.current?.getRunning()){
-            // Reset the Time the user has accumulated
             timerRef.current?.reset();
-            setIcon("play_circle");
-
             setBoard(prevBoard => {
-                
+
                 // Inherit the previous board state
                 const newBoard = [...prevBoard];
 
+                // Save the current board state to be able to hide it from the user
+                
                 // Clear the board (except locked cells) and highlight at the origin of the board
                 Clear(newBoard);
+                SaveBoardState(newBoard);
+                
                 return newBoard;
             });
         }
@@ -162,12 +166,13 @@ export default function Home() {
                     if (!newBoard[i][j].locked && newBoard[i][j].marked) {
                         // Cast target to int, because it's incoming as a string
                         let val = num;
-                        val = +newBoard[i][j].data;
                         
                         if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                            val = +newBoard[i][j].data;
                             newBoard[i][j].data = '';
                         }
                         else {
+                            val = +newBoard[i][j].data;
                             newBoard[i][j].data = num.toString();
                         }
                         HandleHighlighting(i, j, newBoard, val);

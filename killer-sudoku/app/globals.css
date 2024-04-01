@@ -97,7 +97,6 @@
 		color: inherit;
 		background: inherit;
 		margin:	auto;
-		margin-top: 0;
 		border: none;
 		width: 40px;
 		height: 40px;
@@ -301,7 +300,8 @@
 		translate: 50%;
 		display: inline-flex;
 		align-items: center;
-		padding: 20px;
+		padding: 10px;
+		padding-left: 0px;
 	}
 	.timer{
 		color: gray;
@@ -318,6 +318,7 @@
 		font-size: 48px;
 	}
 	.killerSudokuNames{
+		padding-left: 5px;
 		color: black;
 		font-size: 18px;
 		font-weight: 500;
@@ -401,10 +402,20 @@
 		position: absolute;
 		text-align: center;
 		margin: auto;
-		width: 20px;
-		height: 20px;
+		width: 25px;
+		height: 25px;
 		background: inherit;
 		padding: 0;
+	}
+
+	input:hover{
+		cursor: default;
+	}
+
+	form{
+		align-items: center;
+		margin: auto;
+		margin-top: 0;
 	}
 
 	legend {
