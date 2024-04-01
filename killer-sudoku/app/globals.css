@@ -8,36 +8,191 @@
 		text-wrap: balance;
 	}
 	/*All containers hold these properties to generate a default space*/
+	.dashedBorder,
+	.dashedBorderTopOpen,
+	.dashedBorderRightOpen,
+	.dashedBorderLeftOpen,
+	.dashedBorderBottomOpen,
+	.dashedBorderRightBottomOpen,
+	.dashedBorderRightTopOpen,
+	.dashedBorderLeftBottomOpen,
+	.dashedBorderLeftTopOpen,
+	.dashedBorderTopBottomOpen,
+	.dashedBorderLeftRightOpen,
+	.dashedBorderAllClosed,
 	.space,
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
 	.spaceHighlightedLookingAtSpecific,
-	.spaceNumberTaken {
+	.spaceNumberTaken,
+	.spaceTop,
+	.spaceHighlightedTop,
+	.spaceHighlightedLookingAtTop,
+	.spaceHighlightedLookingAtSpecificTop,
+	.spaceNumberTakenTop,
+	.spaceLeft,
+	.spaceHighlightedLeft,
+	.spaceHighlightedLookingAtLeft,
+	.spaceHighlightedLookingAtSpecificLeft,
+	.spaceNumberTakenLeft,
+	.spaceBottom,
+	.spaceHighlightedBottom,
+	.spaceHighlightedLookingAtBottom,
+	.spaceHighlightedLookingAtSpecificBottom,
+	.spaceNumberTakenBottom,
+	.spaceRight,
+	.spaceHighlightedRight,
+	.spaceHighlightedLookingAtRight,
+	.spaceHighlightedLookingAtSpecificRight,
+	.spaceNumberTakenRight,
+	.spaceBottomLeft,
+	.spaceHighlightedBottomLeft,
+	.spaceHighlightedLookingAtBottomLeft,
+	.spaceHighlightedLookingAtSpecificBottomLeft,
+	.spaceNumberTakenBottomLeft,
+	.spaceBottomRight,
+	.spaceHighlightedBottomRight,
+	.spaceHighlightedLookingAtBottomRight,
+	.spaceHighlightedLookingAtSpecificBottomRight,
+	.spaceNumberTakenBottomRight,
+	.spaceTopLeft,
+	.spaceHighlightedTopLeft,
+	.spaceHighlightedLookingAtTopLeft,
+	.spaceHighlightedLookingAtSpecificTopLeft,
+	.spaceNumberTakenTopLeft,
+	.spaceTopRight,
+	.spaceHighlightedTopRight,
+	.spaceHighlightedLookingAtTopRight,
+	.spaceHighlightedLookingAtSpecificTopRight,
+	.spaceNumberTakenTopRight {
 		cursor: default;
 		text-align: center;
 		display: flex;
 		align-items: center;
 		flex-direction: column;
-		font-size: 24px;
+		font-size: 20px;
 		font: lighter;
-		font-weight: 150;
-		border: 1px solid black;
+		font-weight: 200;
+		border: 1px solid rgb(150, 150, 150);
 		background: white;
-		padding: 2px;
-		margin: -1px;
-		margin-bottom: -3px;
+		width: 45px;
+		height: 45px;
+		position: relative;
+		color: #344861;
+	}
+	.dashedBorder,
+	.dashedBorderTopOpen,
+	.dashedBorderRightOpen,
+	.dashedBorderLeftOpen,
+	.dashedBorderBottomOpen,
+	.dashedBorderRightBottomOpen,
+	.dashedBorderRightTopOpen,
+	.dashedBorderLeftBottomOpen,
+	.dashedBorderLeftTopOpen,
+	.dashedBorderTopBottomOpen,
+	.dashedBorderLeftRightOpen,
+	.dashedBorderAllClosed{
+		display: flex;
+		vertical-align: middle;
+		color: inherit;
+		background: inherit;
+		margin:	auto;
+		margin-top: 0;
+		border: none;
 		width: 40px;
 		height: 40px;
-		position: relative;
+		padding: 0;
+		align-items: center;
 	}
+	.dashedBorderLeftOpen{
+		border-right: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderTopOpen{
+		border-right: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderRightOpen{
+		border-top: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderBottomOpen{
+		border-right: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderLeftRightOpen{
+		border-bottom: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderTopBottomOpen{
+		border-left: 2px dashed #344861;
+		border-right: 2px dashed #344861;
+	}
+	.dashedBorderLeftTopOpen{
+		border-right: 2px dashed #344861;
+		border-bottom: 2px dashed #344861;
+	}
+	.dashedBorderLeftBottomOpen{
+		border-right: 2px dashed #344861;
+		border-top: 2px dashed #344861;
+	}
+	.dashedBorderRightTopOpen{
+		border-bottom: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+	}
+	.dashedBorderRightBottomOpen{
+		border-top: 2px dashed #344861;
+		border-left: 2px dashed #344861;
+	}
+
+	.dashedBorderAllClosed{
+		border: 2px dashed #344861;
+	}
+
 	.spaceHighlighted,
-	.spaceHighlightedLookingAt {
-		background: lightblue;
+	.spaceHighlightedTop,
+	.spaceHighlightedBottom,
+	.spaceHighlightedLeft,
+	.spaceHighlightedRight,
+	.spaceHighlightedTopLeft,
+	.spaceHighlightedTopRight,
+	.spaceHighlightedBottomLeft,
+	.spaceHighlightedBottomRight,
+	.spaceHighlightedLookingAt,
+	.spaceHighlightedLookingAtRight,
+	.spaceHighlightedLookingAtLeft,
+	.spaceHighlightedLookingAtTop,
+	.spaceHighlightedLookingAtBottom,
+	.spaceHighlightedLookingAtTopLeft,
+	.spaceHighlightedLookingAtTopRight,
+	.spaceHighlightedLookingAtBottomLeft,
+	.spaceHighlightedLookingAtBottomRight {
+		background: #e1eaf3;
 	}
-	.spaceHighlightedLookingAtSpecific {
-		background: #00ffff;
+	.spaceHighlightedLookingAtSpecific,
+	.spaceHighlightedLookingAtSpecificTop,
+	.spaceHighlightedLookingAtSpecificBottom,
+	.spaceHighlightedLookingAtSpecificLeft,
+	.spaceHighlightedLookingAtSpecificRight,
+	.spaceHighlightedLookingAtSpecificTopLeft,
+	.spaceHighlightedLookingAtSpecificTopRight,
+	.spaceHighlightedLookingAtSpecificBottomLeft,
+	.spaceHighlightedLookingAtSpecificBottomRight {
+		background: #bbdefb;
 	}
-	.spaceNumberTaken {
+	.spaceNumberTaken,
+	.spaceNumberTakenRight,
+	.spaceNumberTakenLeft,
+	.spaceNumberTakenTop,
+	.spaceNumberTakenBottom,
+	.spaceNumberTakenTopRight,
+	.spaceNumberTakenBottomRight,
+	.spaceNumberTakenTopLeft,
+	.spaceNumberTakenBottomLeft {
 		background: red;
 		color: white;
 	}
@@ -129,7 +284,7 @@
 	}
 	.difficultyButton:hover,
 	.solveButton:hover{
-		background: lightgray;
+		background: #c1c7d6;
 		border-radius: 10px;
 	}
 	.buttonsContainer{
@@ -174,39 +329,94 @@
 		color: lightslategray;
 		font-size: 27px;
 	}
-	/*
-	.space[data-status='top'],
-	.spaceHighlighted[data-status='top'],
-	.spaceHighlightedLookingAt[data-status='top'],
-	.spaceHighlightedLookingAtSpecific[data-status='top'],
-	.spaceNumberTaken[data-status='top'] {
-		border-top: 4px solid black;
+	.spaceTop,
+	.spaceHighlightedTop,
+	.spaceHighlightedLookingAtTop,
+	.spaceHighlightedLookingAtSpecificTop,
+	.spaceNumberTakenTop {
+		border-top: 2px solid #344861;
 	}
 
-	.space[data-status='left'],
-	.spaceHighlighted[data-status='left'],
-	.spaceHighlightedLookingAt[data-status='left'],
-	.spaceHighlightedLookingAtSpecific[data-status='left'],
-	.spaceNumberTaken[data-status='left'] {
-		border-left: 4px solid black;
+	.spaceLeft,
+	.spaceHighlightedLeft,
+	.spaceHighlightedLookingAtLeft,
+	.spaceHighlightedLookingAtSpecificLeft,
+	.spaceNumberTakenLeft {
+		border-left: 2px solid #344861;
 	}
 
-	.space[data-status='bottom'],
-	.spaceHighlighted[data-status='bottom'],
-	.spaceHighlightedLookingAt[data-status='bottom'],
-	.spaceHighlightedLookingAtSpecific[data-status='bottom'],
-	.spaceNumberTaken[data-status='bottom'] {
-		border-bottom: 4px solid black;
+	.spaceBottom,
+	.spaceHighlightedBottom,
+	.spaceHighlightedLookingAtBottom,
+	.spaceHighlightedLookingAtSpecificBottom,
+	.spaceNumberTakenBottom {
+		border-bottom: 2px solid #344861;
 	}
 
-	.space[data-status='right'],
-	.spaceHighlighted[data-status='right'],
-	.spaceHighlightedLookingAt[data-status='right'],
-	.spaceHighlightedLookingAtSpecific[data-status='right'],
-	.spaceNumberTaken[data-status='right'] {
-		border-right: 4px solid black;
+	.spaceRight,
+	.spaceHighlightedRight,
+	.spaceHighlightedLookingAtRight,
+	.spaceHighlightedLookingAtSpecificRight,
+	.spaceNumberTakenRight {
+		border-right: 2px solid #344861;
 	}
-	*/
+	.spaceTopRight,
+	.spaceHighlightedTopRight,
+	.spaceHighlightedLookingAtTopRight,
+	.spaceHighlightedLookingAtSpecificTopRight,
+	.spaceNumberTakenTopRight {
+		border-right: 2px solid #344861;
+		border-top: 2px solid #344861;
+	}
+	
+	.spaceTopLeft,
+	.spaceHighlightedTopLeft,
+	.spaceHighlightedLookingAtTopLeft,
+	.spaceHighlightedLookingAtSpecificTopLeft,
+	.spaceNumberTakenTopLeft {
+		border-left: 2px solid #344861;
+		border-top: 2px solid #344861;
+	}
+
+	.spaceBottomRight,
+	.spaceHighlightedBottomRight,
+	.spaceHighlightedLookingAtBottomRight,
+	.spaceHighlightedLookingAtSpecificBottomRight,
+	.spaceNumberTakenBottomRight {
+		border-right: 2px solid #344861;
+		border-bottom: 2px solid #344861;
+	}
+	
+	.spaceBottomLeft,
+	.spaceHighlightedBottomLeft,
+	.spaceHighlightedLookingAtBottomLeft,
+	.spaceHighlightedLookingAtSpecificBottomLeft,
+	.spaceNumberTakenBottomLeft {
+		border-left: 2px solid #344861;
+		border-bottom: 2px solid #344861;
+	}
+
+	input{
+		display: block;
+		position: absolute;
+		text-align: center;
+		margin: auto;
+		width: 20px;
+		height: 20px;
+		background: inherit;
+		padding: 0;
+	}
+
+	legend {
+		align-content: first baseline;
+		height: 11px;
+		text-align: left;
+		font-size: 12px;
+		font-weight: bold;
+		color: #344861;
+		padding-top: 5px 5px;
+	}
+
 	/* Chrome, Safari, Edge, Opera */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {

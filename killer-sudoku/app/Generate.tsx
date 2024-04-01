@@ -117,40 +117,81 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
             const hidd = toStr(board.tile[x][y]);
             arr[x][y] = {
                 data: tile,
-                hiddenData: hidd, 
-                highlighted: 'space', 
+                highlighted: 'space',
+                savedData: tile,
+                hiddenData: hidd,
+                fixedStatus: '',
+                mutableStatus: '',
                 locked: (tile != ''), // <-- Lock the tile if it's not blank
-                dataStatus: '', 
-                savedData: tile, 
-                savedHighlight: 'space'
+                previousHighlight: 'space',
+                marked: false,
+                topleftnumber: 0,
             };
         }
     }
 
     console.log("initBoard: Initialization complete");
 
-    // initBoardBoldLines(arr);
-
     // Initially highlight the board at the origin
+    initBoardBoldLines(arr);
     HandleHighlighting(4, 4, arr);
     SaveBoardState(arr);
     return arr;
 }
 
 function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+    /*Init fixed status for the bolded border outlines */
     for (let i = 0; i < 9; i++){
-        newBoard[i][0].dataStatus='top';
-        newBoard[0][i].dataStatus='left';
+        newBoard[i][0].fixedStatus='Top';
+        newBoard[0][i].fixedStatus='Left';        
 
-        newBoard[i][2].dataStatus='top';
-        newBoard[2][i].dataStatus='left';
+        newBoard[i][3].fixedStatus='Top';
+        newBoard[3][i].fixedStatus='Left';
 
-        newBoard[i][5].dataStatus='bottom';
-        newBoard[5][i].dataStatus='right';
+        newBoard[i][6].fixedStatus='Top';
+        newBoard[6][i].fixedStatus='Left';
 
-        newBoard[i][8].dataStatus='bottom';
-        newBoard[8][i].dataStatus='right';
+        newBoard[i][8].fixedStatus='Bottom';
+        newBoard[8][i].fixedStatus='Right';
     }
+    for (let i = 0; i < 9; i += 3){
+        for (let j = 0; j < 9; j += 3){
+            newBoard[i][j].fixedStatus='TopLeft'
+        }
+    }
+    for (let i = 0; i <= 6; i += 3){
+        newBoard[i][8].fixedStatus='BottomLeft';
+        newBoard[8][i].fixedStatus='TopRight';
+    }
+    newBoard[8][8].fixedStatus='BottomRight';
+
+    /* START OF MUTABLE BORDER ALGORITHM 
+
+    // random number hash for identifier, boolean for visited
+    let mapping = new Map<number, boolean>();
+
+    switch(percentage){
+
+        //no default case because its defined in a range of 1-100
+    }
+
+    */
+    
+    for (let i = 0; i < 9; i++){
+        for (let j = 0; j < 9; j++){
+            newBoard[i][j].mutableStatus = 'dashedBorder';
+        }
+    }
+
+    // newBoard[2][1].mutableStatus ='dashedBorderRightOpen';
+    // newBoard[2][1].topleftnumber = 4;
+    // newBoard[3][1].mutableStatus ='dashedBorderLeftRightOpen';
+    // newBoard[4][1].mutableStatus ='dashedBorderLeftRightOpen';
+    // newBoard[5][1].mutableStatus ='dashedBorderLeftBottomOpen';
+    // newBoard[5][2].mutableStatus ='dashedBorderTopBottomOpen';
+    // newBoard[5][3].mutableStatus ='dashedBorderTopOpen'; 
+    // newBoard[7][3].mutableStatus ='dashedBorderAllClosed'; 
+
     return newBoard;
 }
 
