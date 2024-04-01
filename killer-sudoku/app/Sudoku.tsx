@@ -72,10 +72,12 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                 // Cast target to int, because it's incoming as a string
                 let val = +e.target.value;
 
+                console.log("VALUE INCOMING " + val);
+
                 // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
                 if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0) {
-                    val = +newBoard[row][col].data;
                     if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = '';
                         /**
                          * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
@@ -83,7 +85,9 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                         */
                     }
                     else {
+                        val = +newBoard[row][col].data;
                         newBoard[row][col].data = e.target.value.toString();
+                        console.log("NEWBOARD[ROW][COL] " + newBoard[row][col].data)
                         /**
                          * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
                         used++;
@@ -154,19 +158,23 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                         {row.map((space, columnIndex) => (
                             <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
                                 <div className={space.highlighted + space.fixedStatus}>
-                                    <fieldset className={space.mutableStatus}>
-                                        <legend>
-                                            {space.topleftnumber === 0 ? "" : space.topleftnumber}
-                                        </legend>
-                                        <input
-                                            type='text' // Because numbers are really fucking weird for some reason
-                                            autoComplete='off'
-                                            autoCapitalize='off'
-                                            value={space.data} // The incoming value
-                                            onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
-                                            style={{ outline: 'none'}}
-                                        />
-                                    </fieldset>
+                                    <form>
+                                        <label>
+                                            <fieldset className={space.mutableStatus}>
+                                                <legend>
+                                                    {space.topleftnumber === 0 ? "" : space.topleftnumber}
+                                                </legend>
+                                                <input
+                                                    type='text' // Because numbers are really fucking weird for some reason
+                                                    autoComplete='off'
+                                                    autoCapitalize='off'
+                                                    value={space.data} // The incoming value
+                                                    onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
+                                                    style={{ outline: 'none'}}
+                                                />
+                                            </fieldset>
+                                        </label>
+                                    </form>
                                 </div>
                             </div>
                         ))}
@@ -312,15 +320,13 @@ export function Clear(newBoard: SpaceButtonProperties[][]) {
     console.log("user clicked clear button");
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
-            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
+            newBoard[i][j].previousHighlight = 'space';
             newBoard[i][j].highlighted='space';
             if (!newBoard[i][j].locked) {
                 newBoard[i][j].data='';
             }
         }
     }
-    
-    HandleHighlighting(4, 4, newBoard);
 }
 
 export function HideBoard(newBoard: SpaceButtonProperties[][]) {
