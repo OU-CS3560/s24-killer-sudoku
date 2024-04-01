@@ -109,7 +109,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Tile showing complete");
 
     // Initialization Loop, load all values onto the board's data
-    const arr: SpaceButtonProperties[][] = [];
+    let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
