@@ -42,7 +42,7 @@ export function genKiller(tiles: number[][]): kTile[][] {
         return ((0 <= x && x <= 8) && (0 <= y && y <= 8) && groups[x][y].symbol != '.');
     }
 
-    let groups: kTile[][] = [];
+    const groups: kTile[][] = [];
     for (let i = 0; i < 9; i++) {
         groups[i] = []
         for (let j = 0; j < 9; j++) {
@@ -64,8 +64,8 @@ export function genKiller(tiles: number[][]): kTile[][] {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
                 if (groups[x][y].symbol != '.') {continue;}
-                let neighbors: [number,number][] = [];
-                for (let [x0,y0] of [[x-1,y],[x,y-1],[x+1,y],[x,y+1]]) {
+                const neighbors: [number,number][] = [];
+                for (const [x0,y0] of [[x-1,y],[x,y-1],[x+1,y],[x,y+1]]) {
                     if (avail(x0,y0)) neighbors.push([x0,y0]);
                 }
                 if (neighbors.length == 0) continue;
@@ -89,11 +89,11 @@ export function genKiller(tiles: number[][]): kTile[][] {
  *  x & y coordinates, as well as the kTile itself
  */
 export function killerTopLeftVals(input: kTile[][]): [number,number,kTile][] {
-    let keyTrack: {[i: string]: boolean} = {};
-    for (let char of kKey) {
+    const keyTrack: {[i: string]: boolean} = {};
+    for (const char of kKey) {
         keyTrack[char] = false;
     }
-    let output: [number,number,kTile][] = [];
+    const output: [number,number,kTile][] = [];
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const char = input[x][y].symbol;

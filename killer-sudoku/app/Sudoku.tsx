@@ -21,7 +21,7 @@ export interface SpaceButtonProperties {
     previousHighlight: string,
     marked: boolean,
     topleftnumber: number,
-};
+}
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly

@@ -18,7 +18,7 @@ export interface SpaceButtonProperties {
     hiddenData: string,
     highlightedStatus: string,
     locked: boolean,
-};
+}
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly

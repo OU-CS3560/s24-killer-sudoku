@@ -13,8 +13,8 @@
  * @returns {[number,number][]} array of changed tiles, stored as a tuple of [x,y], both numbers
  */
 export function solve_gen(board: genBoardType, opt: number = 0): [number,number][] {
-    let changes: [number,number][] = [];
-    let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
+    const changes: [number,number][] = [];
+    const tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
 
     for (let progress: boolean = true; progress == true;) {
         progress = false;

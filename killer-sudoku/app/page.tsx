@@ -14,7 +14,7 @@ import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, S
 export default function Home() {
 
 	// var gameOver: boolean = false;
-    var used = 0;
+    const used = 0;
 
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");

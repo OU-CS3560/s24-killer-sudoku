@@ -39,7 +39,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
             } while (board.tile[x][y] != 0);
 
             //Look through every available option
-            for (let val of randomOptions(board.note[x][y])) { 
+            for (const val of randomOptions(board.note[x][y])) { 
                 boardAdd(board,val,x,y);
                 if (generate(board)) return true;
                 boardRem(board,x,y);
@@ -47,7 +47,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
         }
 
         //If board is unsolvable, undo all solver changes & return false
-        for (let ch of changes) boardRem(board,ch[0],ch[1]);
+        for (const ch of changes) boardRem(board,ch[0],ch[1]);
         board.state = true;
         return false;
     }
@@ -118,7 +118,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     }
 
     // Initialization Loop, load all values onto the board's data
-    let arr: SpaceButtonProperties[][] = [];
+    const arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
         arr[x] = [];
         for (let y = 0; y < 9; y++) {
@@ -195,8 +195,8 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
 
     if (kBoard[0][0].size == -1) return;
 
-    let topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
-    for (let val of topLeftArr) {
+    const topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
+    for (const val of topLeftArr) {
         newBoard[val[0]][val[1]].topleftnumber = val[2].size;
     }
 
@@ -206,8 +206,8 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
 
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
-            let neighbors: string[] = [];
-            for (let [x0,y0] of [[x-1,y],[x,y+1],[x+1,y],[x,y-1]]) {
+            const neighbors: string[] = [];
+            for (const [x0,y0] of [[x-1,y],[x,y+1],[x+1,y],[x,y-1]]) {
                 neighbors.push((sameGroup(x0,y0,kBoard[x0][y0].symbol)) ? '1' : '0');
             }
             newBoard[x][y].mutableStatus = `dashedBorder${neighbors.join()}`;
@@ -221,7 +221,7 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
  * @return {void} None (input is passed by reference)
  */
 export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
-    let board: genBoardType = makeBoard();
+    const board: genBoardType = makeBoard();
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const tile = boardSBP[x][y];
@@ -267,9 +267,9 @@ function toNum(input: string): number {
 function isValid(board: genBoardType): boolean {
     for (let d1 = 0; d1 < 9; d1++) {
         const a = (d1%3)*3, b = (d1/3>>0)*3;
-        let nums1: boolean[] = [];
-        let nums2: boolean[] = [];
-        let nums3: boolean[] = [];
+        const nums1: boolean[] = [];
+        const nums2: boolean[] = [];
+        const nums3: boolean[] = [];
         for (let d2 = 0; d2 < 9; d2++) {
             const tile1 = board.tile[d1][d2];
             if (nums1[tile1] || tile1 == 0) return false;
@@ -291,14 +291,14 @@ function isValid(board: genBoardType): boolean {
  * @returns {number[]} random array of available number options for this tile
  */
 function randomOptions(tile: boolean[]): number[] {
-    let arr: number[] = [];
+    const arr: number[] = [];
     for (let i: number = 1; i <= 9; i++) {
         if (tile[i]) arr.push(i);
     }
     const sz = arr.length;
     for (let i = 0; i < sz; i++) {
-        let j = rand(0,sz-1);
-        let temp = arr[i];
+        const j = rand(0,sz-1);
+        const temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
     }
