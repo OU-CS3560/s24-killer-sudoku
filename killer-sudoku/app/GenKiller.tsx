@@ -22,7 +22,7 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
  *  in a kTile[][] point to the same kTile, thus not needing to worry abt
  *  updating all tiles, since those spots would just point to the same object
 */
-type kTile = {
+export type kTile = {
     sum: number,
     size: number,
     symbol: string
@@ -85,21 +85,21 @@ export function genKiller(tiles: number[][]): kTile[][] {
 /**
  * @brief takes an array of kTiles & outputs the top-left-most tile of each group
  * @param {kTile[][]} input array of kTiles to be used
- * @returns {[number,number,string][]} outputs an array of tuples, consisting of the
- *  x & y coordinates, as well as the char identifying that group (if needed)
+ * @returns {[number,number,kTile][]} outputs an array of tuples, consisting of the
+ *  x & y coordinates, as well as the kTile itself
  */
-export function killerTopLeftVals(input: kTile[][]): [number,number,string][] {
+export function killerTopLeftVals(input: kTile[][]): [number,number,kTile][] {
     let keyTrack: {[i: string]: boolean} = {};
     for (let char of kKey) {
         keyTrack[char] = false;
     }
-    let output: [number,number,string][] = [];
+    let output: [number,number,kTile][] = [];
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const char = input[x][y].symbol;
             if (keyTrack[char] == false) {
                 keyTrack[char] = true;
-                output.push([x,y,char]);
+                output.push([x,y,input[x][y]]);
             }
         }
     }

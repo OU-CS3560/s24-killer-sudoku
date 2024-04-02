@@ -1,6 +1,6 @@
 "use client";
 
-import { solve_sbp, initBoard } from "../Generate";
+import { solve_sbp, initBoard, KillerMode_TEMP } from "../Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../Sudoku";
 import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "../Timer";
@@ -11,7 +11,7 @@ export default function Home() {
 	const [icon, setIcon] = useState("play_circle");
 	const timerRef = useRef<TimerRef>(null);
 	const [board, setBoard] = useState(() => {
-        return initBoard(used)
+        return initBoard(KillerMode_TEMP,used)
     });
 
 	const handleClickSolveButton = () => {
@@ -69,7 +69,7 @@ export default function Home() {
         setBoard(prevBoard => {
             // Inherit the previous board state
             timerRef.current?.reset();
-            return initBoard(used);
+            return initBoard(KillerMode_TEMP,used);
         });
     };
 

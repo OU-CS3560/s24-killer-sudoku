@@ -7,6 +7,10 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
+import { kTile, genKiller, killerTopLeftVals } from "./GenKiller";
+
+//TEMP VARIABLE:
+export const KillerMode_TEMP: boolean = true;
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -14,7 +18,7 @@ import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver
  * @param {number} used (WIP?)
  * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
-export function initBoard(used: number): SpaceButtonProperties[][] {
+export function initBoard(killer: boolean, used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
@@ -108,6 +112,11 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Tile showing complete");
 
+    let kBoard: kTile[][] = [[{size: -1, sum: -1, symbol:'.'}]];
+    if (killer) {
+        kBoard = genKiller(board.tile);
+    }
+
     // Initialization Loop, load all values onto the board's data
     let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
@@ -133,13 +142,15 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Initialization complete");
 
     // Initially highlight the board at the origin
-    initBoardBoldLines(arr);
+    initBoardBoldLines(arr, kBoard);
+
     HandleHighlighting(4, 4, arr);
+
     SaveBoardState(arr);
     return arr;
 }
 
-function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[][]): void {
     /*Init fixed status for the bolded border outlines */
     for (let i = 0; i < 9; i++){
         newBoard[i][0].fixedStatus='Top';
@@ -174,25 +185,34 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
 
         //no default case because its defined in a range of 1-100
     }
-
     */
-    
-    for (let i = 0; i < 9; i++){
-        for (let j = 0; j < 9; j++){
-            newBoard[i][j].mutableStatus = 'dashedBorder';
+
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            newBoard[x][y].mutableStatus = 'dashedBorder1111';
         }
     }
 
-    // newBoard[2][1].mutableStatus ='dashedBorderRightOpen';
-    // newBoard[2][1].topleftnumber = 4;
-    // newBoard[3][1].mutableStatus ='dashedBorderLeftRightOpen';
-    // newBoard[4][1].mutableStatus ='dashedBorderLeftRightOpen';
-    // newBoard[5][1].mutableStatus ='dashedBorderLeftBottomOpen';
-    // newBoard[5][2].mutableStatus ='dashedBorderTopBottomOpen';
-    // newBoard[5][3].mutableStatus ='dashedBorderTopOpen'; 
-    // newBoard[7][3].mutableStatus ='dashedBorderAllClosed'; 
+    if (kBoard[0][0].size == -1) return;
 
-    return newBoard;
+    let topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
+    for (let val of topLeftArr) {
+        newBoard[val[0]][val[1]].topleftnumber = val[2].size;
+    }
+
+    const sameGroup = (x: number, y: number, thisSymbol: string): boolean => {
+        return ((0 <= x && x <= 8) && (0 <= y && y <= 8) && kBoard[x][y].symbol == thisSymbol);
+    }
+
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            let neighbors: string[] = [];
+            for (let [x0,y0] of [[x-1,y],[x,y+1],[x+1,y],[x,y-1]]) {
+                neighbors.push((sameGroup(x0,y0,kBoard[x0][y0].symbol)) ? '1' : '0');
+            }
+            newBoard[x][y].mutableStatus = `dashedBorder${neighbors.join()}`;
+        }
+    }
 }
 
 /**
