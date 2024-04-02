@@ -12,6 +12,8 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 'warn',
     'prefer-const': 'warn',
-    'no-constant-condition': 'warn'
+    'no-constant-condition': 'warn',
+    'no-var': 'warn',
+    'no-extra-semi': 'warn'
   }
 };
