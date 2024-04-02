@@ -19,8 +19,8 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
  *  will have the same symbol attached to it)
  * @note Elsewhere, i take advantage of the fact that objects are always
  *  passed by reference in typescript, so that i can assign multiple spots
- *  in a kTile[][] to the same kTile, thus not needing to worry abt updating
- *  all tiles, since those spots would just point to the same object
+ *  in a kTile[][] point to the same kTile, thus not needing to worry abt
+ *  updating all tiles, since those spots would just point to the same object
 */
 type kTile = {
     sum: number,
