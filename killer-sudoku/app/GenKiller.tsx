@@ -39,7 +39,8 @@ export function genKiller(tiles: number[][]): kTile[][] {
     const AmountTotal: number = 32;
 
     const avail = (x: number, y: number): boolean => {
-        return ((0 <= x && x <= 8) && (0 <= y && y <= 8) && groups[x][y].symbol != '.');
+        if (!((0 <= x && x <= 8) && (0 <= y && y <= 8))) return false;
+        return (groups[x][y].symbol != '.');
     }
 
     let groups: kTile[][] = [];

@@ -84,22 +84,22 @@
 		position: relative;
 		color: #344861;
 	}
-	.dashedBorder1111,
-	.dashedBorder1000,
-	.dashedBorder0100,
-	.dashedBorder0001,
-	.dashedBorder0010,
-	.dashedBorder0110,
-	.dashedBorder1100,
-	.dashedBorder0011,
-	.dashedBorder1001,
-	.dashedBorder1010,
-	.dashedBorder0101,
-	.dashedBorder0000,
-	.dashedBorder0111,
-	.dashedBorder1011,
-	.dashedBorder1101,
-	.dashedBorder1110{
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder0111, /*right bottom left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1011, /*top bottom left*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1101, /*top right left*/
+	.dashedBorder1110, /*top right bottom*/
+	.dashedBorder1111  /*all*/{
 		display: flex;
 		vertical-align: middle;
 		color: inherit;
@@ -111,64 +111,49 @@
 		padding: 0;
 		align-items: center;
 	}
-	.dashedBorder0001{
-		border-right: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorder1000{
-		border-right: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorder0100{
-		border-top: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorder0010{
-		border-right: 2px dashed #344861;
-		border-left: 2px dashed #344861;
+
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder0111  /*right bottom left*/ {
 		border-top: 2px dashed #344861;
 	}
-	.dashedBorder0101{
-		border-bottom: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-	}
-	.dashedBorder1010{
-		border-left: 2px dashed #344861;
+	
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1011  /*top bottom left*/ {
 		border-right: 2px dashed #344861;
 	}
-	.dashedBorder1001{
-		border-right: 2px dashed #344861;
+
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1101  /*top right left*/ {
 		border-bottom: 2px dashed #344861;
 	}
-	.dashedBorder0011{
-		border-right: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-	}
-	.dashedBorder1100{
-		border-bottom: 2px dashed #344861;
+
+	.dashedBorder0000, /*none*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1110  /*top right bottom*/ {
 		border-left: 2px dashed #344861;
-	}
-	.dashedBorder0110{
-		border-top: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-	}
-	.dashedBorder0111{
-		border-top: 2px dashed #344861;
-	}
-	.dashedBorder1011{
-		border-right: 2px dashed #344861;
-	}
-	.dashedBorder1101{
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorder1110{
-		border-left: 2px dashed #344861;
-	}
-	.dashedBorder0000{
-		border: 2px dashed #344861;
 	}
 
 	.spaceHighlighted,

@@ -112,10 +112,8 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     console.log("initBoard: Tile showing complete");
 
-    let kBoard: kTile[][] = [[{size: -1, sum: -1, symbol:'.'}]];
-    if (killer) {
-        kBoard = genKiller(board.tile);
-    }
+    let kBoard: kTile[][] = [];
+    if (killer) kBoard = genKiller(board.tile);
 
     // Initialization Loop, load all values onto the board's data
     let arr: SpaceButtonProperties[][] = [];
@@ -143,9 +141,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     // Initially highlight the board at the origin
     initBoardBoldLines(arr, kBoard);
-
     HandleHighlighting(4, 4, arr);
-
     SaveBoardState(arr);
     return arr;
 }
@@ -187,30 +183,34 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
     }
     */
 
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            newBoard[x][y].mutableStatus = 'dashedBorder1111';
+    if (kBoard.length == 0) {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                newBoard[x][y].mutableStatus = 'dashedBorder1111';
+            }
         }
+        return;
     }
-
-    if (kBoard[0][0].size == -1) return;
 
     let topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
     for (let val of topLeftArr) {
-        newBoard[val[0]][val[1]].topleftnumber = val[2].size;
-    }
-
-    const sameGroup = (x: number, y: number, thisSymbol: string): boolean => {
-        return ((0 <= x && x <= 8) && (0 <= y && y <= 8) && kBoard[x][y].symbol == thisSymbol);
+        newBoard[val[0]][val[1]].topleftnumber = val[2].sum;
     }
 
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             let neighbors: string[] = [];
             for (let [x0,y0] of [[x-1,y],[x,y+1],[x+1,y],[x,y-1]]) {
-                neighbors.push((sameGroup(x0,y0,kBoard[x0][y0].symbol)) ? '1' : '0');
+                if (!((0 <= x0 && x0 <= 8) && (0 <= y0 && y0 <= 8))) {
+                    neighbors.push('0');
+                } else if (kBoard[x0][y0].symbol == kBoard[x][y].symbol) {
+                    neighbors.push('1');
+                }
+                else neighbors.push('0');
             }
-            newBoard[x][y].mutableStatus = `dashedBorder${neighbors.join()}`;
+            let str = 'dashedBorder' + neighbors[0] + neighbors[1] + neighbors[2] + neighbors[3];
+            console.log(str);
+            newBoard[x][y].mutableStatus = str;
         }
     }
 }
