@@ -130,7 +130,7 @@ export default function Home() {
             // Reset the Time the user has accumulated
             timerRef.current?.reset();
 
-            setIcon("play_circle");
+            setIcon("pause_circle");
             return initBoard(used);
         });
     };
