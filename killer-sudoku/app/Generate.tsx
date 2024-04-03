@@ -7,7 +7,7 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
-import { kTile, genKiller, killerTopLeftVals } from "./GenKiller";
+import { kTile, genKiller, killerTopLeftVals, onBoard } from "./GenKiller";
 
 //Set true to override/force turn on killer sudoku generation, false for default behavior
 const KillerOverride: boolean = false;
@@ -192,8 +192,7 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
         return;
     }
 
-    let topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
-    for (let val of topLeftArr) {
+    for (let val of killerTopLeftVals(kBoard)) {
         newBoard[val[0]][val[1]].topleftnumber = val[2].sum;
     }
 
@@ -205,19 +204,12 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             let neighbors: string[] = [];
-            const opts: [number,number][] = [[x,y-1],[x+1,y],[x,y+1],[x-1,y]];
-            for (let opt of opts) {
-                const [x0,y0] = opt;
-                if (!((0 <= x0 && x0 <= 8) && (0 <= y0 && y0 <= 8))) {
-                    neighbors.push('0');
-                } else if (kBoard[x0][y0].symbol == kBoard[x][y].symbol) {
-                    neighbors.push('1');
-                }
-                else neighbors.push('0');
+            const thisSym: string = kBoard[x][y].symbol;
+            for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
+                const x0 = opt[0], y0 = opt[1];
+                neighbors.push((onBoard(x0,y0) && kBoard[x0][y0].symbol == thisSym) ? '1' : '0');
             }
-            let str = `dashedBorder${neighbors.join('')}`;
-            console.log(str);
-            newBoard[x][y].mutableStatus = str;
+            newBoard[x][y].mutableStatus = `dashedBorder${neighbors.join('')}`;
         }
     }
 }

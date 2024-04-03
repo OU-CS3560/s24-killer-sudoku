@@ -38,11 +38,6 @@ export function genKiller(tiles: number[][]): kTile[][] {
     //# of killer groups (vary on difficulty?)
     const AmountTotal: number = 32;
 
-    const avail = (x: number, y: number): boolean => {
-        if (!((0 <= x && x <= 8) && (0 <= y && y <= 8))) return false;
-        return (groups[x][y].symbol != '.');
-    }
-
     let groups: kTile[][] = [];
     for (let i = 0; i < 9; i++) {
         groups[i] = []
@@ -64,12 +59,11 @@ export function genKiller(tiles: number[][]): kTile[][] {
     for (let numBlank = 81-AmountTotal; numBlank > 0;) {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (groups[x][y].symbol != '.') {continue;}
+                if (groups[x][y].symbol != '.') continue;
                 let neighbors: [number,number][] = [];
-                const opts: [number,number][] = [[x-1,y],[x,y-1],[x+1,y],[x,y+1]];
-                for (let opt of opts) {
-                    const [x0,y0] = opt; 
-                    if (avail(x0,y0)) neighbors.push([x0,y0]);
+                for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
+                    const x0 = opt[0], y0 = opt[1];
+                    if (onBoard(x0,y0) && groups[x0][y0].symbol != '.') neighbors.push([x0,y0]);
                 }
                 if (neighbors.length == 0) continue;
                 //sort possible options by group size: smaller groups -> higher priority
@@ -97,8 +91,8 @@ export function killerTopLeftVals(input: kTile[][]): [number,number,kTile][] {
         keyTrack[char] = false;
     }
     let output: [number,number,kTile][] = [];
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
+    for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
             const char = input[x][y].symbol;
             if (keyTrack[char] == false) {
                 keyTrack[char] = true;
@@ -107,4 +101,9 @@ export function killerTopLeftVals(input: kTile[][]): [number,number,kTile][] {
         }
     }
     return output;
+}
+
+//checks if coords (x,y) are within board coordinates
+export function onBoard(x: number, y: number): boolean {
+    return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
 }
