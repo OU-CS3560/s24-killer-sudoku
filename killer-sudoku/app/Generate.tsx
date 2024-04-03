@@ -10,7 +10,7 @@ import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver
 import { kTile, genKiller, killerTopLeftVals } from "./GenKiller";
 
 //Set true to override/force turn on killer sudoku generation, false for default behavior
-const KillerOverride: boolean = true;
+const KillerOverride: boolean = false;
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
