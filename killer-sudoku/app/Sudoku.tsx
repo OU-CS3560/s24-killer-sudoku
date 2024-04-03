@@ -20,7 +20,7 @@ export interface SpaceButtonProperties {
     locked: boolean,
     previousHighlight: string,
     marked: boolean,
-    topleftnumber: number,
+    topLeftNumber: number,
 };
 
 /**
@@ -162,7 +162,7 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
                                         <label>
                                             <fieldset className={space.mutableStatus}>
                                                 <legend>
-                                                    {space.topleftnumber === 0 ? "" : space.topleftnumber}
+                                                    {space.topLeftNumber === 0 ? "" : space.topLeftNumber}
                                                 </legend>
                                                 <input
                                                     type='text' // Because numbers are really fucking weird for some reason

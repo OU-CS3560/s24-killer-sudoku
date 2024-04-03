@@ -6,6 +6,7 @@
 */
 
 import { rand } from "./Generate";
+import { SpaceButtonProperties } from "./Sudoku";
 
 //character used as a unique identifier for each group
 const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -22,7 +23,7 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
  *  in a kTile[][] point to the same kTile, thus not needing to worry abt
  *  updating all tiles, since those spots would just point to the same object
 */
-export type kTile = {
+type kTile = {
     sum: number,
     size: number,
     symbol: string
@@ -30,19 +31,18 @@ export type kTile = {
 
 /** 
  * @brief Creates groups for killer sudoku based on the given board
- * @param {number[][]} tiles 2d-array of numbers taken as input
- * @return {kTile[][]} 2d-array of kTiles, containing groups designated by
- *  a symbol, and with the sum & size of each group also stored in each tile.
+ * @param {SpaceButtonProperties[][]} board board to write dashedBorder & topLeftNumber values to
+ * @return None
 */
-export function genKiller(tiles: number[][]): kTile[][] {
+export function genKiller(board: SpaceButtonProperties[][]): void {
     //# of killer groups (vary on difficulty?)
     const AmountTotal: number = 32;
 
     let groups: kTile[][] = [];
     for (let i = 0; i < 9; i++) {
-        groups[i] = []
+        groups[i] = [];
         for (let j = 0; j < 9; j++) {
-            groups[i][j] = {sum: tiles[i][j], size: 1, symbol: '.'};
+            groups[i][j] = {sum: Number(board[i][j].data), size: 1, symbol: '.'};
         }
     }
 
@@ -75,32 +75,49 @@ export function genKiller(tiles: number[][]): kTile[][] {
                 numBlank--;
             }
         }
-    }    
-    return groups;
-}
+    }
 
-/**
- * @brief takes an array of kTiles & outputs the top-left-most tile of each group
- * @param {kTile[][]} input array of kTiles to be used
- * @returns {[number,number,kTile][]} outputs an array of tuples, consisting of the
- *  x & y coordinates, as well as the kTile itself
- */
-export function killerTopLeftVals(input: kTile[][]): [number,number,kTile][] {
     let keyTrack: {[i: string]: boolean} = {};
     for (let char of kKey) {
         keyTrack[char] = false;
     }
-    let output: [number,number,kTile][] = [];
     for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
-            const char = input[x][y].symbol;
+            const char = groups[x][y].symbol;
             if (keyTrack[char] == false) {
                 keyTrack[char] = true;
-                output.push([x,y,input[x][y]]);
+                board[x][y].topLeftNumber = groups[x][y].sum;
             }
         }
     }
-    return output;
+
+    /* START OF MUTABLE BORDER ALGORITHM 
+
+    // random number hash for identifier, boolean for visited
+    let mapping = new Map<number, boolean>();
+
+    switch(percentage){
+
+        //no default case because its defined in a range of 1-100
+    }
+    */
+
+    // Holy Sacred Comment: Do NOT remove this comment under ANY circumstances, otherwise will break group outlines
+    //  \/                                          \/
+    //newBoard[0][0].mutableStatus = 'dashedBorder0000';
+    //  /\                                          /\
+
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            let neighbors: string[] = [];
+            const thisSym: string = groups[x][y].symbol;
+            for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
+                const x0 = opt[0], y0 = opt[1];
+                neighbors.push((onBoard(x0,y0) && groups[x0][y0].symbol == thisSym) ? '1' : '0');
+            }
+            board[x][y].mutableStatus = `dashedBorder${neighbors.join('')}`;
+        }
+    }
 }
 
 //checks if coords (x,y) are within board coordinates
