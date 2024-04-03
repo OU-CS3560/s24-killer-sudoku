@@ -66,7 +66,9 @@ export function genKiller(tiles: number[][]): kTile[][] {
             for (let y = 0; y < 9; y++) {
                 if (groups[x][y].symbol != '.') {continue;}
                 let neighbors: [number,number][] = [];
-                for (let [x0,y0] of [[x-1,y],[x,y-1],[x+1,y],[x,y+1]]) {
+                const opts: [number,number][] = [[x-1,y],[x,y-1],[x+1,y],[x,y+1]];
+                for (let opt of opts) {
+                    const [x0,y0] = opt; 
                     if (avail(x0,y0)) neighbors.push([x0,y0]);
                 }
                 if (neighbors.length == 0) continue;

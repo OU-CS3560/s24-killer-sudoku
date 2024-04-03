@@ -9,7 +9,7 @@
 
 import Timer, { TimerRef } from "./Timer";
 import React, { useRef, useState } from 'react'
-import { solve_sbp, initBoard, KillerMode_TEMP } from "./Generate";
+import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
 export default function Home() {
 
@@ -25,7 +25,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(KillerMode_TEMP,used)
+        return initBoard(false,used)
     });
 
     // A function to handle when the user clicks the solve button
@@ -131,7 +131,7 @@ export default function Home() {
             timerRef.current?.reset();
 
             setIcon("pause_circle");
-            return initBoard(KillerMode_TEMP,used);
+            return initBoard(false,used);
         });
     };
 
