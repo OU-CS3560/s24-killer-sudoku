@@ -11,7 +11,7 @@ export default function Home() {
 	const [icon, setIcon] = useState("play_circle");
 	const timerRef = useRef<TimerRef>(null);
 	const [board, setBoard] = useState(() => {
-        return initBoard(used)
+        return initBoard(true,used)
     });
 
 	const handleClickSolveButton = () => {
@@ -69,7 +69,7 @@ export default function Home() {
         setBoard(prevBoard => {
             // Inherit the previous board state
             timerRef.current?.reset();
-            return initBoard(used);
+            return initBoard(true,used);
         });
     };
 

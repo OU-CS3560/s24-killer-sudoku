@@ -8,18 +8,22 @@
 		text-wrap: balance;
 	}
 	/*All containers hold these properties to generate a default space*/
-	.dashedBorder,
-	.dashedBorderTopOpen,
-	.dashedBorderRightOpen,
-	.dashedBorderLeftOpen,
-	.dashedBorderBottomOpen,
-	.dashedBorderRightBottomOpen,
-	.dashedBorderRightTopOpen,
-	.dashedBorderLeftBottomOpen,
-	.dashedBorderLeftTopOpen,
-	.dashedBorderTopBottomOpen,
-	.dashedBorderLeftRightOpen,
-	.dashedBorderAllClosed,
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder0111, /*right bottom left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1011, /*top bottom left*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1101, /*top right left*/
+	.dashedBorder1110, /*top right bottom*/
+	.dashedBorder1111, /*all*/
 	.space,
 	.spaceHighlighted,
 	.spaceHighlightedLookingAt,
@@ -80,18 +84,22 @@
 		position: relative;
 		color: #344861;
 	}
-	.dashedBorder,
-	.dashedBorderTopOpen,
-	.dashedBorderRightOpen,
-	.dashedBorderLeftOpen,
-	.dashedBorderBottomOpen,
-	.dashedBorderRightBottomOpen,
-	.dashedBorderRightTopOpen,
-	.dashedBorderLeftBottomOpen,
-	.dashedBorderLeftTopOpen,
-	.dashedBorderTopBottomOpen,
-	.dashedBorderLeftRightOpen,
-	.dashedBorderAllClosed{
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder0111, /*right bottom left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1011, /*top bottom left*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1101, /*top right left*/
+	.dashedBorder1110, /*top right bottom*/
+	.dashedBorder1111  /*all*/{
 		display: flex;
 		vertical-align: middle;
 		color: inherit;
@@ -103,53 +111,49 @@
 		padding: 0;
 		align-items: center;
 	}
-	.dashedBorderLeftOpen{
-		border-right: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorderTopOpen{
-		border-right: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorderRightOpen{
-		border-top: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorderBottomOpen{
-		border-right: 2px dashed #344861;
-		border-left: 2px dashed #344861;
+
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder0111  /*right bottom left*/ {
 		border-top: 2px dashed #344861;
 	}
-	.dashedBorderLeftRightOpen{
-		border-bottom: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-	}
-	.dashedBorderTopBottomOpen{
-		border-left: 2px dashed #344861;
+	
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0011, /*bottom left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1011  /*top bottom left*/ {
 		border-right: 2px dashed #344861;
-	}
-	.dashedBorderLeftTopOpen{
-		border-right: 2px dashed #344861;
-		border-bottom: 2px dashed #344861;
-	}
-	.dashedBorderLeftBottomOpen{
-		border-right: 2px dashed #344861;
-		border-top: 2px dashed #344861;
-	}
-	.dashedBorderRightTopOpen{
-		border-bottom: 2px dashed #344861;
-		border-left: 2px dashed #344861;
-	}
-	.dashedBorderRightBottomOpen{
-		border-top: 2px dashed #344861;
-		border-left: 2px dashed #344861;
 	}
 
-	.dashedBorderAllClosed{
-		border: 2px dashed #344861;
+	.dashedBorder0000, /*none*/
+	.dashedBorder0001, /*left*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0101, /*right left*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1001, /*top left*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1101  /*top right left*/ {
+		border-bottom: 2px dashed #344861;
+	}
+
+	.dashedBorder0000, /*none*/
+	.dashedBorder0010, /*bottom*/
+	.dashedBorder0100, /*right*/
+	.dashedBorder0110, /*right bottom*/
+	.dashedBorder1000, /*top*/
+	.dashedBorder1010, /*top bottom*/
+	.dashedBorder1100, /*top right*/
+	.dashedBorder1110  /*top right bottom*/ {
+		border-left: 2px dashed #344861;
 	}
 
 	.spaceHighlighted,

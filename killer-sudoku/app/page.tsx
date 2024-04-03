@@ -25,7 +25,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(used)
+        return initBoard(false,used)
     });
 
     // A function to handle when the user clicks the solve button
@@ -131,7 +131,7 @@ export default function Home() {
             timerRef.current?.reset();
 
             setIcon("pause_circle");
-            return initBoard(used);
+            return initBoard(false,used);
         });
     };
 
