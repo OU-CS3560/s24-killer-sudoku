@@ -4,6 +4,7 @@ import { solve_sbp, initBoard } from "../Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../Sudoku";
 import React, { useRef, useState } from 'react'
 import Timer, { TimerRef } from "../Timer";
+import KillerSudoku from "../KillerSudoku";
 export default function Home() {
 
 	var gameOver: boolean = false;
@@ -181,7 +182,7 @@ export default function Home() {
                                 0
                             </div>
                             <div onClick={() => {SaveBoardState(board); handleClickStartButton}}>
-                                <SudokuBoard board={board} setBoard={setBoard}></SudokuBoard>
+                                <KillerSudoku board={board} setBoard={setBoard}></KillerSudoku>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">

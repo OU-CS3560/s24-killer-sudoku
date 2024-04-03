@@ -206,20 +206,28 @@
 		margin-bottom: 20px;
 	}
 	.navbar {
-		width: 100%;
+		margin: auto;
+		width: 33%;
 		padding: 20px 0;
 		display: flex;
-		justify-content: center;
 		background:  white;
 	}
 	.navbar a{
 		position: relative;
 		display: inline-block;
 		font-size: 20px;
+		font-weight: 450;
 		color: black;
 		text-decoration: none;
 		margin: 0 25px;
 	}
+
+	p {
+		font-size: 24px;
+		font-weight: 600;
+		color: #344861;
+	}
+
 	.navbar a::after{
 		content: '';
 		position: absolute;
@@ -243,10 +251,11 @@
 		font-size: 40px;
 		font-weight: 300;
 		background: lightgray;
-		width: 60px;
-		height: 60px;
+		width: 70px;
+		height: 70px;
 		margin: 7.5px;
 	}
+	
 	.numberPanel:hover{
 		color: darkturquoise;
 		background: whitesmoke;
@@ -256,8 +265,7 @@
 	}
 	.boardAndButtons{
 		display: flex;
-		justify-content: flex-end;
-		translate: 50%;
+		align-content: center;
 	}
 	.newGame{
 		align-items: center;
@@ -286,18 +294,37 @@
 		background: #c1c7d6;
 		border-radius: 10px;
 	}
-	.buttonsContainer{
+	.buttonsContainer,
+	.buttonsContainerNavbar{
 		align-items: center;
-		display: inline-flex;
+		display: flex;
 		flex-direction: row;
 	}
-	.buttonsContainerTwo{
+
+	.percent_33{
+		height: inherit;
+		width: 33%;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+
+	.buttonsContainerNavbar{
+		justify-content: space-between;
+		width: 100%;
+	}
+	.buttonsContainerTwo, 
+	.mainContent{
 		align-items: center;
 		display: inline-flex;
 		flex-direction: column;
 	}
+	
+	.mainContent{
+		width: 100%;
+		display: flex;
+	}
+	
 	.timerContainer{
-		translate: 50%;
 		display: inline-flex;
 		align-items: center;
 		padding: 10px;
@@ -313,7 +340,6 @@
 		flex-direction: row;
 	}
 	.killerSudokuTitle{
-		translate: 50%;
 		font-weight: 400;
 		font-size: 48px;
 	}
@@ -330,6 +356,7 @@
 		color: lightslategray;
 		font-size: 27px;
 	}
+
 	.spaceTop,
 	.spaceHighlightedTop,
 	.spaceHighlightedLookingAtTop,
@@ -355,6 +382,7 @@
 	}
 
 	.spaceRight,
+	.spaceRightKillerSudoku,
 	.spaceHighlightedRight,
 	.spaceHighlightedLookingAtRight,
 	.spaceHighlightedLookingAtSpecificRight,

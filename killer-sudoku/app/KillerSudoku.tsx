@@ -8,17 +8,7 @@
 "use client"; // For useState variables
 
 import React, { ChangeEvent} from 'react';
-
-// Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
-export interface SpaceButtonProperties {
-    data: string,
-    highlighted: string,
-    savedData: string,
-    savedHighlight: string,
-    hiddenData: string,
-    highlightedStatus: string,
-    locked: boolean,
-};
+import { SpaceButtonProperties } from './Sudoku';
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
@@ -37,7 +27,7 @@ const KillerSudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], s
             // Inherit the previous board state
             const newBoard = [...prevBoard];
             console.log("*********************");
-            console.log("newBoard[row][col], row " + row + ", " + col + " highlightedStatus, " + newBoard[row][col].highlightedStatus);
+            console.log("newBoard[row][col], row " + row + ", " + col + " highlightedStatus, " + newBoard[row][col].fixedStatus);
             console.log("*********************");
             HandleHighlighting(row, col, newBoard);
             return newBoard;
@@ -156,7 +146,7 @@ const KillerSudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], s
                                     autoComplete='off'
                                     autoCapitalize='off'
                                     value={space.data} // The incoming value
-                                    className={space.highlighted + space.highlightedStatus}
+                                    className={space.highlighted + space.fixedStatus}
                                     onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
                                     style={{ outline: 'none'}}
                                 />
@@ -309,7 +299,7 @@ export function SaveBoardState(newBoard: SpaceButtonProperties[][]) {
     console.log("save board state");
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
-            newBoard[i][j].savedHighlight = newBoard[i][j].highlighted;
+            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
             newBoard[i][j].savedData = newBoard[i][j].data;
         }
     }
@@ -320,7 +310,7 @@ export function ReApplyBoardState(newBoard: SpaceButtonProperties[][]) {
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
             newBoard[i][j].data = newBoard[i][j].savedData;
-            newBoard[i][j].highlighted = newBoard[i][j].savedHighlight;
+            newBoard[i][j].highlighted = newBoard[i][j].previousHighlight;
         }
     }
 }
