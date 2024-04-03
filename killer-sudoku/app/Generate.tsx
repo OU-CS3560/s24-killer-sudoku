@@ -7,6 +7,10 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
 import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
+import { kTile, genKiller, killerTopLeftVals } from "./GenKiller";
+
+//Set true to override/force turn on killer sudoku generation, false for default behavior
+const KillerOverride: boolean = false;
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -14,7 +18,7 @@ import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver
  * @param {number} used (WIP?)
  * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
-export function initBoard(used: number): SpaceButtonProperties[][] {
+export function initBoard(killer: boolean, used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
@@ -57,7 +61,7 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Randomization complete");
 
     // Eventually have this value come from a UI element, instead of being defined here
-    let difficulty: string = "Medium";
+    const difficulty: string = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start
@@ -108,6 +112,9 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
 
     console.log("initBoard: Tile showing complete");
 
+    let kBoard: kTile[][] = [];
+    if (killer || KillerOverride) kBoard = genKiller(board.tile);
+
     // Initialization Loop, load all values onto the board's data
     let arr: SpaceButtonProperties[][] = [];
     for (let x = 0; x < 9; x++) {
@@ -133,13 +140,13 @@ export function initBoard(used: number): SpaceButtonProperties[][] {
     console.log("initBoard: Initialization complete");
 
     // Initially highlight the board at the origin
-    initBoardBoldLines(arr);
+    initBoardBoldLines(arr, kBoard);
     HandleHighlighting(4, 4, arr);
     SaveBoardState(arr);
     return arr;
 }
 
-function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonProperties[][]{
+function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[][]): void {
     /*Init fixed status for the bolded border outlines */
     for (let i = 0; i < 9; i++){
         newBoard[i][0].fixedStatus='Top';
@@ -174,25 +181,45 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): SpaceButtonPro
 
         //no default case because its defined in a range of 1-100
     }
-
     */
-    
-    for (let i = 0; i < 9; i++){
-        for (let j = 0; j < 9; j++){
-            newBoard[i][j].mutableStatus = 'dashedBorder';
+
+    if (kBoard.length == 0) { //if no killer groups, ignore dashed borders & return
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                newBoard[x][y].mutableStatus = 'dashedBorder1111';
+            }
         }
+        return;
     }
 
-    // newBoard[2][1].mutableStatus ='dashedBorderRightOpen';
-    // newBoard[2][1].topleftnumber = 4;
-    // newBoard[3][1].mutableStatus ='dashedBorderLeftRightOpen';
-    // newBoard[4][1].mutableStatus ='dashedBorderLeftRightOpen';
-    // newBoard[5][1].mutableStatus ='dashedBorderLeftBottomOpen';
-    // newBoard[5][2].mutableStatus ='dashedBorderTopBottomOpen';
-    // newBoard[5][3].mutableStatus ='dashedBorderTopOpen'; 
-    // newBoard[7][3].mutableStatus ='dashedBorderAllClosed'; 
+    let topLeftArr: [number,number,kTile][] = killerTopLeftVals(kBoard);
+    for (let val of topLeftArr) {
+        newBoard[val[0]][val[1]].topleftnumber = val[2].sum;
+    }
 
-    return newBoard;
+    // Holy Sacred Comment: Do NOT remove this comment under ANY circumstances, otherwise will break group outlines
+    // \/                     \/
+    //newBoard[0][0].mutableStatus = 'dashedBorder0000';
+    // /\                     /\
+
+    for (let x = 0; x < 9; x++) {
+        for (let y = 0; y < 9; y++) {
+            let neighbors: string[] = [];
+            const opts: [number,number][] = [[x,y-1],[x+1,y],[x,y+1],[x-1,y]];
+            for (let opt of opts) {
+                const [x0,y0] = opt;
+                if (!((0 <= x0 && x0 <= 8) && (0 <= y0 && y0 <= 8))) {
+                    neighbors.push('0');
+                } else if (kBoard[x0][y0].symbol == kBoard[x][y].symbol) {
+                    neighbors.push('1');
+                }
+                else neighbors.push('0');
+            }
+            let str = `dashedBorder${neighbors.join('')}`;
+            console.log(str);
+            newBoard[x][y].mutableStatus = str;
+        }
+    }
 }
 
 /**
