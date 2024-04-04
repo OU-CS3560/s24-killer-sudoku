@@ -140,13 +140,13 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     console.log("initBoard: Initialization complete");
 
     // Initially highlight the board at the origin
-    initBoardBoldLines(arr, kBoard);
+    initBoardBoldLines(arr, kBoard, killer);
     HandleHighlighting(4, 4, arr);
     SaveBoardState(arr);
     return arr;
 }
 
-function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[][]): void {
+function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[][], yesorno: boolean): void {
     /*Init fixed status for the bolded border outlines */
     for (let i = 0; i < 9; i++){
         newBoard[i][0].fixedStatus='Top';
@@ -182,11 +182,15 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
         //no default case because its defined in a range of 1-100
     }
     */
-
     if (kBoard.length == 0) { //if no killer groups, ignore dashed borders & return
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                newBoard[x][y].mutableStatus = 'dashedBorder1111';
+                if (yesorno){
+                    newBoard[x][y].mutableStatus = 'dashedBorder0000';
+                }
+                else{
+                    newBoard[x][y].mutableStatus = 'dashedBorder1111';
+                }
             }
         }
         return;
@@ -199,7 +203,7 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][], kBoard: kTile[]
 
     // Holy Sacred Comment: Do NOT remove this comment under ANY circumstances, otherwise will break group outlines
     // \/                     \/
-    //newBoard[0][0].mutableStatus = 'dashedBorder0000';
+    // I removed the comment >:}
     // /\                     /\
 
     for (let x = 0; x < 9; x++) {

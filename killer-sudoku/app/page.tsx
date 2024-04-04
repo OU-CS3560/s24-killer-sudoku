@@ -11,9 +11,10 @@ import Timer, { TimerRef } from "./Timer";
 import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
-export default function Home() {
+import KillerSudoku from "./KillerSudoku";
 
-	// var gameOver: boolean = false;
+export default function Home() {
+    // var gameOver: boolean = false;
     var used = 0;
 
     // A useState for the icon of the Timer
@@ -27,10 +28,10 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(false,used)
+        return initBoard(true, used)
     });
 
-    // A function to handle when the user clicks the solve button
+	// A function to handle when the user clicks the solve button
 	const handleClickSolveButton = () => {
         if (!gameOver){
             setGameOver(true);
@@ -134,14 +135,11 @@ export default function Home() {
 
     // A function to handle when the user clicks New Game
 	const handleClickNewGame = () => {
-        setBoard(prevBoard => {
+        // Reset the Time the user has accumulated
+        timerRef.current?.reset();
 
-            // Reset the Time the user has accumulated
-            timerRef.current?.reset();
-
-            setIcon("pause_circle");
-            return initBoard(false,used);
-        });
+        setIcon("pause_circle");
+        setBoard(initBoard(true, used));
     };
 
     // A function to handle when the user selects a new difficulty
@@ -202,12 +200,13 @@ export default function Home() {
 
 	return (
 		<div>
+            <link rel="stylesheet" href="globals.css"></link>
             <div className="buttonsContainerNavbar">
                 <div className="percent_33">
-                    <p>Sudoku.DrewMullett.net</p>
+                    <p>KillerSudoku.DrewMullett.net</p>
                 </div>
                 <div className="navbar">
-                    <a href='/killer'>Killer</a>
+                    <a href='/sudoku'>Classic</a>
                     <a href='#'>Leaderboard</a>
                     {/* /leaderboard */}
                     <a href='#'>Daily</a>
@@ -222,67 +221,69 @@ export default function Home() {
                 Zachary Wolfe, Drew Mullett, Kevin Belock, Nick Adkins
             </div>
             <div className='buttonsContainer'>
-                Difficulty:
-                <button name='Easy' className='difficultyButton' onClick={() => handleClickDifficultyButton("Easy")}>
-                    Easy
-                </button>
-                <button name='Medium' className='difficultyButton' onClick={() => handleClickDifficultyButton("Medium")}>
-                    Medium
-                </button>
-                <button name='Hard' className='difficultyButton' onClick={() => handleClickDifficultyButton("Hard")}>
-                    Hard
-                </button>
-                <button name='Expert' className='difficultyButton' onClick={() => handleClickDifficultyButton("Expert")}>
-                    Expert
-                </button>
-            </div>
-            <div className="mainContent">
-                <div className="killerSudokuTitle">
-                    Sudoku
+                    Difficulty:
+                    <button name='Easy' className='difficultyButton' onClick={() => handleClickDifficultyButton("Easy")}>
+                        Easy
+                    </button>
+                    <button name='Medium' className='difficultyButton' onClick={() => handleClickDifficultyButton("Medium")}>
+                        Medium
+                    </button>
+                    <button name='Hard' className='difficultyButton' onClick={() => handleClickDifficultyButton("Hard")}>
+                        Hard
+                    </button>
+                    <button name='Expert' className='difficultyButton' onClick={() => handleClickDifficultyButton("Expert")}>
+                        Expert
+                    </button>
                 </div>
-                <div className='timerContainer'>
-                    <Timer ref={timerRef}></Timer>
-                    {/* eslint-disable-next-line */}
-                    <button className="material-symbols-outlined" onClick={icon == "pause_circle" ? () => handleClickStopButton() : () => handleClickStartButton()}>{icon}</button>
-                </div>
-                <div className="boardAndButtons">
-                    <div className="buttonsContainer">
-                        <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
-                            <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></SudokuBoard>
-                        </div>
-                        <div className="panelConglomerate">
-                            <div className="buttonsContainerTwo">
-                                <div className="buttonsContainer">
-                                    <button className='solveButton' onClick={() => {handleClickSolveButton()}}>
-                                        Solve
+            <div>
+                <div className="mainContent">
+                    <div className="killerSudokuTitle">
+                        Killer Sudoku
+                    </div>
+                    <div className='timerContainer'>
+                        <Timer ref={timerRef}></Timer>
+                        {/* eslint-disable-next-line */}
+                        <button className="material-symbols-outlined" onClick={icon == "pause_circle" ? () => handleClickStopButton() : () => handleClickStartButton()}>{icon}</button>
+                    </div>
+                    <div className="boardAndButtons">
+                        <div className="buttonsContainer">
+                            <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
+                                <KillerSudoku board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></KillerSudoku>
+                            </div>
+                            <div className="panelConglomerate">
+                                <div className="buttonsContainerTwo">
+                                    <div className="buttonsContainer">
+                                        <button className='solveButton' onClick={() => {handleClickSolveButton()}}>
+                                            Solve
+                                        </button>
+                                        <button className='solveButton' onClick={() => handleClickClearButton()}>
+                                            Clear
+                                        </button>
+                                    </div>
+                                    <div className="buttonsContainer">
+                                        <button onClick={() => handleClickPanel(1)} className="numberPanel">1</button>
+                                        <button onClick={() => handleClickPanel(2)} className="numberPanel">2</button>
+                                        <button onClick={() => handleClickPanel(3)} className="numberPanel">3</button>
+                                    </div>
+                                    <div className="buttonsContainer">
+                                        <button onClick={() => handleClickPanel(4)} className="numberPanel">4</button>
+                                        <button onClick={() => handleClickPanel(5)} className="numberPanel">5</button>
+                                        <button onClick={() => handleClickPanel(6)} className="numberPanel">6</button>
+                                    </div>
+                                    <div className="buttonsContainer">
+                                        <button onClick={() => handleClickPanel(7)} className="numberPanel">7</button>
+                                        <button onClick={() => handleClickPanel(8)} className="numberPanel">8</button>
+                                        <button onClick={() => handleClickPanel(9)} className="numberPanel">9</button>
+                                    </div>
+                                    <button className='newGame' onClick={() => handleClickNewGame()}>
+                                        New Game
                                     </button>
-                                    <button className='solveButton' onClick={() => {handleClickClearButton()}}>
-                                        Clear
-                                    </button>
                                 </div>
-                                <div className="buttonsContainer">
-                                    <button onClick={() => handleClickPanel(1)} className="numberPanel">1</button>
-                                    <button onClick={() => handleClickPanel(2)} className="numberPanel">2</button>
-                                    <button onClick={() => handleClickPanel(3)} className="numberPanel">3</button>
-                                </div>
-                                <div className="buttonsContainer">
-                                    <button onClick={() => handleClickPanel(4)} className="numberPanel">4</button>
-                                    <button onClick={() => handleClickPanel(5)} className="numberPanel">5</button>
-                                    <button onClick={() => handleClickPanel(6)} className="numberPanel">6</button>
-                                </div>
-                                <div className="buttonsContainer">
-                                    <button onClick={() => handleClickPanel(7)} className="numberPanel">7</button>
-                                    <button onClick={() => handleClickPanel(8)} className="numberPanel">8</button>
-                                    <button onClick={() => handleClickPanel(9)} className="numberPanel">9</button>
-                                </div>
-                                <button className='newGame' onClick={() => handleClickNewGame()}>
-                                    New Game
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+		</div>
 	);
 }

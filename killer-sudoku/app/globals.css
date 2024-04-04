@@ -7,6 +7,20 @@
 	.text-balance {
 		text-wrap: balance;
 	}
+
+	.removeall{
+		border: none;
+		width: 0%;
+		height: 0%;
+		color: white;
+		cursor: default;
+		text-align: center;
+		display: none;
+		align-items: normal;
+		font-size: 0px;
+		font-weight: 0;
+		background: white;
+	}
 	/*All containers hold these properties to generate a default space*/
 	.dashedBorder0000, /*none*/
 	.dashedBorder0001, /*left*/
@@ -176,6 +190,7 @@
 	.spaceHighlightedLookingAtBottomRight {
 		background: #e1eaf3;
 	}
+	
 	.spaceHighlightedLookingAtSpecific,
 	.spaceHighlightedLookingAtSpecificTop,
 	.spaceHighlightedLookingAtSpecificBottom,
@@ -265,7 +280,8 @@
 		background: whitesmoke;
 	}
 	.panelConglomerate{
-		margin-left: 10px;
+		margin: auto;
+		padding: 20px;
 	}
 	.boardAndButtons{
 		display: flex;
@@ -276,7 +292,7 @@
 		border-radius: 5px;
 		color: white;
 		height: 65px;
-		width: 225px;
+		width: 100%;
 		font-size: 18px;
 		font-weight: 600;
 		background: royalblue;
@@ -386,7 +402,6 @@
 	}
 
 	.spaceRight,
-	.spaceRightKillerSudoku,
 	.spaceHighlightedRight,
 	.spaceHighlightedLookingAtRight,
 	.spaceHighlightedLookingAtSpecificRight,

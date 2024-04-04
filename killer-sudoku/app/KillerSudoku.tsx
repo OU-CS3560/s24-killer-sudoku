@@ -9,12 +9,13 @@
 
 import React, { ChangeEvent} from 'react';
 import { SpaceButtonProperties } from './Sudoku';
+import { TimerRef } from './Timer';
 
 /**
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
  * @returns The main board and handles almost all highlighting logic
  */
-const KillerSudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoard: React.Dispatch<React.SetStateAction<SpaceButtonProperties[][]>> }) => {
+const KillerSudoku = ({ board, setBoard, setGameState, gameOver, timerRef, setIcon }: { board: SpaceButtonProperties[][], setBoard: React.Dispatch<React.SetStateAction<SpaceButtonProperties[][]>>, setGameState:  React.Dispatch<React.SetStateAction<boolean>>, gameOver: boolean, timerRef: React.RefObject<TimerRef>, setIcon: React.Dispatch<React.SetStateAction<string>>}) => {
 
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
@@ -141,15 +142,25 @@ const KillerSudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], s
                     <div key={rowIndex} id={rowIndex.toString()}>
                         {row.map((space, columnIndex) => (
                             <div key={columnIndex} id={columnIndex.toString()} onClick={() => handleCellClickHighlight(rowIndex, columnIndex)}>
-                                <input
-                                    type='text' // Because numbers are really fucking weird for some reason
-                                    autoComplete='off'
-                                    autoCapitalize='off'
-                                    value={space.data} // The incoming value
-                                    className={space.highlighted + space.fixedStatus}
-                                    onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
-                                    style={{ outline: 'none'}}
-                                />
+                                <div className={space.highlighted + space.fixedStatus}>
+                                    <form>
+                                        <label>
+                                            <fieldset className={space.mutableStatus}>
+                                                <legend>
+                                                    {space.topleftnumber === 0 ? "" : space.topleftnumber}
+                                                </legend>
+                                                <input
+                                                    type='text' // Because numbers are really fucking weird for some reason
+                                                    autoComplete='off'
+                                                    autoCapitalize='off'
+                                                    value={space.data} // The incoming value
+                                                    onChange={(e) => handleCellClickInput(rowIndex, columnIndex, e)} // What to do when clicked
+                                                    style={{ outline: 'none'}}
+                                                />
+                                            </fieldset>
+                                        </label>
+                                    </form>
+                                </div>
                             </div>
                         ))}
                         {rowIndex !== board.length - 1 && <br />}
