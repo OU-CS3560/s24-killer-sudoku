@@ -11,7 +11,7 @@ import Timer, { TimerRef } from "./Timer";
 import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
-import KillerSudoku from "./KillerSudoku";
+import Sudoku from "./Sudoku";
 
 export default function Home() {
     // var gameOver: boolean = false;
@@ -248,7 +248,7 @@ export default function Home() {
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
                             <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
-                                <KillerSudoku board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></KillerSudoku>
+                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">
