@@ -42,7 +42,7 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
     for (let i = 0; i < 9; i++) {
         groups[i] = [];
         for (let j = 0; j < 9; j++) {
-            groups[i][j] = {sum: Number(board[i][j].data), size: 1, symbol: '.'};
+            groups[i][j] = {sum: Number(board[i][j].hiddenData), size: 1, symbol: '.'};
         }
     }
 
