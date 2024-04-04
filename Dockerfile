@@ -19,4 +19,4 @@ RUN npm install express
 
 EXPOSE 3000
 
-# CMD [ "make" ]
+CMD [ "make" ]
