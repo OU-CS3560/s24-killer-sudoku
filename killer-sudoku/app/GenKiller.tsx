@@ -35,6 +35,11 @@ type kTile = {
  * @return None
 */
 export function genKiller(board: SpaceButtonProperties[][]): void {
+    //checks if coords (x,y) are within board coordinates
+    const onBoard = (x: number, y: number): boolean => {
+        return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
+    }
+
     //# of killer groups (vary on difficulty?)
     const AmountTotal: number = 32;
 
@@ -46,24 +51,34 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
         }
     }
 
-    //Puts (#) of tiles into initial groups, no picking already chosen tiles
+    //Puts (#) of tiles into initial groups, no picking already chosen tiles or tiles next to those
+    let numTaken = 0;
     for (let i = 0; i < AmountTotal; i++) {
+        if (numTaken == 81) break;
         let x = 0, y = 0;
         do {
             x = rand(0,8); y = rand(0,8);
         } while (groups[x][y].symbol != '.');
         groups[x][y].symbol = kKey[i];
+        numTaken++;
+        for (let neighbors of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
+            const x0 = neighbors[0], y0 = neighbors[1];
+            if (!onBoard(x0,y0)) continue;
+            if (groups[x0][y0].symbol == '.') {groups[x0][y0].symbol = '/'; numTaken++;}
+        }
     }
 
     //for each initial group, add bordering tiles until no blanks left
     for (let numBlank = 81-AmountTotal; numBlank > 0;) {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (groups[x][y].symbol != '.') continue;
+                if (groups[x][y].symbol != '.' || groups[x][y].symbol != '/') continue;
                 let neighbors: [number,number][] = [];
                 for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
                     const x0 = opt[0], y0 = opt[1];
-                    if (onBoard(x0,y0) && groups[x0][y0].symbol != '.') neighbors.push([x0,y0]);
+                    if (!onBoard(x0,y0)) continue;
+                    if (groups[x0][y0].symbol == '.' || groups[x0][y0].symbol == '/') continue;
+                    neighbors.push([x0,y0]);
                 }
                 if (neighbors.length == 0) continue;
                 //sort possible options by group size: smaller groups -> higher priority
@@ -102,13 +117,9 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
     }
     */
 
-    // Holy Sacred Comment: Do NOT remove this comment under ANY circumstances, otherwise will break group outlines
-    //  \/                                          \/
-    //newBoard[0][0].mutableStatus = 'dashedBorder0000';
-    //  /\                                          /\
-
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
+            board[x][y].mutableStatus = 'dashedBorder0000'; //Need to do this for some reason
             let neighbors: string[] = [];
             const thisSym: string = groups[x][y].symbol;
             for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
@@ -118,9 +129,4 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
             board[x][y].mutableStatus = `dashedBorder${neighbors.join('')}`;
         }
     }
-}
-
-//checks if coords (x,y) are within board coordinates
-export function onBoard(x: number, y: number): boolean {
-    return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
 }
