@@ -40,14 +40,13 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
 
     //TODO: rework this so that it is based on difficulty
     //Percent Configuration, switch around values
-    const percent: {[n: number]: number} = {
-        1: 15,
-        2: 35,
-        3: 35,
-        4: 15,
-        5: 0
-
-    };
+    const percent = new Map<number,number> ([
+        [1, 15],
+        [2, 35],
+        [3, 30],
+        [4, 15],
+        [5, 5 ]
+    ]);
 
     //checks if coords (x,y) are within board coordinates
     const onBoard = (x: number, y: number): boolean => {
@@ -84,7 +83,9 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
         for (let val of row) {
             if (val.symbol == '.' || val.symbol == '/') continue;
             const rNum = Math.random()*100;
-            if (rNum > 85)
+            for (let n = 1, p = 0; p < rNum; n++) {
+                p += percent.get(n) ?? 100;
+            }
         }
     }
 
