@@ -5,17 +5,36 @@
  * @date     March 8, 2024
 */
 
+import { kTile } from "./GenKiller";
+
 /**
  * @brief takes input board & tries to solve it
  * @param {genBoardType} board input board to be solved (passed by reference) 
- * @param {number} opt (WIP) parameter to select which solving methods to use:
- *  0 (default) for all, 1 for 1st method only, 2 for 1st & 2nd, etc. 3,4,5 are WIP
+ * @param {number} kARr (WIP) 
  * @returns {[number,number][]} array of changed tiles, stored as a tuple of [x,y], both numbers
  */
-export function solve_gen(board: genBoardType, opt: number = 0): [number,number][] {
+export function solve_gen(board: genBoardType, kArr?: kTile[][]): [number,number][] {
     let changes: [number,number][] = [];
     let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
+    const killer: boolean = (typeof kArr !== undefined);
+    kArr = kArr as kTile[][];
 
+    // If using killer sudoku, modify notes based on killer groups
+    if (killer) {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                if (board.tile[x][y] != 0) continue;
+                let tile = kArr[x][y];
+                let minVal = -1, maxVal = -1;
+                if (tile.size == 2) {
+                    minVal = (tile.sum-9 >= 1) ? tile.sum-9 : 1;
+                    maxVal = (tile.sum-1 <= 9) ? tile.sum-1 : 9;
+                }
+                else {} //WIP
+            }
+        }
+    }  
+    
     for (let progress: boolean = true; progress == true;) {
         progress = false;
 
@@ -27,7 +46,6 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number]
         }
 
         // Method 1: if theres only one note in a tile, put it in
-        if (true) { //opt == 0 || opt >= 1 -> true
         for (let x = 0; x < 9; x++) { 
             for (let y = 0; y < 9; y++) {
                 if (tiles[x][y] != 0) continue;
@@ -45,10 +63,9 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number]
                     return changes;
                 }
             }
-        }}
+        }
 
         // Method 2: if theres only one note of a type in a row/col, put it in
-        if (opt == 0 || opt >= 2) {
         for (let d1 = 0; d1 < 9; d1++) {
             for (let n: number = 1; n <= 9; n++) {
                 let valR: number = -1;
@@ -76,13 +93,13 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number]
                     success(n,valC,d1);
                 }
             }
-        }}
+        }
 
         // Method 3: if one note exists only in two/three tiles in a 3x3, and
         // those are in same row/col, then remove all others in that row/col
         // NOTE: This doesnt work properly, but i dont really have
         // the time to fix it, need to focus on other things
-        /*if (opt == 0 || opt >= 3) {
+        /*{
             //eliminate all notes in this row
             const clearRow = (row: number, val: number): void => {
                 for (let y = 0; y < 9; y++) {
@@ -126,12 +143,17 @@ export function solve_gen(board: genBoardType, opt: number = 0): [number,number]
 
         // Method 4: if two types of notes form a pair, then remove all other
         //  notes from those tiles & those notes from that 3x3
-        //if (opt == 0 || opt >= 4) {}
+        //{}
 
         // Method 5: idk how else to describe it: its the last one in this link
         //  https://www.conceptispuzzles.com/index.aspx?uri=puzzle/sudoku/techniques
-        //if (opt == 0 || opt >= 5) {}
+        //{}
 
+        if (killer) {
+            // Method K1: if (n-1) # of tiles are known of a (n) tile group,
+            //  then last one can be calculated
+            //if (killer) {} 
+        }
     }
     return changes;
 }

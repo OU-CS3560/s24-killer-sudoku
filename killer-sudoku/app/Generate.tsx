@@ -9,9 +9,6 @@ import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sud
 import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
 import { kTile, genKiller, killerTopLeftVals } from "./GenKiller";
 
-//Set true to override/force turn on killer sudoku generation, false for default behavior
-const KillerOverride: boolean = false;
-
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
  *        data with SpaceButtonProperties, and highlights the origin to start.
@@ -28,7 +25,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
         if (iter++ > 50) {iter = 0; return true;}
         
         //Calls solver & records all changes it made
-        const changes: [number,number][] = solve_gen(board,2);
+        const changes: [number,number][] = solve_gen(board);
         if (board.state) {
             if (board.occ == 81) return true;
 
@@ -59,6 +56,12 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     } while (!isValid(board));
 
     console.log("initBoard: Randomization complete");
+
+    let kBoard: kTile[][] = [];
+    if (killer) {
+        kBoard = genKiller(board.tile);
+        console.log("initBoard: Killer Generation complete");
+    }
 
     // Eventually have this value come from a UI element, instead of being defined here
     const difficulty: string = "Medium";
@@ -107,13 +110,10 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
             }
         }
         temp.occ = shown.occ; temp.state = shown.state;
-        solve_gen(temp,2);
+        solve_gen(temp,kBoard);
     }
 
     console.log("initBoard: Tile showing complete");
-
-    let kBoard: kTile[][] = [];
-    if (killer || KillerOverride) kBoard = genKiller(board.tile);
 
     // Initialization Loop, load all values onto the board's data
     let arr: SpaceButtonProperties[][] = [];
@@ -242,7 +242,7 @@ export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
             }
         }
     }
-    solve_gen(board,2); // Uses the solve function in Solver.tsx
+    solve_gen(board); // Uses the solve function in Solver.tsx
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             boardSBP[x][y].data = toStr(board.tile[x][y]);
