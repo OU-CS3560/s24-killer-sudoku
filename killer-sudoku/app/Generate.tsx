@@ -18,7 +18,7 @@ const KillerOverride: boolean = false;
  * @param {number} used (WIP?)
  * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
-export function initBoard(killer: boolean, used: number): SpaceButtonProperties[][] {
+export function initBoard(killer: boolean, used: number, difficulty:string): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
@@ -59,8 +59,6 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     } while (!isValid(board));
 
     console.log("initBoard: Randomization complete");
-
-    let difficulty = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start

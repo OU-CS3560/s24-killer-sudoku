@@ -16,6 +16,8 @@ export default function Home() {
 	// var gameOver: boolean = false;
     var used = 0;
 
+    let difficulty = "Medium";
+
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
 
@@ -27,7 +29,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(false, used)
+        return initBoard(false, used, difficulty)
     });
 
     // A function to handle when the user clicks the solve button
@@ -138,25 +140,15 @@ export default function Home() {
         timerRef.current?.reset();
 
         setIcon("pause_circle");
-        setBoard(initBoard(false, used));
+        setBoard(initBoard(false, used, difficulty));
     };
 
     // A function to handle when the user selects a new difficulty
 	const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " Killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the retrieved data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+        difficulty = buttonName;
 
-        // Have something passed to generation algorithm
+        handleClickNewGame();
     }
 
     // A function to handle when the user presses on the panel off to the right-hand side of the board

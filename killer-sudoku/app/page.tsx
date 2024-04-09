@@ -18,6 +18,8 @@ export default function Home() {
     // var gameOver: boolean = false;
     var used = 0;
 
+    let difficulty = "K-Easy";
+
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
 
@@ -29,7 +31,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(true, used)
+        return initBoard(true, used, difficulty)
     });
 
 	// A function to handle when the user clicks the solve button
@@ -140,14 +142,15 @@ export default function Home() {
         timerRef.current?.reset();
 
         setIcon("pause_circle");
-        setBoard(initBoard(true, used));
+        setBoard(initBoard(true, used, difficulty));
     };
 
     // A function to handle when the user selects a new difficulty
 	const handleClickDifficultyButton = (buttonName: string) => {
         console.log(buttonName, " difficulty Sudoku puzzle requested");
+        difficulty = "K-" + buttonName;
 
-        const difficulty = "K-" + buttonName;
+        handleClickNewGame();
     }
 
     // A function to handle when the user presses on the panel off to the right-hand side of the board
