@@ -60,8 +60,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     console.log("initBoard: Randomization complete");
 
-    // Eventually have this value come from a UI element, instead of being defined here
-    const difficulty: string = "Medium";
+    let difficulty = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start
