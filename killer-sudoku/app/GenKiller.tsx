@@ -27,7 +27,7 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 type kTile = {
     sum: number,
     curSize: number,
-    maxSize?: number,
+    maxSize: number,
     symbol: string
 };
 
@@ -38,19 +38,25 @@ type kTile = {
 */
 export function genKiller(board: SpaceButtonProperties[][]): void {
 
-    //TODO: rework this so that it is based on difficulty
-    //Percent Configuration, switch around values
-    const percent = new Map<number,number> ([
-        [1, 15],
-        [2, 35],
-        [3, 30],
-        [4, 15],
-        [5, 5 ]
-    ]);
-
     //checks if coords (x,y) are within board coordinates
     const onBoard = (x: number, y: number): boolean => {
         return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
+    }
+
+    //randomly chooses a number (1-5) based on CDF percentages
+    const randMaxSize = (): number => {
+        //Percent Configuration (this is a CDF, not a PDF)
+        const percentCDF = new Map<number,number> ([
+            [1, 10],
+            [2, 45],
+            [3, 80],
+            [4, 95],
+            [5, 100]
+        ]);
+        const rNum = Math.random()*100;
+        let n: number = 1;
+        while ((percentCDF.get(n) ?? 100) <= rNum) n++;
+        return n;
     }
 
     //Initialize killer group grid
@@ -58,7 +64,7 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
     for (let i = 0; i < 9; i++) {
         arr[i] = [];
         for (let j = 0; j < 9; j++) {
-            arr[i][j] = {sum: Number(board[i][j].hiddenData), curSize: 1, symbol: '.'};
+            arr[i][j] = {sum: Number(board[i][j].hiddenData), curSize: 1, maxSize: 1, symbol: '.'};
         }
     }
 
@@ -82,10 +88,7 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
     for (let row of arr) {
         for (let val of row) {
             if (val.symbol == '.' || val.symbol == '/') continue;
-            const rNum = Math.random()*100;
-            for (let n = 1, p = 0; p < rNum; n++) {
-                p += percent.get(n) ?? 100;
-            }
+            val.maxSize = randMaxSize();
         }
     }
 
@@ -93,44 +96,60 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
     for (let numBlank = 81-numGroups; numBlank > 0;) {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
-                if (arr[x][y].symbol == '.' || arr[x][y].symbol == '/') continue;
-
+                if (arr[x][y].symbol != '.' && arr[x][y].symbol != '/') continue;
+                let allNeigh: [number,number][] = [], 
+                    avaNeigh: [number,number][] = [];
+                const options: [number,number][] = [[x,y-1],[x+1,y],[x,y+1],[x-1,y]];
+                for (let [x0,y0] of options) {
+                    if (!onBoard(x0,y0)) continue;
+                    const tile = arr[x0][y0];
+                    if (tile.symbol != '.' && tile.symbol != '/') allNeigh.push([x0,y0]);
+                    if (tile.curSize < tile.maxSize) avaNeigh.push([x0,y0]);
+                }
+                if (allNeigh.length == 0) continue;
+                if (avaNeigh.length == 0) {
+                    arr[x][y].symbol = kKey[numGroups];
+                    arr[x][y].maxSize = randMaxSize();
+                    numGroups++; numBlank--;
+                    continue;
+                }
+                const [a,b] = avaNeigh[rand(0,avaNeigh.length-1)];
+                arr[a][b].curSize++;
+                arr[a][b].sum += arr[x][y].sum;
+                arr[x][y] = arr[a][b]; //merged, both locations now point to same tile/info
+                numBlank--;
             }
         }
     }
 
-    /*
-                if (groups[x][y].symbol != '.' && groups[x][y].symbol != '/') continue;
-                let neighbors: [number,number][] = [];
-                for (let opt of [[x,y-1],[x+1,y],[x,y+1],[x-1,y]]) {
-                    const x0 = opt[0], y0 = opt[1];
-                    if (!onBoard(x0,y0)) continue;
-                    if (groups[x0][y0].symbol == '.' || groups[x0][y0].symbol == '/') continue;
-                    if (groups[x0][y0].size < sizeLimit) neighbors.push([x0,y0]);
-                }
-                const neiLen = neighbors.length;
-                if (neiLen == 0) continue;
-
-                for (let i = 0; i < neiLen; i++) {
-                    const j = rand(0,neiLen-1);
-                    const temp = neighbors[i];
-                    neighbors[i] = neighbors[j];
-                    neighbors[j] = temp;
-                }
-
-                let numNeighborsSzG4 = 0;
-                for (let [a,b] of neighbors) {
-                    if (groups[a][b].size >= sizeLimit-1) {numNeighborsSzG4++; continue;}
-                    groups[a][b].size++;
-                    groups[a][b].sum += groups[x][y].sum;
-                    groups[x][y] = groups[a][b]; //merged, both locations now point to same tile/info
-                    break;
-                }
-                if (numNeighborsSzG4 == neiLen) {
-                    groups[x][y].symbol = kKey[numGroups]; numGroups++;
-                }
-                numBlank--;
-    */
+    //Go back over & combine most of the leftover size-1 groups
+    let numOf1Groups: number = 0; 
+    for (let row of arr) { 
+        for (let val of row) {
+            if (val.curSize == 1) numOf1Groups++; 
+        } 
+    }
+    for (let x = 0; x < 9 && numOf1Groups > 3; x++) {
+        for (let y = 0; y < 9 && numOf1Groups > 3; y++) {
+            if (arr[x][y].curSize != 1) continue;
+            let avaNeigh: [number,number][] = [];
+            const options: [number,number][] = [[x,y-1],[x+1,y],[x,y+1],[x-1,y]];
+            for (let [x0,y0] of options) {
+                if (!onBoard(x0,y0)) continue;
+                const tile = arr[x0][y0];
+                if (tile.symbol == '.' || tile.symbol == '/') continue;
+                if (tile.curSize < tile.maxSize || tile.maxSize == 1 || tile.maxSize == 2) 
+                    avaNeigh.push([x0,y0]);
+            }
+            if (avaNeigh.length == 0) continue;
+            const [a,b] = avaNeigh[rand(0,avaNeigh.length-1)];
+            arr[a][b].curSize++;
+            arr[a][b].maxSize++;
+            arr[a][b].sum += arr[x][y].sum;
+            arr[x][y] = arr[a][b]; //merged, both locations now point to same tile/info
+            numOf1Groups--;
+        }
+    }
 
     let keyTrack: {[i: string]: boolean} = {};
     for (let char of kKey) {
@@ -145,17 +164,6 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
             }
         }
     }
-
-    /* START OF MUTABLE BORDER ALGORITHM 
-
-    // random number hash for identifier, boolean for visited
-    let mapping = new Map<number, boolean>();
-
-    switch(percentage){
-
-        //no default case because its defined in a range of 1-100
-    }
-    */
 
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
