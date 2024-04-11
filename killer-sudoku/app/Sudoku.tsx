@@ -7,7 +7,8 @@
 
 "use client"; // For useState variables
 
-import React, { ChangeEvent} from 'react';
+import React, { ChangeEvent } from 'react';
+import { TimerRef } from './Timer';
 
 // Defines the 'class' which goes on the board. Just think of this as the properties to a single cell.
 export interface SpaceButtonProperties {
@@ -27,8 +28,7 @@ export interface SpaceButtonProperties {
  * @brief A function that utilizes use state for the board, and onChange will update accordingly
  * @returns The main board and handles almost all highlighting logic
  */
-const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoard: React.Dispatch<React.SetStateAction<SpaceButtonProperties[][]>> }) => {
-
+const Sudoku = ({ board, setBoard, setGameState, gameOver, timerRef, setIcon }: { board: SpaceButtonProperties[][], setBoard: React.Dispatch<React.SetStateAction<SpaceButtonProperties[][]>>, setGameState:  React.Dispatch<React.SetStateAction<boolean>>, gameOver: boolean, timerRef: React.RefObject<TimerRef>, setIcon: React.Dispatch<React.SetStateAction<string>>}) => {
     /**
      * @brief A function that is called when an individual cell is clicked to handle highlighting 
      * @param row - the row of the cell that was clicked
@@ -55,52 +55,59 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
      * @returns newBoard - the board after highlight modifications
      */
     const handleCellClickInput = (row: number, col: number, e: ChangeEvent<HTMLInputElement>) => {
-        setBoard(prevBoard => {
-            // Inherit the previous board state
-            const newBoard = [...prevBoard];
-            /**
-             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-            if (used === 80 || timerRef.current?.getMinutes() === 30){
-                
+        if (!gameOver){
+            setBoard(prevBoard => {
+                // Inherit the previous board state
+                const newBoard = [...prevBoard];
+                /**
+                 * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                if (used === 80 || timerRef.current?.getMinutes() === 30){
+                    
+                    if (checkGameOver(newBoard)){
+                        handleClickStopButton();
+                        //victoryFunc();
+                    }
+                }
+                */
+                if (!newBoard[row][col].locked) {
+                    // Cast target to int, because it's incoming as a string
+                    let val = +e.target.value;
+    
+                    console.log("VALUE INCOMING " + val);
+    
+                    // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
+                    if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0) {
+                        if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                            val = +newBoard[row][col].data;
+                            newBoard[row][col].data = '';
+                            /**
+                             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                            used--;
+                            */
+                        }
+                        else {
+                            val = +newBoard[row][col].data;
+                            newBoard[row][col].data = e.target.value.toString();
+                            console.log("NEWBOARD[ROW][COL] " + newBoard[row][col].data)
+                            /**
+                             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+                            used++;
+                            */
+                        }
+                        HandleHighlighting(row, col, newBoard, val);
+                        // console.log(used);
+                    }
+                }
+                // This prevents the board from resetting completely when pressing enter
+                e.preventDefault();
                 if (checkGameOver(newBoard)){
-                    handleClickStopButton();
-                    //victoryFunc();
+                    setGameState(true);
+                    timerRef.current?.stop();
+                    setIcon("pause_circle");
                 }
-            }
-            */
-            if (!newBoard[row][col].locked) {
-                // Cast target to int, because it's incoming as a string
-                let val = +e.target.value;
-
-                console.log("VALUE INCOMING " + val);
-
-                // Check to see if the old data is the same as the number incoming, if NaN (not a number), and if in bounds of arr
-                if (!isNaN(val) && +newBoard[row][col].data !== val && val <= 9 && val >= 0) {
-                    if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                        val = +newBoard[row][col].data;
-                        newBoard[row][col].data = '';
-                        /**
-                         * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                        used--;
-                        */
-                    }
-                    else {
-                        val = +newBoard[row][col].data;
-                        newBoard[row][col].data = e.target.value.toString();
-                        console.log("NEWBOARD[ROW][COL] " + newBoard[row][col].data)
-                        /**
-                         * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-                        used++;
-                        */
-                    }
-                    HandleHighlighting(row, col, newBoard, val);
-                    // console.log(used);
-                }
-            }
-            // This prevents the board from resetting completely when pressing enter
-            e.preventDefault();
-            return newBoard;
-        });
+                return newBoard;
+            });
+        }
     };
 
     /**
@@ -184,6 +191,19 @@ const Sudoku = ({ board, setBoard }: { board: SpaceButtonProperties[][], setBoar
             </div>
         </div>);
 };
+
+export function checkGameOver(newBoard: SpaceButtonProperties[][]): boolean{
+    for (let i = 0; i < 9; i++){
+        for (let j = 0; j < 9; j++){
+            if (newBoard[i][j].data !== newBoard[i][j].hiddenData){
+                console.log("CHECK GAME OVER FALSE");
+                return false;
+            }
+        }
+    }
+    console.log("CHECK GAME OVER TRUE");
+    return true;
+}
 
 /**
  * @brief A function that handles row and column highlights as well as 3x3 highlighting

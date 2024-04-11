@@ -11,13 +11,16 @@ import Timer, { TimerRef } from "./Timer";
 import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./Sudoku";
-export default function Home() {
+import Sudoku from "./Sudoku";
 
-	// var gameOver: boolean = false;
+export default function Home() {
+    // var gameOver: boolean = false;
     var used = 0;
 
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
+
+    const [gameOver, setGameOver] = useState(false);
     
     // A useState to access methods of the Timer
 	const timerRef = useRef<TimerRef>(null);
@@ -25,114 +28,118 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(false,used)
+        return initBoard(true, used)
     });
 
-    // A function to handle when the user clicks the solve button
+	// A function to handle when the user clicks the solve button
 	const handleClickSolveButton = () => {
+        if (!gameOver){
+            setGameOver(true);
+            // If the Timer exists and is running
+            if (timerRef.current?.getRunning()){
 
-        // If the Timer exists and is running
-        if (timerRef.current?.getRunning()){
-
-            // Stop the Timer
-            timerRef.current?.stop();
-            setIcon("play_circle");
-
-            setBoard(prevBoard => {
-                
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
+                // Stop the Timer
                 timerRef.current?.stop();
                 setIcon("play_circle");
-                Clear(newBoard);
-                solve_sbp(newBoard);
-                HandleHighlighting(4, 4, newBoard);
-                return newBoard;
-            });
+
+                setBoard(prevBoard => {
+                    
+                    // Inherit the previous board state
+                    const newBoard = [...prevBoard];
+                    timerRef.current?.stop();
+                    Clear(newBoard);
+                    solve_sbp(newBoard);
+                    HandleHighlighting(4, 4, newBoard);
+                    return newBoard;
+                });
+            }
         }
     }
 
     // A function to handle when the user clicks on the Timer's icon
 	const handleClickStartButton = () => {
-        console.log("handling start button");
+        if (!gameOver){
+            console.log("handling start button");
 
-        // If the Timer exists and ISN'T running (so we can start it)
-        if (!timerRef.current?.getRunning()) {
+            // If the Timer exists and ISN'T running (so we can start it)
+            if (!timerRef.current?.getRunning()) {
 
-            // Start the Timer
-            timerRef.current?.start();
-            setIcon("pause_circle");
+                // Start the Timer
+                timerRef.current?.start();
+                setIcon("pause_circle");
 
-            setBoard(prevBoard => {
+                setBoard(prevBoard => {
 
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
-                
-                // Apply the board state that was hidden from the user
-                ReApplyBoardState(newBoard);
-                
-                return newBoard;
-            });
+                    // Inherit the previous board state
+                    const newBoard = [...prevBoard];
+                    
+                    // Apply the board state that was hidden from the user
+                    ReApplyBoardState(newBoard);
+                    
+                    return newBoard;
+                });
+            }
         }
     };
 
     // A function to handle when the user clicks on the Timer's icon
 	const handleClickStopButton = () => {
-        console.log("handling stop button");
+        if (!gameOver){
+            console.log("handling stop button");
 
-        // If the Timer exists and IS running (so we can stop it)
-        if (timerRef.current?.getRunning()) {
+            // If the Timer exists and IS running (so we can stop it)
+            if (timerRef.current?.getRunning()) {
 
-            // Stop the Timer
-            timerRef.current?.stop(); 
-            setIcon("play_circle");
+                // Stop the Timer
+                timerRef.current?.stop(); 
+                setIcon("play_circle");
 
-            setBoard(prevBoard => {
+                setBoard(prevBoard => {
 
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
+                    // Inherit the previous board state
+                    const newBoard = [...prevBoard];
 
-                // Save the current board state to be able to hide it from the user
-                SaveBoardState(newBoard);
+                    // Save the current board state to be able to hide it from the user
+                    SaveBoardState(newBoard);
 
-                // Hide the board
-                HideBoard(newBoard);
-                return newBoard;
-            });
+                    // Hide the board
+                    HideBoard(newBoard);
+                    return newBoard;
+                });
+            }
         }
     };
 
     // A function to handle when the user clicks Clear
 	const handleClickClearButton = () => {
-        console.log("Clear button pressed");
-        if (timerRef.current?.getRunning()){
-            timerRef.current?.reset();
-            setBoard(prevBoard => {
+        if (!gameOver){
+            console.log("Clear button pressed");
+            if (timerRef.current?.getRunning()){
+                timerRef.current?.reset();
+                setBoard(prevBoard => {
 
-                // Inherit the previous board state
-                const newBoard = [...prevBoard];
+                    // Inherit the previous board state
+                    const newBoard = [...prevBoard];
 
-                // Save the current board state to be able to hide it from the user
-                
-                // Clear the board (except locked cells) and highlight at the origin of the board
-                Clear(newBoard);
-                SaveBoardState(newBoard);
-                
-                return newBoard;
-            });
+                    // Save the current board state to be able to hide it from the user
+                    
+                    // Clear the board (except locked cells) and highlight at the origin of the board
+                    Clear(newBoard);
+                    SaveBoardState(newBoard);
+                    
+                    return newBoard;
+                });
+            }
         }
     }
 
     // A function to handle when the user clicks New Game
 	const handleClickNewGame = () => {
-        setBoard(prevBoard => {
+        // Reset the Time the user has accumulated
+        timerRef.current?.reset();
 
-            // Reset the Time the user has accumulated
-            timerRef.current?.reset();
-
-            setIcon("pause_circle");
-            return initBoard(false,used);
-        });
+        setIcon("pause_circle");
+        setBoard(initBoard(true, used));
     };
 
     // A function to handle when the user selects a new difficulty
@@ -149,51 +156,66 @@ export default function Home() {
                 // Handle any errors
                 console.error(error);
             });
+
+        // Have something passed to generation algorithm
     }
 
     // A function to handle when the user presses on the panel off to the right-hand side of the board
     const handleClickPanel = (num: number) => {
-        setBoard(prevBoard => {
-            const newBoard = [...prevBoard];
+        if (!gameOver){
+            setBoard(prevBoard => {
+                const newBoard = [...prevBoard];
 
-            for (let i = 0; i < 9; i++) {
-                for (let j = 0; j < 9; j++) {
+                for (let i = 0; i < 9; i++) {
+                    for (let j = 0; j < 9; j++) {
 
-                    /******************************************
-                       Same algorithm as handleCellClickInput
-                    ******************************************/
-                   
-                    if (!newBoard[i][j].locked && newBoard[i][j].marked) {
-                        // Cast target to int, because it's incoming as a string
-                        let val = num;
-                        
-                        if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                            val = +newBoard[i][j].data;
-                            newBoard[i][j].data = '';
+                        /******************************************
+                         Same algorithm as handleCellClickInput
+                        ******************************************/
+                    
+                        if (!newBoard[i][j].locked && newBoard[i][j].marked) {
+                            // Cast target to int, because it's incoming as a string
+                            let val = num;
+                            
+                            if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                                val = +newBoard[i][j].data;
+                                newBoard[i][j].data = '';
+                            }
+                            else {
+                                val = +newBoard[i][j].data;
+                                newBoard[i][j].data = num.toString();
+                            }
+                            HandleHighlighting(i, j, newBoard, val);
+                            SaveBoardState(newBoard);
+                            break;
+                            // console.log(used);
                         }
-                        else {
-                            val = +newBoard[i][j].data;
-                            newBoard[i][j].data = num.toString();
-                        }
-                        HandleHighlighting(i, j, newBoard, val);
-                        SaveBoardState(newBoard);
-                        break;
-                        // console.log(used);
                     }
                 }
-            }
-            console.log("Panel Click in set: " + num.toString());
-            return newBoard;
-        });
+                console.log("Panel Click in set: " + num.toString());
+                return newBoard;
+            });
+        }
     }
 
 	return (
 		<div>
-            <nav className='navbar'>
-				<a href='/killer'>Killer</a>
-				<a href='#'>🏆 Leaderboard</a>
-				<a href='#'>Daily</a>
-			</nav>
+            <link rel="stylesheet" href="globals.css"></link>
+            <div className="buttonsContainerNavbar">
+                <div className="percent_33">
+                    <p>KillerSudoku.DrewMullett.net</p>
+                </div>
+                <div className="navbar">
+                    <a href='/sudoku'>Classic</a>
+                    <a href='#'>Leaderboard</a>
+                    {/* /leaderboard */}
+                    <a href='#'>Daily</a>
+                    {/* /daily */}
+                </div>
+                <div className="percent_33">
+                    {/* Avatar */}
+                </div>
+            </div>
             <hr className="solid"></hr>
             <div className="killerSudokuNames">
                 Zachary Wolfe, Drew Mullett, Kevin Belock, Nick Adkins
@@ -214,9 +236,9 @@ export default function Home() {
                     </button>
                 </div>
             <div>
-                <div className="buttonsContainerTwo">
+                <div className="mainContent">
                     <div className="killerSudokuTitle">
-                        Sudoku
+                        Killer Sudoku
                     </div>
                     <div className='timerContainer'>
                         <Timer ref={timerRef}></Timer>
@@ -226,7 +248,7 @@ export default function Home() {
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
                             <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
-                                <SudokuBoard board={board} setBoard={setBoard}></SudokuBoard>
+                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">
@@ -234,7 +256,7 @@ export default function Home() {
                                         <button className='solveButton' onClick={() => {handleClickSolveButton()}}>
                                             Solve
                                         </button>
-                                        <button className='solveButton' onClick={() => {handleClickClearButton()}}>
+                                        <button className='solveButton' onClick={() => handleClickClearButton()}>
                                             Clear
                                         </button>
                                     </div>

@@ -160,7 +160,7 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
             const char = arr[x][y].symbol;
             if (keyTrack[char] == false) {
                 keyTrack[char] = true;
-                board[x][y].topLeftNumber = arr[x][y].curSize;
+                board[x][y].topLeftNumber = arr[x][y].sum;
             }
         }
     }
