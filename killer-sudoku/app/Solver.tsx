@@ -13,24 +13,32 @@ import { kTile } from "./GenKiller";
  * @param {number} kARr (WIP) 
  * @returns {[number,number][]} array of changed tiles, stored as a tuple of [x,y], both numbers
  */
-export function solve_gen(board: genBoardType, kArr?: kTile[][]): [number,number][] {
+export function solve_gen(board: genBoardType, kInput: boolean | (kTile[][]) = false): [number,number][] {
     let changes: [number,number][] = [];
     let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
-    const killer: boolean = (typeof kArr !== undefined);
-    kArr = kArr as kTile[][];
+    
+    let kArr: kTile[][] = [];
+    const killer: boolean = (kInput !== false);
+    if (killer) kArr = kInput as kTile[][];
 
-    // If using killer sudoku, modify notes based on killer groups
+    // If using killer sudoku, initialize notes based on killer groups
     if (killer) {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
                 if (board.tile[x][y] != 0) continue;
-                let tile = kArr[x][y];
-                let minVal = -1, maxVal = -1;
+                let tile: kTile = kArr[x][y];
+                let minVal = -1, maxVal = 10;
                 if (tile.size == 2) {
                     minVal = (tile.sum-9 >= 1) ? tile.sum-9 : 1;
                     maxVal = (tile.sum-1 <= 9) ? tile.sum-1 : 9;
                 }
-                else {} //WIP
+                //else {}
+                for (let n = 1; n < minVal; n++) {
+                    board.note[x][y][n] = false;
+                }
+                for (let n = maxVal; n <= 9; n++) {
+                    board.note[x][y][n] = false;
+                }
             }
         }
     }  
