@@ -141,7 +141,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     // Initially highlight the board at the origin
     initBoardBoldLines(arr, kBoard, killer);
-    HandleHighlighting(4, 4, arr);
+    HandleHighlighting(4, 4, arr, false);
     SaveBoardState(arr);
     return arr;
 }

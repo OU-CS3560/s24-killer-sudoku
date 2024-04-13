@@ -48,7 +48,7 @@ export default function Home() {
                     timerRef.current?.stop();
                     Clear(newBoard);
                     solve_sbp(newBoard);
-                    HandleHighlighting(4, 4, newBoard);
+                    HandleHighlighting(4, 4, newBoard, false);
                     return newBoard;
                 });
             }
@@ -184,7 +184,7 @@ export default function Home() {
                                 val = +newBoard[i][j].data;
                                 newBoard[i][j].data = num.toString();
                             }
-                            HandleHighlighting(i, j, newBoard, val);
+                            HandleHighlighting(i, j, newBoard, false, val);
                             SaveBoardState(newBoard);
                             break;
                             // console.log(used);
@@ -256,7 +256,7 @@ export default function Home() {
                             <div className="spaceBottomRight">0</div>
                         </div>
                         <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
-                            <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></SudokuBoard>
+                            <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={false}></SudokuBoard>
                         </div>
                         <div className="panelConglomerate">
                             <div className="buttonsContainerTwo">

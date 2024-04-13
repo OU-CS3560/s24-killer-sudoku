@@ -31,6 +31,10 @@ export default function Home() {
         return initBoard(true, used)
     });
 
+    const [justPaused, setJustPaused] = useState(false);
+
+    const [gameStarted, setGameStarted] = useState(false);
+
 	// A function to handle when the user clicks the solve button
 	const handleClickSolveButton = () => {
         if (!gameOver){
@@ -49,7 +53,7 @@ export default function Home() {
                     timerRef.current?.stop();
                     Clear(newBoard);
                     solve_sbp(newBoard);
-                    HandleHighlighting(4, 4, newBoard);
+                    HandleHighlighting(4, 4, newBoard, justPaused);
                     return newBoard;
                 });
             }
@@ -63,21 +67,22 @@ export default function Home() {
 
             // If the Timer exists and ISN'T running (so we can start it)
             if (!timerRef.current?.getRunning()) {
-
-                // Start the Timer
-                timerRef.current?.start();
-                setIcon("pause_circle");
-
                 setBoard(prevBoard => {
-
-                    // Inherit the previous board state
                     const newBoard = [...prevBoard];
-                    
+                    if (!gameStarted){
+                        setGameStarted(!gameStarted);
+                        SaveBoardState(newBoard);
+                    }
                     // Apply the board state that was hidden from the user
                     ReApplyBoardState(newBoard);
+
+                    setJustPaused(false);
                     
                     return newBoard;
                 });
+                // Start the Timer
+                timerRef.current?.start();
+                setIcon("pause_circle");
             }
         }
     };
@@ -89,11 +94,6 @@ export default function Home() {
 
             // If the Timer exists and IS running (so we can stop it)
             if (timerRef.current?.getRunning()) {
-
-                // Stop the Timer
-                timerRef.current?.stop(); 
-                setIcon("play_circle");
-
                 setBoard(prevBoard => {
 
                     // Inherit the previous board state
@@ -104,6 +104,13 @@ export default function Home() {
 
                     // Hide the board
                     HideBoard(newBoard);
+
+                    setJustPaused(true);
+
+                    // Stop the Timer
+                    timerRef.current?.stop(); 
+                    setIcon("play_circle");
+
                     return newBoard;
                 });
             }
@@ -185,7 +192,7 @@ export default function Home() {
                                 val = +newBoard[i][j].data;
                                 newBoard[i][j].data = num.toString();
                             }
-                            HandleHighlighting(i, j, newBoard, val);
+                            HandleHighlighting(i, j, newBoard, justPaused, val);
                             SaveBoardState(newBoard);
                             break;
                             // console.log(used);
@@ -243,12 +250,12 @@ export default function Home() {
                     <div className='timerContainer'>
                         <Timer ref={timerRef}></Timer>
                         {/* eslint-disable-next-line */}
-                        <button className="material-symbols-outlined" onClick={icon == "pause_circle" ? () => handleClickStopButton() : () => handleClickStartButton()}>{icon}</button>
+                        <button className="material-symbols-outlined" onClick={icon === "pause_circle" ? () => handleClickStopButton() : () => handleClickStartButton()}>{icon}</button>
                     </div>
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
-                            <div onClick={() => {handleClickStartButton(); SaveBoardState(board)}}>
-                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon}></SudokuBoard>
+                            <div onClick={() => {handleClickStartButton();}}>
+                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={justPaused}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">
