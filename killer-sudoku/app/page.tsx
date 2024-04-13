@@ -170,38 +170,40 @@ export default function Home() {
     // A function to handle when the user presses on the panel off to the right-hand side of the board
     const handleClickPanel = (num: number) => {
         if (!gameOver){
-            setBoard(prevBoard => {
-                const newBoard = [...prevBoard];
-
-                for (let i = 0; i < 9; i++) {
-                    for (let j = 0; j < 9; j++) {
-
-                        /******************************************
-                         Same algorithm as handleCellClickInput
-                        ******************************************/
-                    
-                        if (!newBoard[i][j].locked && newBoard[i][j].marked) {
-                            // Cast target to int, because it's incoming as a string
-                            let val = num;
-                            
-                            if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
-                                val = +newBoard[i][j].data;
-                                newBoard[i][j].data = '';
+            if (icon !== "play_circle"){
+                setBoard(prevBoard => {
+                    const newBoard = [...prevBoard];
+    
+                    for (let i = 0; i < 9; i++) {
+                        for (let j = 0; j < 9; j++) {
+    
+                            /******************************************
+                             Same algorithm as handleCellClickInput
+                            ******************************************/
+                        
+                            if (!newBoard[i][j].locked && newBoard[i][j].marked) {
+                                // Cast target to int, because it's incoming as a string
+                                let val = num;
+                                
+                                if (val === 0) { // IMPORTANT: IF YOU ARE PRESSING DELETE (erase) ON A CELL, THE INPUT IS SET TO 0 REPEATEDLY, THUS, SET IT TO AN EMPTY VALUE
+                                    val = +newBoard[i][j].data;
+                                    newBoard[i][j].data = '';
+                                }
+                                else {
+                                    val = +newBoard[i][j].data;
+                                    newBoard[i][j].data = num.toString();
+                                }
+                                HandleHighlighting(i, j, newBoard, justPaused, val);
+                                SaveBoardState(newBoard);
+                                break;
+                                // console.log(used);
                             }
-                            else {
-                                val = +newBoard[i][j].data;
-                                newBoard[i][j].data = num.toString();
-                            }
-                            HandleHighlighting(i, j, newBoard, justPaused, val);
-                            SaveBoardState(newBoard);
-                            break;
-                            // console.log(used);
                         }
                     }
-                }
-                console.log("Panel Click in set: " + num.toString());
-                return newBoard;
-            });
+                    console.log("Panel Click in set: " + num.toString());
+                    return newBoard;
+                });
+            }
         }
     }
 
