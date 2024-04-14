@@ -20,6 +20,9 @@ import { useState, useImperativeHandle } from 'react';
  * @example
  * ```ts
  * const timerRef = useRef<TimerRef>(null);
+ * 
+ * // ? character used to check for a null timerReference
+ * // The function won't be called timerRef is null
  * timerRef.?start();
  * timerRef.?getRunning(); // Returns true
  * timerRef.?getTime(); // Returns number of seconds since start
