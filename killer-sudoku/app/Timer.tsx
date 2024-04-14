@@ -59,7 +59,7 @@ const Timer = React.forwardRef<TimerRef>((props, ref) => {
     }
 
     React.useEffect(() => {
-        let internalid: string | number | NodeJS.Timeout | undefined;
+        let internalid: NodeJS.Timeout | undefined;
 
         if(isRunning){
             //sets the time from 0 to 1 every second through javascript interval method

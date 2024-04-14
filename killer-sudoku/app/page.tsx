@@ -38,10 +38,9 @@ export default function Home() {
 	// A function to handle when the user clicks the solve button
 	const handleClickSolveButton = () => {
         if (!gameOver){
-            setGameOver(true);
             // If the Timer exists and is running
             if (timerRef.current?.getRunning()){
-
+                setGameOver(true);
                 // Stop the Timer
                 timerRef.current?.stop();
                 setIcon("play_circle");
@@ -70,7 +69,7 @@ export default function Home() {
                 setBoard(prevBoard => {
                     const newBoard = [...prevBoard];
                     if (!gameStarted){
-                        setGameStarted(!gameStarted);
+                        setGameStarted(true);
                         SaveBoardState(newBoard);
                     }
                     // Apply the board state that was hidden from the user
@@ -122,16 +121,15 @@ export default function Home() {
         if (!gameOver){
             console.log("Clear button pressed");
             if (timerRef.current?.getRunning()){
-                timerRef.current?.reset();
                 setBoard(prevBoard => {
 
                     // Inherit the previous board state
                     const newBoard = [...prevBoard];
-
-                    // Save the current board state to be able to hide it from the user
                     
                     // Clear the board (except locked cells) and highlight at the origin of the board
                     Clear(newBoard);
+
+                    // Save the current board state to be able to hide it from the user
                     SaveBoardState(newBoard);
                     
                     return newBoard;
@@ -147,6 +145,8 @@ export default function Home() {
 
         setIcon("pause_circle");
         setBoard(initBoard(true, used));
+        setGameStarted(true);
+        setJustPaused(false);
     };
 
     // A function to handle when the user selects a new difficulty

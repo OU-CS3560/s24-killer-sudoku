@@ -349,6 +349,7 @@ export function Clear(newBoard: SpaceButtonProperties[][]) {
             }
         }
     }
+    HandleHighlighting(4, 4, newBoard, false);
 }
 
 export function HideBoard(newBoard: SpaceButtonProperties[][]) {
