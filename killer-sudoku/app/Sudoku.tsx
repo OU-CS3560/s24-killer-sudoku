@@ -319,7 +319,6 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
             // if the highlight is not a red space
             if (newBoard[row][col].highlighted !== 'spaceNumberTaken' || newBoard[row][col].data === '' || doesntHaveRowColumnMatching(row, col, newBoard)) {
                 newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
-                console.log ("BEFORE HIGHLIGHTING ROW COL " + newBoard[row][col].highlighted);
                 newBoard[row][col].highlighted = 'spaceHighlightedLookingAtSpecific';
                 console.log('highlighting [row][col] ' + row + ', ' + col + ' with ' + newBoard[row][col].highlighted);
             }
@@ -363,13 +362,6 @@ export function HideBoard(newBoard: SpaceButtonProperties[][]) {
 }
 
 export function SaveBoardState(newBoard: SpaceButtonProperties[][]) {
-    console.log("saving this")
-    for (let i = 0; i < 9; i++){
-        for (let j = 0; j < 9; j++){
-            console.log("i: " + i + " j: " + j + " " + newBoard[i][j].highlighted + " with " + newBoard[i][j].data);
-        }
-    }
-
     console.log("save board state");
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
@@ -377,23 +369,9 @@ export function SaveBoardState(newBoard: SpaceButtonProperties[][]) {
             newBoard[i][j].savedData = newBoard[i][j].data;
         }
     }
-
-    console.log("saved as")
-    for (let i = 0; i < 9; i++){
-        for (let j = 0; j < 9; j++){
-            console.log("i: " + i + " j: " + j + " " + newBoard[i][j].previousHighlight + " with " + newBoard[i][j].savedData);
-        }
-    }
 }
 
 export function ReApplyBoardState(newBoard: SpaceButtonProperties[][]){
-    console.log("reapplying this")
-    for (let i = 0; i < 9; i++){
-        for (let j = 0; j < 9; j++){
-            console.log("i: " + i + " j: " + j + " " + newBoard[i][j].previousHighlight + " with " + newBoard[i][j].savedData);
-        }
-    }
-
     console.log("reapply board")
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
