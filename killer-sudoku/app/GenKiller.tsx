@@ -15,7 +15,7 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
  * @brief data type for containing information abt a killer sudoku group
  * @member sum sum of all numbers in this group
  * @member curSize number of tiles in this group
- * @member maxSize (WIP)
+ * @member maxSize maximum size of a particular group
  * @member symbol unique char for this group, mainly to identify
  *  the differences between each group (aka all tiles of the same group
  *  will have the same symbol attached to it)
@@ -24,7 +24,7 @@ const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
  *  in a kTile[][] point to the same kTile, thus not needing to worry abt
  *  updating all tiles, since those spots would just point to the same object
 */
-type kTile = {
+export type kTile = {
     sum: number,
     curSize: number,
     maxSize: number,
@@ -33,15 +33,10 @@ type kTile = {
 
 /** 
  * @brief Creates groups for killer sudoku based on the given board
- * @param {SpaceButtonProperties[][]} board board to write dashedBorder & topLeftNumber values to
- * @return None
+ * @param {number[][]} tiles input tile values (for calculating sums)
+ * @return {kTile[][]} 2d array of the killer groups
 */
-export function genKiller(board: SpaceButtonProperties[][]): void {
-
-    //checks if coords (x,y) are within board coordinates
-    const onBoard = (x: number, y: number): boolean => {
-        return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
-    }
+export function genKiller(tiles: number[][]): kTile[][] {
 
     //randomly chooses a number (1-5) based on CDF percentages
     const randMaxSize = (): number => {
@@ -61,10 +56,10 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
 
     //Initialize killer group grid
     let arr: kTile[][] = [];
-    for (let i = 0; i < 9; i++) {
-        arr[i] = [];
-        for (let j = 0; j < 9; j++) {
-            arr[i][j] = {sum: Number(board[i][j].hiddenData), curSize: 1, maxSize: 1, symbol: '.'};
+    for (let x = 0; x < 9; x++) {
+        arr[x] = [];
+        for (let y = 0; y < 9; y++) {
+            arr[x][y] = {sum: tiles[x][y], curSize: 1, maxSize: 1, symbol: '.'};
         }
     }
 
@@ -144,12 +139,23 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
             if (avaNeigh.length == 0) continue;
             const [a,b] = avaNeigh[rand(0,avaNeigh.length-1)];
             arr[a][b].curSize++;
-            arr[a][b].maxSize++;
+            if (arr[a][b].curSize > arr[a][b].maxSize) arr[a][b].maxSize++;
             arr[a][b].sum += arr[x][y].sum;
             arr[x][y] = arr[a][b]; //merged, both locations now point to same tile/info
             numOf1Groups--;
         }
     }
+
+    return arr;
+}
+
+/**
+ * @brief (WIP desc) apply topleftnum & dashedBorder to SBP[][]
+ * @param arr 
+ * @param board 
+ * @return None
+ */
+export function doKillerUIStuff(arr: kTile[][], board: SpaceButtonProperties[][]): void {
 
     let keyTrack: {[i: string]: boolean} = {};
     for (let char of kKey) {
@@ -177,4 +183,13 @@ export function genKiller(board: SpaceButtonProperties[][]): void {
             board[x][y].mutableStatus = `dashedBorder${neighbors.join('')}`;
         }
     }
+}
+
+export function undef_kArr(): kTile[][] {
+    return [[{sum: -1, curSize: -1, maxSize: -1, symbol: '?'}]];
+}
+
+//checks if coords (x,y) are within board coordinates
+function onBoard (x: number, y: number): boolean {
+    return ((0 <= x && x <= 8) && (0 <= y && y <= 8));
 }

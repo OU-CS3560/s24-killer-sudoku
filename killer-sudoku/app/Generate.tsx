@@ -6,8 +6,8 @@
 */
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
-import { solve_gen, genBoardType, makeBoard, boardAdd, boardRem } from "./Solver";
-import { genKiller } from "./GenKiller";
+import { solve_gen, genBoard } from "./Solver";
+import { kTile, genKiller, undef_kArr, doKillerUIStuff } from "./GenKiller";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -16,49 +16,47 @@ import { genKiller } from "./GenKiller";
  * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
 export function initBoard(killer: boolean, used: number): SpaceButtonProperties[][] {
-    if (KillerOverride) killer = true;
 
     console.log("initBoard: Start");
 
     let iter: number = 0;
 
-    const generate = (board: genBoardType): boolean => {
+    const generate = (board: genBoard): boolean => {
         if (iter++ > 50) {iter = 0; return true;}
         
         //Calls solver & records all changes it made
-        const changes: [number,number][] = solve_gen(board);
+        const numChanges: number = solve_gen(board);
         if (board.state) {
             if (board.occ == 81) return true;
 
             let x: number = 0, y: number = 0;
             do {
-                x = rand(0,8);
-                y = rand(0,8);
+                x = rand(0,8); y = rand(0,8);
             } while (board.tile[x][y] != 0);
 
             //Look through every available option
             for (let val of randomOptions(board.note[x][y])) { 
-                boardAdd(board,val,x,y);
+                board.add(val,x,y);
                 if (generate(board)) return true;
-                boardRem(board,x,y);
+                board.undo();
             }
         }
 
         //If board is unsolvable, undo all solver changes & return false
-        for (let ch of changes) boardRem(board,ch[0],ch[1]);
+        for (let i = 0; i < numChanges; i++) board.undo();
         board.state = true;
         return false;
     }
 
-    let board: genBoardType = makeBoard();
+    let board = new genBoard;
     do {
-        board = makeBoard();
+        board = new genBoard;
         generate(board);
-    } while (!isValid(board));
+    } while (!board.isValid());
 
     console.log("initBoard: Randomization complete");
 
-    let kBoard: kTile[][] = [];
+    let kBoard: kTile[][] = undef_kArr();
     if (killer) {
         kBoard = genKiller(board.tile);
         console.log("initBoard: Killer Generation complete");
@@ -86,32 +84,21 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     console.log(`initBoard: Difficulty: ${difficulty}. numShown: ${numShown}`);
 
+    // TODO: FIX "used++;" SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
+    // since i reworked everything i just moved this out here - Nick
+
     // Showing Tiles
-    let shown: genBoardType = makeBoard(), temp: genBoardType = makeBoard();
-    while (!isValid(temp)) {
-        shown = makeBoard(); temp = makeBoard();
+    let shown = new genBoard;
+    for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
+        shown = new genBoard; copy = new genBoard;
         for (let i = 0; i < numShown; i++) {
             let x: number = 0, y: number = 0;
             do {
                 x = rand(0,8); y = rand(0,8);
             } while (shown.tile[x][y] != 0)
-            boardAdd(shown,board.tile[x][y],x,y);
-            /**
-             * @todo FIX THIS SO THAT USED GETS INCREMENTED CORRECTLY THROUGHOUT RUNTIME
-            used++;
-            * i changed everything surrounding this code here, just FYI - Nick
-            */
+            shown.add(board.tile[x][y],x,y);
+            copy.add(board.tile[x][y],x,y);
         }
-        for (let x = 0; x < 9; x++) {
-            for (let y = 0; y < 9; y++) {
-                temp.tile[x][y] = shown.tile[x][y];
-                for (let n = 1; n <= 9; n++) {
-                    temp.note[x][y][n] = shown.note[x][y][n];
-                }
-            }
-        }
-        temp.occ = shown.occ; temp.state = shown.state;
-        solve_gen(temp,kBoard);
     }
 
     console.log("initBoard: Tile showing complete");
@@ -141,8 +128,8 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     console.log("initBoard: Initialization complete");
 
     if (killer) {
-        genKiller(arr);
-        console.log("initBoard: Killer board info complete");
+        doKillerUIStuff(kBoard,arr);
+        console.log("initBoard: Killer UI elements complete");
     };
 
     // Initially highlight the board at the origin
@@ -185,13 +172,13 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): void {
  * @return {void} None (input is passed by reference)
  */
 export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
-    let board: genBoardType = makeBoard();
+    let board = new genBoard;
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             const tile = boardSBP[x][y];
             //also fixes incorrect tiles so solver works properly
             if (tile.data == tile.hiddenData) {
-                boardAdd(board,toNum(tile.data),x,y)
+                board.add(toNum(tile.data),x,y);
             }
         }
     }
@@ -221,32 +208,6 @@ function toStr(input: number): string {
  */
 function toNum(input: string): number {
     return (input == '') ? 0 : Number(input);
-}
-
-/**
- * @brief determines if the given board is full & is a valid sudoku board
- * @param {genBoardType} board input board
- * @returns {boolean} true if full & valid/solved, false otherwise
- */
-function isValid(board: genBoardType): boolean {
-    for (let d1 = 0; d1 < 9; d1++) {
-        const a = (d1%3)*3, b = (d1/3>>0)*3;
-        let nums1: boolean[] = [];
-        let nums2: boolean[] = [];
-        let nums3: boolean[] = [];
-        for (let d2 = 0; d2 < 9; d2++) {
-            const tile1 = board.tile[d1][d2];
-            if (nums1[tile1] || tile1 == 0) return false;
-            nums1[tile1] = true;
-            const tile2 = board.tile[d2][d1];
-            if (nums2[tile2] || tile2 == 0) return false;
-            nums2[tile2] = true;
-            const tile3 = board.tile[a+(d2%3)][b+(d2/3>>0)];
-            if (nums3[tile3] || tile3 == 0) return false;
-            nums3[tile3] = true;
-        }
-    }
-    return true;
 }
 
 /**

@@ -5,30 +5,46 @@
  * @date     March 8, 2024
 */
 
-import { kTile } from "./GenKiller";
+import { kTile, undef_kArr } from "./GenKiller";
 
 /**
  * @brief takes input board & tries to solve it
- * @param {genBoardType} board input board to be solved (passed by reference) 
- * @param {number} kARr (WIP) 
- * @returns {[number,number][]} array of changed tiles, stored as a tuple of [x,y], both numbers
+ * @param {genBoard} board input board to be solved (passed by reference) 
+ * @param {kTile[][]} kArr (WIP) 
+ * @returns {number} number of changes that were made during this solve call
  */
-export function solve_gen(board: genBoardType, kInput: boolean | (kTile[][]) = false): [number,number][] {
-    let changes: [number,number][] = [];
+export function solve_gen(board: genBoard, kArr: kTile[][] = undef_kArr()): number {
+    let numChanges: number = 0;
     let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
-    
-    let kArr: kTile[][] = [];
-    const killer: boolean = (kInput !== false);
-    if (killer) kArr = kInput as kTile[][];
+    //const killer: boolean = (kArr[0][0].sum != -1);
 
-    // If using killer sudoku, initialize notes based on killer groups
+    const success = (val: number, x: number, y: number): void => {
+        numChanges++;
+        board.add(val,x,y);
+    }
+
+    // Method K0: If using killer sudoku within tile
+    // showing, initialize notes based on killer groups
+    /*
     if (killer) {
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
                 if (board.tile[x][y] != 0) continue;
                 let tile: kTile = kArr[x][y];
+                switch (tile.curSize) {
+                    case 1: {
+                        success(tile.sum,x,y,101); break;
+                    }
+                    case 2: {
+                        break;
+                    }
+                    default: break;
+                }
+                continue;
+
                 let minVal = -1, maxVal = 10;
-                if (tile.size == 2) {
+                
+                if (tile.curSize == 2) {
                     minVal = (tile.sum-9 >= 1) ? tile.sum-9 : 1;
                     maxVal = (tile.sum-1 <= 9) ? tile.sum-1 : 9;
                 }
@@ -39,224 +55,249 @@ export function solve_gen(board: genBoardType, kInput: boolean | (kTile[][]) = f
                 for (let n = maxVal; n <= 9; n++) {
                     board.note[x][y][n] = false;
                 }
+                
             }
         }
-    }  
-    
+    }
+    */
+
     for (let progress: boolean = true; progress == true;) {
         progress = false;
-
-        //solved a tile successfully, do stuff
-        const success = (val: number, x: number, y: number): void => {
-            progress = true; 
-            changes.push([x,y]);
-            boardAdd(board,val,x,y);
-        }
 
         // Method 1: if theres only one note in a tile, put it in
         for (let x = 0; x < 9; x++) { 
             for (let y = 0; y < 9; y++) {
                 if (tiles[x][y] != 0) continue;
-                let val: number = -1;
-                for (let n: number = 1; n <= 9; n++) {
-                    if (notes[x][y][n]) {
-                        val = (val == -1) ? n : -2;
+                switch (board.notesPerTile[x][y]) {
+                    case 1: {
+                        for (let n = 1; n <= 9; n++) {
+                            if (!notes[x][y][n]) continue;
+                            success(n,x,y);
+                            progress = true; 
+                        } break;
                     }
-                }
-                if (val >= 0) { //if there is one boolean true
-                    success(val,x,y);
-                }
-                if (val == -1) { //tile is blank w/ no possible options -> BAD, return
-                    board.state = false;
-                    return changes;
+                    case 0: {
+                        board.state = false;
+                        return numChanges;
+                    }
+                    default: break;
                 }
             }
         }
 
-        // Method 2: if theres only one note of a type in a row/col, put it in
-        for (let d1 = 0; d1 < 9; d1++) {
-            for (let n: number = 1; n <= 9; n++) {
-                let valR: number = -1;
-                for (let d2 = 0; d2 < 9; d2++) {
-                    if (tiles[d1][d2] == n) {
-                        valR = -3; break;
-                    }
-                    if (tiles[d1][d2] == 0 && notes[d1][d2][n]) {
-                        valR = (valR == -1) ? d2 : -2;
+        // Method 2: if theres only one note of a type in a row/col/3x3, put it in
+        for (let n: number = 1; n <= 9; n++) {
+            for (let d1 = 0; d1 < 9; d1++) {
+                if (board.notesPerRow[n][d1] == 1) {
+                    for (let d2 = 0; d2 < 9; d2++) {
+                        if (!notes[d1][d2][n]) continue;
+                        success(n,d1,d2);
+                        progress = true; 
                     }
                 }
-                if (valR >= 0) { //if there is one boolean true
-                    success(n,d1,valR);
-                }
-                let valC: number = -1;
-                for (let d2 = 0; d2 < 9; d2++) {
-                    if (tiles[d2][d1] == n) {
-                        valC = -3; break;
-                    }
-                    if (tiles[d2][d1] == 0 && notes[d2][d1][n]) {
-                        valC = (valC == -1) ? d2 : -2;
+                if (board.notesPerCol[n][d1] == 1) {
+                    for (let d2 = 0; d2 < 9; d2++) {
+                        if (!notes[d2][d1][n]) continue;
+                        success(n,d2,d1);
+                        progress = true; 
                     }
                 }
-                if (valC >= 0) { //if there is one boolean true
-                    success(n,valC,d1);
+                const a = d1/3>>0, b = d1%3;
+                if (board.notesPer3x3[n][a][b] == 1) {
+                    for (let d2 = 0; d2 < 9; d2++) {
+                        const x = 3*a+(d2/3>>0), y = 3*b+(d2%3);
+                        if (!notes[x][y][n]) continue;
+                        success(n,x,y);
+                        progress = true;
+                    }
                 }
             }
         }
 
-        // Method 3: if one note exists only in two/three tiles in a 3x3, and
-        // those are in same row/col, then remove all others in that row/col
-        // NOTE: This doesnt work properly, but i dont really have
-        // the time to fix it, need to focus on other things
-        /*{
-            //eliminate all notes in this row
-            const clearRow = (row: number, val: number): void => {
-                for (let y = 0; y < 9; y++) {
-                    notes[row][y][val] = false;
+        // Method 3: if two types of notes form a pair, then remove all other
+        //  notes from those tiles & those notes from that 3x3
+        //  TODO: also include triples too
+            //1: find how many of all given notes appear in a 3x3
+            //2: filter out any note not having exactly two 1s, then calc exact order (Like "100100000")
+            //3: compare all remaining strings. if two are equal, then ->
+            //3.1:  remove all other notes in those tiles, and all of these two notes in the 3x3
+            //4: else continue to next 3x3
+        /*for (let a = 0; a < 3; a++) {
+            for (let b = 0; b < 3; b++) {
+                let arr: number[] = [];
+                for (let n = 1; n <= 9; n++) {
+                    if (board.notesPer3x3[n][a][b] == 2) arr.push(n);
                 }
-            }
-            //eliminate all notes in this col
-            const clearCol = (col: number, val: number): void => {
-                for (let x = 0; x < 9; x++) {
-                    notes[x][col][val] = false;
-                }
-            }
-
-            for (let n: number = 1; n <= 9; n++) {
-                for (let x = 0; x < 9; x++) {
-                    let arr: [number,number][] = [];
-                    for (let y = 0; y < 9; y++) {
-                        const a = (y % 3)+(x % 3)*3, b = (y/3 >>0)+(x/3 >>0)*3;
-                        if (tiles[a][b] == n) {arr = []; break;}
-                        if (tiles[a][b] == 0 && notes[a][b][n]) arr.push([a,b]);
-                    }
-                    if (arr.length == 2) {
-                        if (arr[0][0] == arr[1][0]) { //if same 'a' val
-                            clearRow(arr[0][0],n);
-                        }
-                        if (arr[0][1] == arr[1][1]) { //if same 'b' val
-                            clearCol(arr[0][1],n);
-                        }
-                    }
-                    if (arr.length == 3) {
-                        if (arr[0][0] == arr[1][0] && arr[1][0] == (arr[2])[0]) { //if same 'a' val
-                            clearRow(arr[0][0],n); 
-                        }
-                        if (arr[0][1] == arr[1][1] && arr[1][1] == (arr[2])[1]) { //if same 'b' val
-                            clearCol(arr[0][1],n);
-                        }
-                    }
-                }
+                //WIP
             }
         }*/
 
-        // Method 4: if two types of notes form a pair, then remove all other
-        //  notes from those tiles & those notes from that 3x3
-        //{}
 
-        // Method 5: idk how else to describe it: its the last one in this link
+        // Method 4: if one note exists only in two/three tiles in a 3x3, and
+        //  those are in same row/col, then remove all others in that row/col
+            //1: For 3x Row: check boolean, skip 3x Row if false
+            //2: Check all tiles in 3x Row for given num
+            //3: if num appears twice, continue to next (& record), else count all notes
+            //4: if all notes in a given 3x3 line up, eliminate all others from that single row
+            //5: repeat process for cols
+        //for (let n: number = 1; n <= 9; n++) {
+            
+        //}
+
+        // Method 5: "X-Wing", idk how else to describe it: its the last one in this link
         //  https://www.conceptispuzzles.com/index.aspx?uri=puzzle/sudoku/techniques
-        //{}
+        //WIP
 
-        if (killer) {
-            // Method K1: if (n-1) # of tiles are known of a (n) tile group,
-            //  then last one can be calculated
-            //if (killer) {} 
-        }
+        //eliminate all notes in this row, except for certain y values
+        /*function clearRow(row: number, n: number, yVals: number[]): void {
+            if (debug) console.log(`Nar: ${n} @ R ${row} to -> ${yVals}`);
+            for (let y = 0; y < 9; y++) {
+                if (y == yVals[0] || y == yVals[1] || y == (yVals[2] ?? -1)) continue;
+                notes[row][y][n] = false;
+            }
+        }*/
+        //eliminate all notes in this col, except for certain x values
+        /*function clearCol(col: number, n: number, xVals: number[]): void {
+            if (debug) console.log(`Nar: ${n} @ C ${col} to -> ${xVals}`);
+            for (let x = 0; x < 9; x++) {
+                if (x == xVals[0] || x == xVals[1] || x == (xVals[2] ?? -1)) continue;
+                notes[x][col][n] = false;
+            }
+        }*/
     }
-    return changes;
+
+    return numChanges;
 }
 
 //Extra stuff below:
 
 /**
- * @brief data type used during the generation process
+ * @brief class used during the generation process
  * @member tile keeping track of the actual present values on the board
  * @member note keep track of all available options for the other tiles
  * @member occ number of tiles occupied
  * @member state set to false if board is unsolvable -> go back
+ * @member (WIP)
  */
-export type genBoardType = {
-    tile: number[][], note: boolean[][][], occ: number, state: boolean
-};
+export class genBoard {
+    tile: number[][]; //actual tiles of the board
+    note: boolean[][][]; //possible options per tile
+    occ: number; //number of tiles occupied
+    state: boolean; //false if error occurs & needs to back out in generation process
 
-/**
- * @brief creates a blank genBoardType, with each value initialized
- * @note looks weird, but this way there are no duplicate values, or arrays pointing to the same value
- * @returns {genBoardType} initialized board
- */
-export function makeBoard(): genBoardType {
-    const bl = () => {return [true,true,true,true,true,true,true,true,true,true]};
-    return {
-        tile: [
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0]],
-        note: [
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()],
-        [bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl(),bl()]],
-        occ: 0, state: true
-    };
-}
+    notesPerTile: number[][]; //number of notes in an empty tile (x,y)
+    notesPerRow: number[][]; //number of a note in a row (n,y)
+    notesPerCol: number[][]; //number of a note in a col (n,x)
+    notesPer3x3: number[][][]; //number of a note in a 3x3 (n,x/3,y/3)
+    //WIP: A lot more variations of this stuff
+    //m4Check: boolean[][][]; //WIP (n,x/3,y/3)
 
-/**
- * @brief Adds a value to a tile of a board, adjusts the notes accordingly
- * @param {genBoardType} board board to be modified
- * @param {number} val value being inserted
- * @param {number} x coordinate of this tile
- * @param {number} y coordinate of this tile
- * @returns {void} None
- */
-export function boardAdd(board: genBoardType, val: number, x: number, y: number): void {
-    board.tile[x][y] = val;
-    board.occ++;
-    const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
-    for (let i = 0; i < 9; i++) {
-        board.note[i][y][val] = false; //each in row
-        board.note[x][i][val] = false; //each in col
-        board.note[a+(i%3)][b+(i/3>>0)][val] = false; //each in 3x3
-        board.note[x][y][i+1] = false; //each in this tile
+    changes: [ //keeps track of every single tile & note change
+        number,number, //tile x & y coords
+        [number,number,number][] //all noted modified as a result of change in tile
+    ][]; //stored as an array (used like a stack)
+
+    /**
+     * @brief creates a blank genBoard, with each value initialized
+     * @note looks weird, but this way there are no duplicate values, or arrays pointing to the same value
+     */
+    constructor () {
+        const tr  =()=>{return [true,true,true,true,true,true,true,true,true,true];}
+        const Rtr =()=>{return [tr(),tr(),tr(),tr(),tr(),tr(),tr(),tr(),tr()];}
+        const R0  =()=>{return [0,0,0,0,0,0,0,0,0];}
+        const R9  =()=>{return [9,9,9,9,9,9,9,9,9];}
+        const TbT =()=>{return [[9,9,9],[9,9,9],[9,9,9]];}
+        //const fa  =()=>{return [[false,false,false],[false,false,false],[false,false,false]];}
+        
+        this.tile = [R0(),R0(),R0(),R0(),R0(),R0(),R0(),R0(),R0()];
+        this.note = [Rtr(),Rtr(),Rtr(),Rtr(),Rtr(),Rtr(),Rtr(),Rtr(),Rtr()];
+        this.occ = 0;
+        this.state = true;
+        this.notesPerTile = [R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9()];
+        this.notesPerRow = [[],R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9()];
+        this.notesPerCol = [[],R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9(),R9()];
+        this.notesPer3x3 = [[],TbT(),TbT(),TbT(),TbT(),TbT(),TbT(),TbT(),TbT(),TbT()];
+        //this.m4Check = [[],fa(),fa(),fa(),fa(),fa(),fa(),fa(),fa(),fa()];
+        this.changes = [];
     }
-}
 
-/**
- * @brief Removes a value from a tile of a board, adjusts the notes accordingly
- * @param {genBoardType} board board to be modified
- * @param {number} x coordinate of this tile
- * @param {number} y coordinate of this tile
- * @returns {void} None
- */
-export function boardRem(board: genBoardType, x: number, y: number): void {
-    const reCalcNote = (val:number, x: number, y: number): boolean => {
+    /**
+     * @brief Adds a value to a tile of a board, adjusts notes accordingly
+     * @param {number} val value being inserted
+     * @param {number} x coordinate of this tile
+     * @param {number} y coordinate of this tile
+     * @returns {void} None
+     */
+    add (val: number, x: number, y: number): void {
+        const handleNotes = (val: number, x: number, y: number): void => {
+            if (!this.note[x][y][val]) return;
+            this.note[x][y][val] = false;
+            this.notesPerTile[x][y]--;
+            this.notesPerRow[val][x]--;
+            this.notesPerCol[val][y]--;
+            this.notesPer3x3[val][x/3>>0][y/3>>0]--;
+            noteChanges.push([val,x,y]);
+        }
+        let noteChanges: [number,number,number][] = [];
+        this.tile[x][y] = val;
+        this.occ++;
         const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
         for (let i = 0; i < 9; i++) {
-            if (board.tile[i][y] == val) return false;
-            if (board.tile[x][i] == val) return false;
-            if (board.tile[a+(i%3)][b+(i/3>>0)] == val) return false;
+            handleNotes(val,i,y); //each in row
+            handleNotes(val,x,i); //each in col
+            handleNotes(val,(i%3)+a,(i/3>>0)+b); //each in 3x3
+            handleNotes(i+1,x,y); //each in this tile
+        }
+        this.changes.push([x,y,noteChanges]);
+    }
+
+    /**
+     * @brief Undo all changes from the most recent this.add call
+     * @param None
+     * @returns {[number,number,number]} tuple of [val,x,y] of the undone modification
+     */
+    undo (): [number,number,number] {
+        const [x0,y0,noteChanges] = this.changes.pop() ?? [0,0,[[this.tile[0][0],0,0]]];
+        let thisVal = -1;
+        if (x0 != -1 && y0 != -1) {
+            thisVal = this.tile[x0][y0];
+            this.tile[x0][y0] = 0;
+            this.occ--;
+        }
+        for (let [val,x,y] of noteChanges) {
+            this.note[x][y][val] = true;
+            this.notesPerTile[x][y]++;
+            this.notesPerRow[val][x]++;
+            this.notesPerCol[val][y]++;
+            this.notesPer3x3[val][x/3>>0][y/3>>0]++;
+        }
+        return [thisVal,x0,y0];
+    }
+
+    /**
+     * @brief determines if the given board is full & is a valid sudoku board
+     * @param None
+     * @returns {boolean} true if full & valid/solved, false otherwise
+     */
+    isValid (): boolean {
+        if (this.occ != 81) return false;
+        for (let d1 = 0; d1 < 9; d1++) {
+            const a = (d1%3)*3, b = (d1/3>>0)*3;
+            let nums1: boolean[] = [];
+            let nums2: boolean[] = [];
+            let nums3: boolean[] = [];
+            for (let d2 = 0; d2 < 9; d2++) {
+                const tile1 = this.tile[d1][d2];
+                if (nums1[tile1]) return false;
+                nums1[tile1] = true;
+                const tile2 = this.tile[d2][d1];
+                if (nums2[tile2]) return false;
+                nums2[tile2] = true;
+                const tile3 = this.tile[a+(d2%3)][b+(d2/3>>0)];
+                if (nums3[tile3]) return false;
+                nums3[tile3] = true;
+            }
         }
         return true;
-    }
-    const val = board.tile[x][y];
-    board.tile[x][y] = 0;
-    board.occ--;
-    const a = (x/3 >>0)*3, b = (y/3 >>0)*3;
-    for (let i = 0; i < 9; i++) {
-        if (board.tile[i][y] == 0) board.note[i][y][val] = reCalcNote(val,i,y); //each in row
-        if (board.tile[x][i] == 0) board.note[x][i][val] = reCalcNote(val,x,i); //each in col
-        const c = a+(i%3), d = b+(i/3>>0);
-        if (board.tile[c][d] == 0) board.note[c][d][val] = reCalcNote(val,c,d); //each in 3x3
-        board.note[x][y][i+1] = reCalcNote(i+1,x,y); //each in this tile
     }
 }
