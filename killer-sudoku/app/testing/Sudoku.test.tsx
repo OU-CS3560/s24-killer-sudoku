@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { HideBoard } from "./Sudoku";
-import { initBoard } from "./Generate";
+import { hideBoardTSFile } from "./hideBoard";
+import initBoard from "./initBoard";
 
 describe("check that the numbers define the start of a 3x3 cell", () => {
     // row
@@ -14,10 +14,10 @@ describe("check that the numbers define the start of a 3x3 cell", () => {
     });
 });
 
-describe("", () => {
-    let newBoard = initBoard(false, 0);
-    HideBoard(newBoard);
+let newBoard = initBoard(false, 0);
+hideBoardTSFile(newBoard);
 
+describe("", () => {
     for (let i = 0; i < 9; i++){
         for (let j = 0; j < 9; j++){
             test("checks that all cells are of highlighted status -> space", () => {
