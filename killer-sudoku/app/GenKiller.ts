@@ -1,5 +1,5 @@
 /**
- * @file     GenKiller.tsx
+ * @file     GenKiller.ts
  * @author   Nicholas Adkins <na761422@ohio.edu>
  * @brief    Generation of Killer Sudoku groups & etc
  * @date     March 31, 2024

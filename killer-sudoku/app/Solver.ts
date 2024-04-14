@@ -1,5 +1,5 @@
 /**
- * @file     Solver.tsx
+ * @file     Solver.ts
  * @author   Nicholas Adkins <na761422@ohio.edu>
  * @brief    Function to solve a board / make progress in solving it
  * @date     March 8, 2024
