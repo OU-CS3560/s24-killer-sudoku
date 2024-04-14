@@ -40,6 +40,8 @@ Safari renders items differently than Google Chrome, please use Google Chrome to
 
 If the installation process isn't working try these solutions:
 
+### Please note that you must be on a UNIX based system to execute these commands. Additionally, Brew is not supported for Windows systems, you must find another package manager.
+
 - `sudo apt update`
 - `sudo apt-get upgrade`
 - `sudo apt-get install`
