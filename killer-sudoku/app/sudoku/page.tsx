@@ -146,6 +146,7 @@ export default function Home() {
         setBoard(initBoard(true, used));
         setGameStarted(true);
         setJustPaused(false);
+        setGameOver(false);
     };
 
     // A function to handle when the user selects a new difficulty
