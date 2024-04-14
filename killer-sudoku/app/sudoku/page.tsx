@@ -143,7 +143,7 @@ export default function Home() {
         timerRef.current?.reset();
 
         setIcon("pause_circle");
-        setBoard(initBoard(true, used));
+        setBoard(initBoard(false, used));
         setGameStarted(true);
         setJustPaused(false);
         setGameOver(false);
