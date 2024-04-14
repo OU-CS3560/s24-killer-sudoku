@@ -17,6 +17,15 @@ import { useState, useImperativeHandle } from 'react';
  * @remarks
  * Uses the Javascript interval method {@link https://www.w3schools.com/jsref/met_win_setinterval.asp} to set the frequency to one second
  * 
+ * @example
+ * ```ts
+ * const timerRef = useRef<TimerRef>(null);
+ * timerRef.?start();
+ * timerRef.?getRunning(); // Returns true
+ * timerRef.?getTime(); // Returns number of seconds since start
+ * timerRef.?stop();
+ * ```
+ * 
  * @interface
  * 
  */
