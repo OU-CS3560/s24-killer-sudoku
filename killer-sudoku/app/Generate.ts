@@ -117,7 +117,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
                 savedData: tile,
                 hiddenData: hidd,
                 fixedStatus: '',
-                mutableStatus: '',
+                mutableStatus: 'dashedBorder1111',
                 locked: (tile != ''), // <-- Lock the tile if it's not blank
                 previousHighlight: 'space',
                 marked: false,
