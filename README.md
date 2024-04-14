@@ -25,14 +25,22 @@ Our application utilizes the typical Typescript back-end and CSS front-end. Addi
 
 This application is built on Next.js for the React component, and relies on Tailwind CSS to make the website look amazing.
 
-## How to build/compile
+## How to build locally
 
-- To build this project you must have the most recent versions of NPM, NODE, and BREW. 
-- Install these by executing, `sudo apt install brew` or windows equivalent && `brew install node`.
-- Installing node will also install npm. 
-- Check that these dependencies are installed with `node -v && npm -v`. They should be the latest releases.
-- Compile the project by simply executing `make` in a ZSH, BASH, or Ubuntu WSL terminal **OR** build by `npm run build`, and start by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
-- Go to the posted team-killer-sudoku [website](https://sudoku.drewmullett.net) and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways. If you run into issues, see `Known Issues`.
+> Note: These commands are run in a UNIX based environment, Windows commands are not in this documentation.
+
+> Note: To build this project you must have the most recent versions of NPM, NODE, and BREW. 
+- Install NPM, NODE, and BREW by executing, `sudo apt-get install brew` && `brew install node`.
+> Note: Installing NODE will also install NPM. NVM may also work. 
+- Check that these are installed with `node -v && npm -v`. They should be the latest releases.
+
+- Compile the project by simply executing `make` in a ZSH, BASH, or Ubuntu WSL terminal in the /s24-killer-sudoku directory **_OR_** build by `npm run build`, and start by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
+
+#### If you run into issues, please see [Known Issues](#known-issues).
+
+### Viewing on our Linode server
+
+- Go to the posted team-killer-sudoku [website](https://sudoku.drewmullett.net) and try it out! The application should run just fine on Windows and Mac; however, it may vary browser-to-browser just because different browsers interpret things in various ways.
 
 ## Known Issues
 
@@ -46,7 +54,7 @@ If the installation process isn't working try these solutions:
 - `sudo apt-get upgrade`
 - `sudo apt-get install`
 
-then:
+### then:
 
 - `sudo apt-get install brew`
 - Check Homebrew is installed by, `brew -v`, if not, follow Homebrew issues.
@@ -57,17 +65,18 @@ Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 - `npm -v`
 - `node -v`
 
-Homebrew issues:
+### Homebrew issues:
 
 - `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 - `(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/$USER/.bashrc`
 
-NPM Error, `npm ERR! killer-sudoku@0.1.0 build: next build`   OR   `sh-next01 ERR`:
+### NPM Error, 
+`npm ERR! killer-sudoku@0.1.0 build: next build` **OR** `sh-next01 ERR`:
 - `npm install next`
 
-Additional Possibilities:
-- Need WSL update
-- Ensure you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows subsystem for Linux enabled.
-- Add homebrew to your path
-- Homebrew isn't installed (`brew -v`)
-- Git is not installed, (`sudo apt-get install git -y`)
+### Additional Possibilities:
+- You need a WSL terminal (Windows Subsystem for Linux) update. I.e **Ubuntu 14.04.1 lTS -> Ubuntu 24.04 LTS**.
+- Double check you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows Subsystem for Linux enabled in your Windows settings.
+- Add Homebrew to your path
+- Homebrew isn't installed (`brew -v`) should yield 4.2.17 or higher.
+- Git is not installed, (`sudo apt-get install git -y`) should yield 2.39.2 or higher.
