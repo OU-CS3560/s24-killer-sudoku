@@ -11,13 +11,49 @@ import * as React from 'react';
 import { useState, useImperativeHandle } from 'react';
 
 // The interface used to create a cross reference to the Sudoku class
+/**
+ * Interface that allows the program control and access the timer on the Sudoku board
+ *     
+ * @remarks
+ * Uses the Javascript interval method {@link https://www.w3schools.com/jsref/met_win_setinterval.asp} to set the frequency to one second
+ * 
+ * @example
+ * ```ts
+ * const timerRef = useRef<TimerRef>(null);
+ * 
+ * // ? character used to check for a null timerReference
+ * // The function won't be called timerRef is null
+ * timerRef.?start();
+ * timerRef.?getRunning(); // Returns true
+ * timerRef.?getTime(); // Returns number of seconds since start
+ * timerRef.?stop();
+ * ```
+ * 
+ * @interface
+ * 
+ */
 export interface TimerRef {
+    /** Starts the timer */
     start:      () => void;
+    /** Stops the timer */
     stop:       () => void;
+    /** Resets the timer */
     reset:      () => void;
+    /** 
+     * Shows if timer is currently running
+     */
     getRunning: () => boolean;
+    /**
+     * Shows the current time
+     */
     getTime:    () => number;
+    /**
+     * Shows the time in minutes
+     */
     getMinutes: () => number;
+    /**
+     * Shows time in seconds
+     */
     getSeconds: () => number;
 }
 
