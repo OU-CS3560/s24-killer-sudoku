@@ -79,4 +79,4 @@ Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 - Double check you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows Subsystem for Linux enabled in your Windows settings.
 - Add Homebrew to your path
 - Homebrew isn't installed (`brew -v`) should yield 4.2.17 or higher.
-- Git is not installed, (`sudo apt-get install git -y`) should yield 2.39.2 or higher.
+- Git isn't installed or isn't the correct version, (`sudo apt-get install git -y`) should yield 2.39.2 or higher.
