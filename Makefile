@@ -2,10 +2,10 @@
 .PHONY: run server t test v version
 
 run:
-	@(cd killer-sudoku; npm run build; npm run start)
+	@(cd killer-sudoku; npm run build && npm run start)
 
 server:
-	@(git pull; cd killer-sudoku; npm run build; npm run start)
+	@(git pull; cd killer-sudoku; npm run build && npm run start)
 
 t: test
 

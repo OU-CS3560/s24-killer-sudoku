@@ -6,7 +6,7 @@
 */
 
 import { rand } from "./Generate";
-import { SpaceButtonProperties } from "./Sudoku";
+import { SpaceButtonProperties } from "./SudokuFuncs";
 
 //character used as a unique identifier for each group
 const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
