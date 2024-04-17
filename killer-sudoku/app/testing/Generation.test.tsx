@@ -16,7 +16,6 @@ describe("", ()=>{
     });
 });
 
-
 //TODO: Check if tile hiding system hides
 // the correct number of tiles
 
