@@ -5,7 +5,7 @@
  * @date     February 26, 2024
 */
 
-import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./Sudoku";
+import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./SudokuFuncs";
 import { solve_gen, genBoard } from "./Solver";
 import { kTile, genKiller, undef_kArr, doKillerUIStuff } from "./GenKiller";
 

@@ -10,7 +10,8 @@
 import Timer, { TimerRef } from "../Timer";
 import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "../Generate";
-import SudokuBoard, { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../Sudoku";
+import SudokuBoard  from "../Sudoku";
+import { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../SudokuFuncs"
 export default function Home() {
 
 	// var gameOver: boolean = false;
