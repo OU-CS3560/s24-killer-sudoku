@@ -239,6 +239,7 @@ export class genBoard {
             noteChanges.push([val,x,y]);
         }
         let noteChanges: [number,number,number][] = [];
+        if (this.tile[x][y] != 0) return;
         this.tile[x][y] = val;
         this.occ++;
         const a = (x/3 >>0)*3, b = (y/3 >>0)*3;

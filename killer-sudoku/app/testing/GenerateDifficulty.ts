@@ -5,7 +5,7 @@
  * @date     February 26, 2024
 */
 
-import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "../Sudoku";
+import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "../SudokuFuncs";
 import { solve_gen, genBoard } from "../Solver";
 import { kTile, genKiller, undef_kArr, doKillerUIStuff } from "../GenKiller";
 
@@ -87,8 +87,9 @@ export function initBoard(killer: boolean, used: number, difficulty: string): Sp
 
     // Showing Tiles
     let shown = new genBoard;
-    for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
-        shown = new genBoard; copy = new genBoard;
+    let copy = new genBoard;
+    // for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
+    //     shown = new genBoard; copy = new genBoard;
         for (let i = 0; i < numShown; i++) {
             let x: number = 0, y: number = 0;
             do {
@@ -97,7 +98,7 @@ export function initBoard(killer: boolean, used: number, difficulty: string): Sp
             shown.add(board.tile[x][y],x,y);
             copy.add(board.tile[x][y],x,y);
         }
-    }
+    // }
 
     console.log("initBoard: Tile showing complete");
 
@@ -131,8 +132,8 @@ export function initBoard(killer: boolean, used: number, difficulty: string): Sp
     }
 
     // Initially highlight the board at the origin
-    initBoardBoldLines(arr);
-    HandleHighlighting(4, 4, arr, false);
+    // initBoardBoldLines(arr);
+    // HandleHighlighting(4, 4, arr, false);
     SaveBoardState(arr);
     return arr;
 }

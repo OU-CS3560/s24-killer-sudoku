@@ -1,17 +1,16 @@
 
-.PHONY: run server u update v version
+.PHONY: run server t test v version
 
 run:
-	@(cd killer-sudoku; npm run build; npm run start)
+	@(cd killer-sudoku; npm run build && npm run start)
 
 server:
-	@(git pull; cd killer-sudoku; npm run build; npm run start)
+	@(git pull; cd killer-sudoku; npm run build && npm run start)
 
-u: update
+t: test
 
-update:
-	@sudo apt update
-	@sudo apt-get upgrade
+test:
+	@(cd killer-sudoku; npm run test)
 
 v: version
 
