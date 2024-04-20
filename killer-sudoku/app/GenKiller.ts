@@ -6,7 +6,7 @@
 */
 
 import { rand } from "./Generate";
-import { SpaceButtonProperties } from "./Sudoku";
+import { SpaceButtonProperties } from "./SudokuFuncs";
 
 //character used as a unique identifier for each group
 const kKey: string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -31,6 +31,20 @@ export type kTile = {
     symbol: string
 };
 
+/**
+ * @brief Map corresponding to the chances a group may
+ *  contain a certain maximum number of tiles.
+ *  Feel free to change these values
+ * @note This is Percentage CDF, not a PMF/PDF.
+ */
+const killerGroupCDF = new Map<number,number> ([
+    [1, 10], //10%
+    [2, 45], //35%
+    [3, 80], //35%
+    [4, 95], //15%
+    [5, 100] //5%
+]);
+
 /** 
  * @brief Creates groups for killer sudoku based on the given board
  * @param {number[][]} tiles input tile values (for calculating sums)
@@ -40,17 +54,9 @@ export function genKiller(tiles: number[][]): kTile[][] {
 
     //randomly chooses a number (1-5) based on CDF percentages
     const randMaxSize = (): number => {
-        //Percent Configuration (this is a CDF, not a PDF)
-        const percentCDF = new Map<number,number> ([
-            [1, 10],
-            [2, 45],
-            [3, 80],
-            [4, 95],
-            [5, 100]
-        ]);
         const rNum = Math.random()*100;
         let n: number = 1;
-        while ((percentCDF.get(n) ?? 100) <= rNum) n++;
+        while ((killerGroupCDF.get(n) ?? 100) <= rNum) n++;
         return n;
     }
 

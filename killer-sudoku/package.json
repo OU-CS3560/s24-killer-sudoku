@@ -10,10 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "babbel": "^3.0.12",
+    "babel": "^3.0.12",
     "next": "14.1.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-test-renderer": "^18.2.0",
+    "wrap-ansi": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
@@ -28,7 +30,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
-    "tailwindcss": "^3.3.0",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5"
   }
 }
