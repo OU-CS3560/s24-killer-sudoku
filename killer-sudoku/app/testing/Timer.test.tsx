@@ -1,7 +1,7 @@
 const { it } = require("node:test");
 import { describe, expect, jest, test } from "@jest/globals";
 import { hasUncaughtExceptionCaptureCallback } from 'process';
-import {timer} from './timer-test.ts';
+import {timer} from './timer-test';
 
 
 

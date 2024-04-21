@@ -10,7 +10,7 @@
 /coverage
 
 # documentation
-/docs   
+docs   
 
 # next.js
 /.next/
