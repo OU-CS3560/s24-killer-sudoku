@@ -16,7 +16,7 @@ import { kTile, genKiller, undef_kArr, doKillerUIStuff } from "./GenKiller";
  * @param {number} used (WIP?)
  * @returns {SpaceButtonProperties[][]} A 9x9 board, both with visible & hidden values on every tile
  */
-export function initBoard(killer: boolean, used: number): SpaceButtonProperties[][] {
+export function initBoard(killer: boolean, used: number, difficulty: string): SpaceButtonProperties[][] {
 
     console.log("initBoard: Start");
 
@@ -64,7 +64,6 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     }
 
     // Eventually have this value come from a UI element, instead of being defined here
-    const difficulty: string = "Medium";
 
     // Also feel free to change around these difficulty values a bit
     // The number signifies how many tiles (out of 81) are shown at start
@@ -90,7 +89,8 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     // Showing Tiles
     let shown = new genBoard;
-    for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
+    let copy = new genBoard;
+    // for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
         shown = new genBoard; copy = new genBoard;
         for (let i = 0; i < numShown; i++) {
             let x: number = 0, y: number = 0;
@@ -100,7 +100,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
             shown.add(board.tile[x][y],x,y);
             copy.add(board.tile[x][y],x,y);
         }
-    }
+    // }
 
     console.log("initBoard: Tile showing complete");
 

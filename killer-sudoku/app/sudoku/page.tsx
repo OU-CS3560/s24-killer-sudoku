@@ -12,6 +12,9 @@ import React, { useRef, useState } from 'react'
 import { solve_sbp, initBoard } from "../Generate";
 import SudokuBoard  from "../Sudoku";
 import { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "../SudokuFuncs"
+
+let difficulty : string = "Normal";
+
 export default function Home() {
 
 	// var gameOver: boolean = false;
@@ -28,7 +31,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(false, used)
+        return initBoard(false, used, difficulty)
     });
 
     const [justPaused, setJustPaused] = useState(false);
@@ -144,7 +147,7 @@ export default function Home() {
         timerRef.current?.reset();
 
         setIcon("pause_circle");
-        setBoard(initBoard(false, used));
+        setBoard(initBoard(false, used, difficulty));
         setGameStarted(true);
         setJustPaused(false);
         setGameOver(false);
@@ -152,19 +155,21 @@ export default function Home() {
 
     // A function to handle when the user selects a new difficulty
 	const handleClickDifficultyButton = (buttonName: string) => {
-        console.log(buttonName, " Killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the retrieved data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
+        console.log(buttonName, " Sudoku puzzle requested");
+        // alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
+        // fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         // Handle the retrieved data
+        //         console.log(data);
+        //     })
+        //     .catch(error => {
+        //         // Handle any errors
+        //         console.error(error);
+        //     });
 
+        difficulty = buttonName;
+        setBoard(initBoard(false, used, difficulty))
         // Have something passed to generation algorithm
     }
 
