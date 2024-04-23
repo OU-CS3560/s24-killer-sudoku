@@ -1,0 +1,33 @@
+
+> killer-sudoku@0.1.0 test
+> jest Generation.test.tsx
+
+PASS app/testing/Generation.test.tsx
+  When Adding to a genBoard tile
+    ✓ tile gets updated (3 ms)
+    ✓ note in tile is turned off
+    ✓ occ is now incremented
+    notesPerTile
+      ✓ ...is now 0 for this tile (1 ms)
+      ✓ ...is now 8 for other tiles
+    notesPerRow
+      ✓ ...is now 0 for this row
+      ✓ ...is now 6 for other rows in this 3x3 (1 ms)
+      ✓ ...is now 8 for other rows
+    changes
+      ✓ ... latest has a total of 29 changes
+  When Removing From the board
+    ✓ tile is now blank (1 ms)
+    ✓ note in tile is now available
+    ✓ occ is now decremented (1 ms)
+  Calling genKiller
+    ✓ 1 <= kBoard size <= 5 (39 ms)
+  Calling solve_gen
+    ✓ Method 1 Works (1 ms)
+    ✓ Method 2 Works
+
+Test Suites: 1 passed, 1 total
+Tests:       15 passed, 15 total
+Snapshots:   0 total
+Time:        0.719 s, estimated 1 s
+Ran all test suites matching /Generation.test.tsx/i.
