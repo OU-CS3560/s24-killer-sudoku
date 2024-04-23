@@ -47,7 +47,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     if (newBoard[j][k].highlighted !== 'spaceNumberTaken') {
                         newBoard[j][k].previousHighlight = newBoard[j][k].highlighted;
                         newBoard[j][k].highlighted = 'space'
-                        console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
+                     //   console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
                     }
     
                     if (newBoard[j][k].marked){
