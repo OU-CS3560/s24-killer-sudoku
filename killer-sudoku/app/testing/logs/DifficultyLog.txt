@@ -1,0 +1,105 @@
+
+> killer-sudoku@0.1.0 test
+> jest Difficulty.test.tsx
+
+  console.log
+    initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+  console.log
+    initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+  console.log
+    initBoard: Difficulty: Medium. numShown: 31
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+  console.log
+    initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+  console.log
+    initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+  console.log
+    save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+  console.log
+    initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+  console.log
+    initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+  console.log
+    initBoard: Difficulty: Gibberish. numShown: 81
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+  console.log
+    initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+  console.log
+    initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+  console.log
+    save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+  console.log
+    initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+  console.log
+    initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+  console.log
+    initBoard: Difficulty: K-Expert. numShown: 0
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+  console.log
+    initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+  console.log
+    initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+  console.log
+    save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+PASS app/testing/Difficulty.test.tsx
+  Test board generation
+    ✓ Check if correct number of tiles are revealed for a regular sudoku puzzle (35 ms)
+    ✓ Check for incorrect difficulty (27 ms)
+    ✓ Test for high difficulty (10 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.67 s, estimated 1 s
+Ran all test suites matching /Difficulty.test.tsx/i.
