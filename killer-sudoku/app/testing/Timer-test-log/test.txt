@@ -1,0 +1,14 @@
+
+> killer-sudoku@0.1.0 test
+> jest Timer.test.ts
+
+PASS app/testing/Timer.test.tsx
+  ✓ Checks how many seconds have passed using advance time (2 ms)
+  ✓ Checks how many minutes have passed using advance Time (1 ms)
+  ✓ Checks if it resets correctly (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        0.272 s, estimated 1 s
+Ran all test suites matching /Timer.test.ts/i.
