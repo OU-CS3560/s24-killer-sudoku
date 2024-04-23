@@ -1,0 +1,260 @@
+
+> killer-sudoku@0.1.0 test
+> jest Sudoku.test.tsx
+
+  console.log
+    initBoard: Start
+
+      at log (app/Generate.ts:21:13)
+
+  console.log
+    initBoard: Randomization complete
+
+      at log (app/Generate.ts:58:13)
+
+  console.log
+    initBoard: Difficulty: Medium. numShown: 31
+
+      at log (app/Generate.ts:86:13)
+
+  console.log
+    initBoard: Tile showing complete
+
+      at log (app/Generate.ts:105:13)
+
+  console.log
+    initBoard: Initialization complete
+
+      at log (app/Generate.ts:129:13)
+
+  console.log
+    1 highlighting [i][col] 0, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 0 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 1, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 1 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 2, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 2 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 3, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 3 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 5, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 5 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 6, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 6 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 7, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 7 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    1 highlighting [i][col] 8, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+  console.log
+    1 highlighting  [row][i] 4, 8 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+  console.log
+    consttopleft Highlighting square at 3, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 3, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 3, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 4, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 4, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 4, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 5, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 5, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    consttopleft Highlighting square at 5, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+  console.log
+    highlighting [row][col] 4, 4 with spaceHighlightedLookingAtSpecific
+
+      at log (app/SudokuFuncs.ts:150:25)
+
+  console.log
+    save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+  console.log
+    hide board
+
+      at log (app/SudokuFuncs.ts:182:13)
+
+PASS app/testing/Sudoku.test.tsx
+  check that the numbers define the start of a 3x3 cell
+    ✓ checks that if we click on a cell in row 2 that the highlighting starts at row 0 (3 ms)
+    ✓ checks that if we click on a cell in column 4 that highlighting starts at 3  (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space (1 ms)
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+    ✓ checks that all cells are of highlighted status -> space
+
+Test Suites: 1 passed, 1 total
+Tests:       83 passed, 83 total
+Snapshots:   0 total
+Time:        0.747 s, estimated 1 s
+Ran all test suites matching /Sudoku.test.tsx/i.
