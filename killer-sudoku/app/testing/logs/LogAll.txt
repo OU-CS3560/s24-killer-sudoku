@@ -1,0 +1,273 @@
+
+> killer-sudoku@0.1.0 test
+> jest .
+
+PASS app/testing/Difficulty.test.tsx
+  ● Console
+
+    console.log
+      initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+    console.log
+      initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+    console.log
+      initBoard: Difficulty: Medium. numShown: 31
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+    console.log
+      initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+    console.log
+      initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+    console.log
+      save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+    console.log
+      initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+    console.log
+      initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+    console.log
+      initBoard: Difficulty: Gibberish. numShown: 81
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+    console.log
+      initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+    console.log
+      initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+    console.log
+      save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+    console.log
+      initBoard: Start
+
+      at log (app/testing/GenerateDifficulty.ts:21:13)
+
+    console.log
+      initBoard: Randomization complete
+
+      at log (app/testing/GenerateDifficulty.ts:58:13)
+
+    console.log
+      initBoard: Difficulty: K-Expert. numShown: 0
+
+      at log (app/testing/GenerateDifficulty.ts:83:13)
+
+    console.log
+      initBoard: Tile showing complete
+
+      at log (app/testing/GenerateDifficulty.ts:103:13)
+
+    console.log
+      initBoard: Initialization complete
+
+      at log (app/testing/GenerateDifficulty.ts:127:13)
+
+    console.log
+      save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+PASS app/testing/Sudoku.test.tsx
+  ● Console
+
+    console.log
+      initBoard: Start
+
+      at log (app/Generate.ts:21:13)
+
+    console.log
+      initBoard: Randomization complete
+
+      at log (app/Generate.ts:58:13)
+
+    console.log
+      initBoard: Difficulty: Medium. numShown: 31
+
+      at log (app/Generate.ts:86:13)
+
+    console.log
+      initBoard: Tile showing complete
+
+      at log (app/Generate.ts:105:13)
+
+    console.log
+      initBoard: Initialization complete
+
+      at log (app/Generate.ts:129:13)
+
+    console.log
+      1 highlighting [i][col] 0, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 0 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 1, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 1 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 2, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 2 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 3, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 3 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 5, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 5 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 6, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 6 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 7, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 7 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      1 highlighting [i][col] 8, 4 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:64:29)
+
+    console.log
+      1 highlighting  [row][i] 4, 8 with spaceHighlighted
+
+      at log (app/SudokuFuncs.ts:69:29)
+
+    console.log
+      consttopleft Highlighting square at 3, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 3, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 3, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 4, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 4, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 4, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 5, 3 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 5, 4 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      consttopleft Highlighting square at 5, 5 as spaceHighlightedLookingAt
+
+      at log (app/SudokuFuncs.ts:112:33)
+
+    console.log
+      highlighting [row][col] 4, 4 with spaceHighlightedLookingAtSpecific
+
+      at log (app/SudokuFuncs.ts:150:25)
+
+    console.log
+      save board state
+
+      at log (app/SudokuFuncs.ts:192:13)
+
+    console.log
+      hide board
+
+      at log (app/SudokuFuncs.ts:182:13)
+
+PASS app/testing/Generation.test.tsx
+PASS app/testing/Timer.test.tsx
+
+Test Suites: 4 passed, 4 total
+Tests:       104 passed, 104 total
+Snapshots:   0 total
+Time:        1.147 s
+Ran all test suites matching /./i.
