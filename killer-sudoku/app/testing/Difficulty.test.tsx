@@ -6,9 +6,8 @@
  */
 
 import { SpaceButtonProperties } from '../SudokuFuncs';
-import { initBoard } from './GenerateDifficulty';
+import { initBoard } from '../Generate';
 import { describe, expect, test } from "@jest/globals";
-
 
 describe("Test board generation", () => {
     test("Check if correct number of tiles are revealed for a regular sudoku puzzle", () => {

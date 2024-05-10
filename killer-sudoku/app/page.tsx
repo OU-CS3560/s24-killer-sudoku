@@ -13,9 +13,12 @@ import { solve_sbp, initBoard } from "./Generate";
 import SudokuBoard  from "./Sudoku";
 import { Clear, HandleHighlighting, HideBoard, ReApplyBoardState, SaveBoardState } from "./SudokuFuncs"
 
-export default function Home() {
-    // var gameOver: boolean = false;
+export default function Home() {    
+
     var used = 0;
+
+    //let difficulty = "K-Easy";
+    const [difficulty, setDifficulty] = useState("K-Easy");
 
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
@@ -28,7 +31,7 @@ export default function Home() {
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
         console.log("rendered");
-        return initBoard(true, used)
+        return initBoard(true, used, difficulty)
     });
 
     const [justPaused, setJustPaused] = useState(false);
@@ -144,7 +147,7 @@ export default function Home() {
         timerRef.current?.reset();
 
         setIcon("pause_circle");
-        setBoard(initBoard(true, used));
+        setBoard(initBoard(true, used, difficulty));
         setGameStarted(true);
         setJustPaused(false);
         setGameOver(false);
@@ -152,20 +155,9 @@ export default function Home() {
 
     // A function to handle when the user selects a new difficulty
 	const handleClickDifficultyButton = (buttonName: string) => {
-        console.log(buttonName, " Killer Sudoku puzzle requested");
-        alert("Making GET request to http://localhost3000/?difficulty=" + buttonName);
-        fetch("http://localhost3000/difficulty/?difficulty=" + buttonName)
-            .then(response => response.json())
-            .then(data => {
-                // Handle the retrieved data
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle any errors
-                console.error(error);
-            });
-
-        // Have something passed to generation algorithm
+        console.log(buttonName, " difficulty Sudoku puzzle requested");
+        setDifficulty("K-" + buttonName);
+        handleClickNewGame();
     }
 
     // A function to handle when the user presses on the panel off to the right-hand side of the board
@@ -258,7 +250,7 @@ export default function Home() {
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
                             <div onClick={() => {handleClickStartButton();}}>
-                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={justPaused}></SudokuBoard>
+                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={justPaused} difficulty={setDifficulty}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">

@@ -43,7 +43,7 @@ function onBoard (x: number, y: number): boolean {
  *  in a kTile[][] point to the same kTile, thus not needing to worry abt
  *  updating all tiles, since those spots would just point to the same object
 */
-type kTile = {
+export type kTile = {
     sum: number,
     curSize: number,
     maxSize: number,
