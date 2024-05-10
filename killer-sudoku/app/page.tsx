@@ -17,9 +17,6 @@ export default function Home() {
 
     var used = 0;
 
-    //let difficulty = "K-Easy";
-    const [difficulty, setDifficulty] = useState("K-Easy");
-
     // A useState for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
 
@@ -27,6 +24,9 @@ export default function Home() {
     
     // A useState to access methods of the Timer
 	const timerRef = useRef<TimerRef>(null);
+
+    //i dont really know what im doing here lol --nick
+    const [difficulty, setDifficulty] = useState("K-Easy");
 
     // A useState to modify the board throughout the state of the game
 	const [board, setBoard] = useState(() => {
@@ -250,7 +250,7 @@ export default function Home() {
                     <div className="boardAndButtons">
                         <div className="buttonsContainer">
                             <div onClick={() => {handleClickStartButton();}}>
-                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={justPaused} difficulty={setDifficulty}></SudokuBoard>
+                                <SudokuBoard board={board} setBoard={setBoard} setGameState={setGameOver} gameOver={gameOver} timerRef={timerRef} setIcon={setIcon} justPaused={justPaused}></SudokuBoard>
                             </div>
                             <div className="panelConglomerate">
                                 <div className="buttonsContainerTwo">
