@@ -7,7 +7,7 @@
 
 import { SpaceButtonProperties, HandleHighlighting, SaveBoardState } from "./SudokuFuncs";
 import { solve_gen, genBoard } from "./Solver";
-import { kTile, genKiller, undef_kArr, doKillerUIStuff } from "./GenKiller";
+import { killerBoard } from "./GenKiller";
 
 /**
  * @brief Initializes the board to be a 2d array, generates a board full of 
@@ -57,9 +57,9 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     console.log("initBoard: Randomization complete");
 
-    let kBoard: kTile[][] = undef_kArr();
+    let kBoard = new killerBoard;
     if (killer) {
-        kBoard = genKiller(board.tile);
+        kBoard.genKiller(board.tile);
         console.log("initBoard: Killer Generation complete");
     }
 
@@ -90,16 +90,12 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
 
     // Showing Tiles
     let shown = new genBoard;
-    for (let copy = new genBoard; !copy.isValid(); solve_gen(copy,kBoard)) {
-        shown = new genBoard; copy = new genBoard;
-        for (let i = 0; i < numShown; i++) {
-            let x: number = 0, y: number = 0;
-            do {
-                x = rand(0,8); y = rand(0,8);
-            } while (shown.tile[x][y] != 0)
-            shown.add(board.tile[x][y],x,y);
-            copy.add(board.tile[x][y],x,y);
-        }
+    for (let i = 0; i < numShown; i++) {
+        let x: number = 0, y: number = 0;
+        do {
+            x = rand(0,8); y = rand(0,8);
+        } while (shown.tile[x][y] != 0)
+        shown.add(board.tile[x][y],x,y);
     }
 
     console.log("initBoard: Tile showing complete");
@@ -129,7 +125,7 @@ export function initBoard(killer: boolean, used: number): SpaceButtonProperties[
     console.log("initBoard: Initialization complete");
 
     if (killer) {
-        doKillerUIStuff(kBoard,arr);
+        kBoard.doKillerUIStuff(arr);
         console.log("initBoard: Killer UI elements complete");
     }
 
@@ -173,17 +169,58 @@ function initBoardBoldLines(newBoard: SpaceButtonProperties[][]): void {
  * @return {void} None (input is passed by reference)
  */
 export function solve_sbp(boardSBP: SpaceButtonProperties[][]): void {
-    let board = new genBoard;
-    for (let x = 0; x < 9; x++) {
-        for (let y = 0; y < 9; y++) {
-            const tile = boardSBP[x][y];
-            //also fixes incorrect tiles so solver works properly
-            if (tile.data == tile.hiddenData) {
-                board.add(toNum(tile.data),x,y);
+    const solve_rec = (board: genBoard): boolean => {
+        //Calls solver & records all changes it made
+        const numChanges: number = solve_gen(board);
+        if (board.state) {
+            if (board.occ == 81) return true;
+
+            let x: number = 0, y: number = 0;
+            do {
+                x = rand(0,8); y = rand(0,8);
+            } while (board.tile[x][y] != 0);
+
+            //Look through every available option
+            for (let val of randomOptions(board.note[x][y])) { 
+                board.add(val,x,y);
+                if (solve_rec(board)) return true;
+                board.undo();
             }
         }
+
+        //If board is unsolvable, undo all solver changes & return false
+        for (let i = 0; i < numChanges; i++) board.undo();
+        board.state = true;
+        return false;
     }
-    solve_gen(board); // Uses the solve function in Solver.tsx
+
+    const isCorrectBoard = (board1: genBoard, board2: SpaceButtonProperties[][]): boolean => {
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                if (toStr(board1.tile[x][y]) != board2[x][y].hiddenData) return false;
+            }
+        }
+        return true;
+    }
+
+    let board = new genBoard;
+    do { 
+        board = new genBoard;
+        for (let x = 0; x < 9; x++) {
+            for (let y = 0; y < 9; y++) {
+                const tile = boardSBP[x][y];
+                //also fixes incorrect tiles so solver works properly
+                if (tile.data == tile.hiddenData) {
+                    board.add(toNum(tile.data),x,y);
+                }
+            }
+        }
+
+        solve_gen(board); // Solve the board as much as possible with solver algorithm
+        solve_rec(board); // then finish rest with recursive backtracking
+
+    } while (!isCorrectBoard(board, boardSBP));
+    
     for (let x = 0; x < 9; x++) {
         for (let y = 0; y < 9; y++) {
             boardSBP[x][y].data = toStr(board.tile[x][y]);

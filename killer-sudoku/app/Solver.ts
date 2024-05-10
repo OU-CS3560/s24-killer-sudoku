@@ -5,18 +5,18 @@
  * @date     March 8, 2024
 */
 
-import { kTile, undef_kArr } from "./GenKiller";
+import { killerBoard } from "./GenKiller";
 
 /**
  * @brief takes input board & tries to solve it
  * @param {genBoard} board input board to be solved (passed by reference) 
- * @param {kTile[][]} kArr (WIP) 
+ * @param {kTile[][]} kBoard (WIP) 
  * @returns {number} number of changes that were made during this solve call
  */
-export function solve_gen(board: genBoard, kArr: kTile[][] = undef_kArr()): number {
+export function solve_gen(board: genBoard, kBoard = new killerBoard): number {
     let numChanges: number = 0;
     let tiles: number[][] = board.tile, notes: boolean[][][] = board.note;
-    //const killer: boolean = (kArr[0][0].sum != -1);
+    //const killer: boolean = (kBoard[0][0].sum != -1);
 
     const success = (val: number, x: number, y: number): void => {
         numChanges++;
@@ -30,7 +30,7 @@ export function solve_gen(board: genBoard, kArr: kTile[][] = undef_kArr()): numb
         for (let x = 0; x < 9; x++) {
             for (let y = 0; y < 9; y++) {
                 if (board.tile[x][y] != 0) continue;
-                let tile: kTile = kArr[x][y];
+                let tile: kTile = kBoard[x][y];
                 switch (tile.curSize) {
                     case 1: {
                         success(tile.sum,x,y,101); break;
