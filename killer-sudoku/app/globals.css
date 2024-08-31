@@ -314,6 +314,9 @@
 		background: #c1c7d6;
 		border-radius: 10px;
 	}
+	.buttonsContainer{
+		margin-left: 2.5%;
+	}
 	.buttonsContainer,
 	.buttonsContainerNavbar{
 		align-items: center;
@@ -360,11 +363,12 @@
 		flex-direction: row;
 	}
 	.killerSudokuTitle{
+		overflow: hidden;
 		font-weight: 400;
 		font-size: 48px;
 	}
 	.killerSudokuNames{
-		padding-left: 5px;
+		margin-left: 2.5%;
 		color: black;
 		font-size: 18px;
 		font-weight: 500;

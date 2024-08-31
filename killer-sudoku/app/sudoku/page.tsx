@@ -5,6 +5,7 @@
  * @date     March 13, 2024
 */
 
+// for next.js
 "use client";
 
 import Timer, { TimerRef } from "../Timer";
@@ -17,22 +18,24 @@ export default function Home() {
 	// var gameOver: boolean = false;
     var used = 0;
 
-    // A useState for the icon of the Timer
+    // A useState string for the icon of the Timer
 	const [icon, setIcon] = useState("play_circle");
-
+ 
+    // A useState boolean for the state of the game
     const [gameOver, setGameOver] = useState(false);
     
-    // A useState to access methods of the Timer
+    // A useState timer refernce to access methods of the Timer
 	const timerRef = useRef<TimerRef>(null);
 
-    // A useState to modify the board throughout the state of the game
+    // A useState variable to modify board state throughout the game's progression
 	const [board, setBoard] = useState(() => {
-        console.log("rendered");
         return initBoard(false, used)
     });
 
+    // A useState variable to keep track of whether the user has just paused the game
     const [justPaused, setJustPaused] = useState(false);
-
+ 
+    // A useState variable to keep track of whether the game has started
     const [gameStarted, setGameStarted] = useState(false);
 
     // A function to handle when the user clicks the solve button

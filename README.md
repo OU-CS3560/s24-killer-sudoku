@@ -1,8 +1,4 @@
-# bash$ :(){ :|:&};:}  
-
-A sister to Sudoku, which requires randomly sized boxes to be filled to add up to a specific number.
-
-## Team Information
+# Team Information
 
 **Team ID:** team-killer-sudoku  
 **Problem/Project name:** Killer Sudoku \
@@ -30,7 +26,7 @@ Our application utilizes the typical Typescript/Javascript back-end and CSS, Rea
 > Note: Installing NODE will also install NPM. If you have NVM that may also work, just ensure that you have installed the correct versions listed below. 
 - Check that these dependencies are installed with `node -v && npm -v`. These should be the most recent releases.
 
-- Compile the project by simply executing `make` in the main s24-killer-sudoku directory. This can also be accomplished by running `npm run build`, an then starting that build by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
+- Obtain a(n) .env file from a contributer, and compile the project by simply executing `make` in the main s24-killer-sudoku directory. This can also be accomplished by running `npm run build`, an then starting that build by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
 
 #### If you run into issues, please see [Known Issues](#known-issues).
 

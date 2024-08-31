@@ -47,7 +47,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     if (newBoard[j][k].highlighted !== 'spaceNumberTaken') {
                         newBoard[j][k].previousHighlight = newBoard[j][k].highlighted;
                         newBoard[j][k].highlighted = 'space'
-                     //   console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
+                     //console.log('j: ' + j + ', k: ' + k + ' highlighted with: ' + newBoard[j][k].highlighted);
                     }
     
                     if (newBoard[j][k].marked){
@@ -61,12 +61,12 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                 if (i !== row && newBoard[i][col].highlighted !== 'spaceNumberTaken') {
                     newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
                     newBoard[i][col].highlighted = 'spaceHighlighted';
-                    console.log('1 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
+                    //console.log('1 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
                 }
                 if (i !== col && newBoard[row][i].highlighted !== 'spaceNumberTaken') {
                     newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
                     newBoard[row][i].highlighted = 'spaceHighlighted';
-                    console.log('1 highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
+                    //console.log('1 highlighting  [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
                 }
             }
     
@@ -78,12 +78,12 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     if (newBoard[row][i].highlighted === 'spaceNumberTaken' && +newBoard[row][i].data === difNum && i !== col && doesntHaveRowColumnMatching(row, i, newBoard)) {
                         newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
                         newBoard[row][i].highlighted = 'spaceHighlighted';
-                        console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
+                        //console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
                     }
                     if (newBoard[i][col].highlighted === 'spaceNumberTaken' && +newBoard[i][col].data === difNum && i !== row && doesntHaveRowColumnMatching(i, col, newBoard)) {
                         newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
                         newBoard[i][col].highlighted = 'spaceHighlighted';
-                        console.log('2 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
+                        //console.log('2 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
                     }
                 }
                 const topLeftRow = Math.floor(row / 3) * 3;
@@ -109,14 +109,21 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
                     if (newBoard[i][j].highlighted !== 'spaceNumberTaken') {
                         newBoard[i][j].previousHighlight = newBoard[i][j].highlighted;
                         newBoard[i][j].highlighted = 'spaceHighlightedLookingAt';
-                        console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
+                        //console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                     }
                     if (newBoard[row][col].data === newBoard[i][j].data && i !== row && j !== col && newBoard[i][j].data !== '') {
-                        newBoard[i][j].previousHighlight = newBoard[i][j].highlighted
-                        newBoard[i][j].highlighted = 'spaceNumberTaken';
-                        newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
-                        newBoard[row][col].highlighted = 'spaceNumberTaken';
-                        console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
+
+                        if (!newBoard[i][j].locked){
+                            newBoard[i][j].previousHighlight = newBoard[i][j].highlighted
+                            newBoard[i][j].highlighted = 'spaceNumberTaken';
+                        }
+                        
+                        if (!newBoard[row][col].locked){
+                            newBoard[row][col].previousHighlight = newBoard[row][col].highlighted;
+                            newBoard[row][col].highlighted = 'spaceNumberTaken';
+                        }
+                        
+                        //console.log('consttopleft Highlighting square at ' + i + ', ' + j + ' as ' + newBoard[i][j].highlighted);
                     }
                 }
             }
@@ -125,18 +132,32 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
             for (let i = 0; i < 9; i++) {
                 for (let j = i + 1; j < 9; j++) {
                     if (newBoard[row][i].data === newBoard[row][j].data && newBoard[row][i].data !== '') {
-                        newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
-                        newBoard[row][j].previousHighlight = newBoard[row][j].highlighted;
-                        newBoard[row][i].highlighted = 'spaceNumberTaken';
-                        newBoard[row][j].highlighted = 'spaceNumberTaken';
+                        
+                        if (!newBoard[row][i].locked){
+                            newBoard[row][i].previousHighlight = newBoard[row][i].highlighted;
+                            newBoard[row][i].highlighted = 'spaceNumberTaken';
+                        }
+
+                        if (!newBoard[row][j].locked){
+                            newBoard[row][j].previousHighlight = newBoard[row][j].highlighted;
+                            newBoard[row][j].highlighted = 'spaceNumberTaken';
+                        }
+                        
                         console.log('highlighting [row][i] ' + row + ', ' + i + ' with ' + newBoard[row][i].highlighted);
                         console.log('highlighting [row][j] ' + row + ', ' + j + ' with ' + newBoard[row][j].highlighted);
                     }
                     if (newBoard[i][col].data === newBoard[j][col].data && newBoard[i][col].data !== '') {
-                        newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
-                        newBoard[j][col].previousHighlight = newBoard[j][col].highlighted;
-                        newBoard[i][col].highlighted = 'spaceNumberTaken';
-                        newBoard[j][col].highlighted = 'spaceNumberTaken';
+
+                        if (!newBoard[i][col].locked){
+                            newBoard[i][col].previousHighlight = newBoard[i][col].highlighted;
+                            newBoard[i][col].highlighted = 'spaceNumberTaken';
+                        }
+                        
+                        if (!newBoard[j][col].locked){
+                            newBoard[j][col].previousHighlight = newBoard[j][col].highlighted;
+                            newBoard[j][col].highlighted = 'spaceNumberTaken';
+                        }
+                        
                         console.log('3 highlighting [i][col] ' + i + ', ' + col + ' with ' + newBoard[i][col].highlighted);
                         console.log('highlighting [j][col] ' + j + ', ' + col + ' with ' + newBoard[j][col].highlighted);
                     }
@@ -158,8 +179,7 @@ export function HandleHighlighting(row: number, col: number, newBoard: SpaceButt
     
             newBoard[row][col].marked = true;
         } catch (error) {
-            console.log(error);
-            console.log("fuck");
+           console.log("error in handlehighlighting");
         }
     }
 }
