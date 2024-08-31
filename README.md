@@ -13,30 +13,30 @@ A sister to Sudoku, which requires randomly sized boxes to be filled to add up t
 - Nick Adkins   ([Email](na761422@ohio.edu), [Github](github.com/nickadkins47))
 - Kevin Belock  ([Email](kb848020@ohio.edu), [Github](github.com/Phoenix2317))
 
-## About this project
+## About
 
-Killer Sudoku is a logical reasoning number puzzle game that combines elements of Sudoku, Kenken and Kakuro. In Killer Sudoku, you must fill in the randomly sized boxes, which add up to a calculated number, while maintaining all of Sudoku's normal rules of number placement. Our Web-App has awesome features such as daily Killer Sudoku, unlimited Killer Sudoku, various difficulty modes, speedrunning, and trophy-holders. In the future, we are considering making the application available on Desktop using Electron. 
+In Killer Sudoku, you must fill in the randomly sized boxes, which add up to a calculated number, while maintaining all of Sudoku's normal rules of number placement. Our Web-App plans to have awesome features such as daily Killer Sudoku, unlimited Killer Sudoku, various difficulty modes, speedrunning, and trophy-holders. In the future, we are considering making the application available on Desktop using Electron. 
 
 ## Platform
 
-Our application utilizes the typical Typescript back-end and CSS front-end. Additionally, we are hosting a [linode server](https://sudoku.drewmullett.net) for all students to try our Killer Sudoku.
-
-## Frameworks/Tools
-
-This application is built on Next.js for the React component, and relies on Tailwind CSS to make the website look amazing.
+Our application utilizes the typical Typescript/Javascript back-end and CSS, React-Redux front-end. Additionally, we are hosting a [linode server](https://sudoku.drewmullett.net) for all students to try our Killer Sudoku.
 
 ## How to build locally
 
-> Note: These commands are run in a UNIX based environment, Windows commands are not in this documentation.
+> Note: These commands are run in a UNIX based environment. Windows commands are not in this documentation.
 
 > Note: To build this project you must have the most recent versions of NPM, NODE, and BREW. 
 - Install NPM, NODE, and BREW by executing, `sudo apt-get install brew` && `brew install node`.
-> Note: Installing NODE will also install NPM. NVM may also work. 
-- Check that these are installed with `node -v && npm -v`. They should be the latest releases.
+> Note: Installing NODE will also install NPM. If you have NVM that may also work, just ensure that you have installed the correct versions listed below. 
+- Check that these dependencies are installed with `node -v && npm -v`. These should be the most recent releases.
 
-- Compile the project by simply executing `make` in a ZSH, BASH, or Ubuntu WSL terminal in the /s24-killer-sudoku directory **_OR_** build by `npm run build`, and start by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
+- Compile the project by simply executing `make` in the main s24-killer-sudoku directory. This can also be accomplished by running `npm run build`, an then starting that build by `npm run start`, additionally you must open [localhost](https://localhost:3000) to see the results. 
 
 #### If you run into issues, please see [Known Issues](#known-issues).
+
+## Frameworks/Tools
+
+This application is built on Next.js, and utilizes React for front-end components and general functionalit. The web-app also uses Tailwind CSS to make the website look amazing.
 
 ### Viewing on our Linode server
 
@@ -72,10 +72,10 @@ Ensure NPM and NODE are of versions v21.6.1, and v10.2.4 or higher respectively.
 
 ### NPM Error, 
 `npm ERR! killer-sudoku@0.1.0 build: next build` **OR** `sh-next01 ERR`:
+- `npm install`
 - `npm install next`
 
 ### Additional Possibilities:
-- You need a WSL terminal (Windows Subsystem for Linux) update. I.e **Ubuntu 14.04.1 lTS -> Ubuntu 24.04 LTS**.
 - Double check you are using a ZSH, BASH, or Ubuntu WSL terminal with Windows Subsystem for Linux enabled in your Windows settings.
 - Add Homebrew to your path
 - Homebrew isn't installed (`brew -v`) should yield 4.2.17 or higher.
